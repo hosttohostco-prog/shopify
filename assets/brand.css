@@ -108,6 +108,58 @@
 .mono { font-family: var(--mono); letter-spacing: 0.02em; }
 .price { font-family: var(--mono); font-size: 0.95rem; letter-spacing: 0.01em; color: var(--ink); }
 
+/* ---------- Buttons ----------
+   Matches the design-handoff lock (.btn): full pill, ink primary on cream
+   text, orange CTA reserved for highest-intent moments. We steer Dawn's own
+   --color-button / --color-button-text scheme vars so the existing fill,
+   hover and border machinery render in brand colors instead of fighting it.
+   Triplets are comma-separated to match Dawn's rgba(var(--color-button), …). */
+
+/* Pill shape + brand type on every button variant */
+.button,
+.shopify-challenge__button,
+.customer button,
+button.shopify-payment-button__button--unbranded {
+  --buttons-radius: var(--hth-radius-pill);
+  --buttons-radius-outset: var(--hth-radius-pill);
+  font-family: var(--sans);
+  font-weight: 600;
+  letter-spacing: 0.01em;
+  transition: box-shadow var(--duration-short) ease, filter var(--duration-short) ease;
+}
+
+/* Default primary = ink fill, cream text (leaves secondary/tertiary alone) */
+.button:not(.button--secondary):not(.button--tertiary),
+.shopify-challenge__button,
+.customer button,
+button.shopify-payment-button__button--unbranded {
+  --color-button: 64, 62, 63;          /* ink   #403e3f */
+  --color-button-text: 251, 242, 233;  /* cream #fbf2e9 */
+}
+
+/* CTA — brand coral, the few highest-intent moments only (hero, checkout) */
+.button.cta:not(.button--secondary):not(.button--tertiary),
+.button.button--cta:not(.button--secondary):not(.button--tertiary) {
+  --color-button: 238, 121, 84;        /* coral #ee7954 */
+  --color-button-text: 251, 242, 233;  /* cream #fbf2e9 */
+}
+
+/* Subtle press/hover feedback (handoff darkens primary, brightens CTA down) */
+.button:not([disabled]):hover,
+.customer button:not([disabled]):hover {
+  filter: brightness(0.93);
+}
+.button:not([disabled]):active {
+  transform: translateY(1px);
+}
+
+/* On ink sections, primary inverts to cream fill / ink text (CTA stays orange) */
+.hth-bg-ink .button:not(.button--secondary):not(.button--tertiary):not(.cta):not(.button--cta) {
+  --color-button: 251, 242, 233;       /* cream */
+  --color-button-text: 64, 62, 63;     /* ink   */
+}
+
 @media (prefers-reduced-motion: reduce) {
   html:focus-within { scroll-behavior: auto; }
+  .button:not([disabled]):active { transform: none; }
 }
