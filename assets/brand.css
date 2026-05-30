@@ -1,15 +1,15 @@
 /* ============================================================
    HostToHost — brand layer over Dawn
    Tokens + type system ported from the locked design handoff
-   (host-to-host/project/styles.css). Accent = palette blue.
-   Page base = white; cream/sage-soft are secondary surfaces.
+   (design-handoff/project/styles.css). Accent = coral (Mafe's brand);
+   blue = secondary/trust. Page base = white; cream/sage-soft secondary.
    ============================================================ */
 
 :root {
   --cream: #fbf2e9;
-  --coral: #597bbd;
-  --orange: #597bbd;
-  --peach: #96a1d2;
+  --coral: #ee7954;
+  --orange: #f15f2a;
+  --peach: #f39878;
   --gold: #fab95b;
   --blue: #597bbd;
   --periwinkle: #96a1d2;
