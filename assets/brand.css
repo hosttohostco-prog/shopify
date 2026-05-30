@@ -362,13 +362,22 @@ details[open] > .header__menu-item {
   margin: 0;
 }
 .card-wrapper .card__content--kit .card-information {
-  flex: 1 1 auto;
+  flex: 1 1 0;
   min-width: 0;
 }
 .card-wrapper .card__content--kit .quick-add {
   flex: 0 0 auto;
   margin-left: auto;
   margin-top: 0;
+}
+
+/* Card price — keep it small/quiet (DM Mono); Dawn's card price runs large.
+   Sized on both the wrapper and the price item so it actually shrinks. */
+.card-wrapper .card__content--kit .price,
+.card-wrapper .card__content--kit .price .price-item {
+  font-size: 0.95rem;
+  line-height: 1.2;
+  letter-spacing: 0;
 }
 
 /* Quick-add → small outlined pill: transparent fill, light-coral border, ink
