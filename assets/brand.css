@@ -342,14 +342,34 @@ details[open] > .header__menu-item {
 }
 .slider-counter--current { color: var(--coral); }
 
-/* Quick-add → coral pill (reuses the Step B CTA hue for the highest-intent
-   in-card action). The floating "+" overlay from the handoff would need markup
-   changes; kept as a brand pill button for now (see status note). */
-.quick-add__submit {
+/* Quick-add → small outlined pill: transparent fill, light-coral border, ink
+   text, auto width (not Dawn's full-width), centered under the card. Override
+   Dawn's ::after shadow-border with a real border so the outline is the light
+   coral the brand wants. Scoped under .card-wrapper to beat .button--full-width. */
+.card-wrapper .quick-add {
+  text-align: center;
+}
+.card-wrapper .quick-add__submit {
   --buttons-radius: var(--hth-radius-pill);
   --buttons-radius-outset: var(--hth-radius-pill);
-  background-color: var(--coral);
-  color: var(--cream);
+  display: inline-flex;
+  width: auto;
+  min-width: 0;
+  min-height: 0;
+  padding: 0.5rem 1.15rem;
+  font-size: 0.8rem;
+  letter-spacing: 0.01em;
+  background-color: transparent;
+  color: var(--ink);
+  border: 1px solid var(--peach);
+}
+.card-wrapper .quick-add__submit::after {
+  display: none;
+}
+.card-wrapper .quick-add__submit:not([disabled]):hover {
+  border-color: var(--coral);
+  background-color: var(--peach-tint);
+  color: var(--ink);
 }
 
 @media (prefers-reduced-motion: reduce) {
