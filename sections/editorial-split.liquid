@@ -1,0 +1,334 @@
+{%- comment -%}
+  HostToHost — Editorial split "El Criterio" (bespoke)
+  Phase 2 · Step I. Text + criteria-card split per the design handoff
+  (design-handoff/project/index.html, the "El criterio" section) + brief §5.1.
+  Left: eyebrow + Fraunces h2 (italic word in coral via inline_richtext <em>)
+  + DM Sans lead + Caveat script kicker. Right: a peach card whose rows are
+  editor-editable blocks (sage icon disc + DM Mono number + Fraunces h3 +
+  body). Self-contained: layout/type live in this section's own {% stylesheet %}
+  block on brand tokens from brand.css :root. Per-section padding via Dawn's
+  {% style %}+section.id idiom (same as hero.liquid / manifesto.liquid).
+{%- endcomment -%}
+
+{%- style -%}
+  .section-{{ section.id }}-padding {
+    padding-top: {{ section.settings.padding_top | times: 0.7 | round: 0 }}px;
+    padding-bottom: {{ section.settings.padding_bottom | times: 0.7 | round: 0 }}px;
+  }
+  @media screen and (min-width: 750px) {
+    .section-{{ section.id }}-padding {
+      padding-top: {{ section.settings.padding_top }}px;
+      padding-bottom: {{ section.settings.padding_bottom }}px;
+    }
+  }
+{%- endstyle -%}
+
+<div class="brand-editorial brand-editorial--{{ section.settings.background }} section-{{ section.id }}-padding">
+  <div class="brand-editorial__wrap">
+    <div class="brand-editorial__left">
+      {%- if section.settings.eyebrow != blank -%}
+        <span class="brand-editorial__eyebrow">{{ section.settings.eyebrow }}</span>
+      {%- endif -%}
+      {%- if section.settings.heading != blank -%}
+        <h2 class="brand-editorial__heading">{{ section.settings.heading }}</h2>
+      {%- endif -%}
+      {%- if section.settings.body != blank -%}
+        <p class="brand-editorial__lead">{{ section.settings.body }}</p>
+      {%- endif -%}
+      {%- if section.settings.kicker != blank -%}
+        <p class="brand-editorial__kicker">{{ section.settings.kicker }}</p>
+      {%- endif -%}
+    </div>
+
+    {%- if section.blocks.size > 0 -%}
+      <div class="brand-editorial__card">
+        {%- for block in section.blocks -%}
+          <div class="brand-criterion" {{ block.shopify_attributes }}>
+            <div class="brand-criterion__ic">
+              {%- case block.settings.icon -%}
+                {%- when 'star' -%}
+                  <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" aria-hidden="true"><path d="m12 3 2.4 5.3L20 9l-4 3.9.9 5.6L12 16l-4.9 2.5L8 12.9 4 9l5.6-.7L12 3Z" stroke-linejoin="round"/></svg>
+                {%- when 'truck' -%}
+                  <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" aria-hidden="true"><path d="M3 7h13v10H3z"/><path d="M16 10h3l2 3v4h-5" stroke-linejoin="round"/><circle cx="7" cy="18" r="1.6"/><circle cx="17.5" cy="18" r="1.6"/></svg>
+                {%- else -%}
+                  <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" aria-hidden="true"><path d="M4 12a8 8 0 1 0 16 0 8 8 0 0 0-16 0Z"/><path d="m9 12 2 2 4-4" stroke-linecap="round" stroke-linejoin="round"/></svg>
+              {%- endcase -%}
+            </div>
+            <div class="brand-criterion__tx">
+              <span class="brand-criterion__num">{{ forloop.index | prepend: '0' }}</span>
+              {%- if block.settings.title != blank -%}
+                <h3 class="brand-criterion__title">{{ block.settings.title }}</h3>
+              {%- endif -%}
+              {%- if block.settings.body != blank -%}
+                <p class="brand-criterion__body">{{ block.settings.body }}</p>
+              {%- endif -%}
+            </div>
+          </div>
+        {%- endfor -%}
+      </div>
+    {%- endif -%}
+  </div>
+</div>
+
+{%- stylesheet -%}
+  .brand-editorial--cream { background: var(--cream); }
+  .brand-editorial--white { background: #fff; }
+  .brand-editorial--sage { background: var(--sage-soft); }
+  .brand-editorial--ink { background: var(--ink); color: var(--cream); }
+
+  .brand-editorial__wrap {
+    max-width: var(--hth-maxw);
+    margin-inline: auto;
+    padding-inline: var(--hth-gutter);
+    display: grid;
+    grid-template-columns: 1fr;
+    gap: clamp(32px, 5vw, 56px);
+    align-items: center;
+  }
+  @media screen and (min-width: 900px) {
+    .brand-editorial__wrap {
+      grid-template-columns: 1fr 1.05fr;
+      gap: clamp(40px, 5vw, 72px);
+    }
+  }
+
+  .brand-editorial__left {
+    display: flex;
+    flex-direction: column;
+    align-items: flex-start;
+    gap: 20px;
+  }
+
+  .brand-editorial__eyebrow {
+    display: inline-flex;
+    align-items: center;
+    gap: 0.55em;
+    font-family: var(--font-body-family);
+    font-size: 0.72rem;
+    font-weight: 600;
+    letter-spacing: 0.18em;
+    text-transform: uppercase;
+    color: var(--sage);
+  }
+  .brand-editorial--ink .brand-editorial__eyebrow { color: var(--peach); }
+
+  .brand-editorial__heading {
+    margin: 0;
+    font-family: var(--serif);
+    font-weight: 500;
+    line-height: 1.06;
+    letter-spacing: -0.015em;
+    font-size: clamp(1.8rem, 3.6vw, 2.9rem);
+    text-wrap: balance;
+    color: inherit;
+  }
+  .brand-editorial__heading em,
+  .brand-editorial__heading i {
+    font-style: italic;
+    color: var(--coral);
+  }
+
+  .brand-editorial__lead {
+    margin: 0;
+    max-width: 46ch;
+    font-size: clamp(1rem, 1.4vw, 1.13rem);
+    line-height: 1.55;
+    color: var(--ink-70);
+  }
+  .brand-editorial--ink .brand-editorial__lead { color: rgba(251, 242, 233, 0.75); }
+
+  .brand-editorial__kicker {
+    margin: 0;
+    font-family: var(--script);
+    font-size: 1.5rem;
+    line-height: 1.1;
+    color: var(--sage);
+  }
+  .brand-editorial--ink .brand-editorial__kicker { color: var(--peach); }
+
+  /* Criteria card */
+  .brand-editorial__card {
+    background: #f8dbbe;
+    border-radius: var(--hth-radius);
+    overflow: hidden;
+    color: var(--ink);
+  }
+
+  .brand-criterion {
+    display: grid;
+    grid-template-columns: auto 1fr;
+    gap: 20px;
+    align-items: start;
+    padding: clamp(22px, 3vw, 30px);
+    border-bottom: 1px solid var(--hairline);
+  }
+  .brand-criterion:last-child { border-bottom: 0; }
+
+  .brand-criterion__ic {
+    width: 52px;
+    height: 52px;
+    border-radius: 50%;
+    background: var(--sage-soft);
+    color: var(--sage);
+    display: grid;
+    place-items: center;
+    flex: none;
+  }
+  .brand-criterion__ic svg { width: 24px; height: 24px; }
+
+  .brand-criterion__num {
+    display: block;
+    font-family: var(--mono);
+    font-size: 0.72rem;
+    letter-spacing: 0.1em;
+    color: var(--ink-40);
+  }
+  .brand-criterion__title {
+    margin: 4px 0 8px;
+    font-family: var(--serif);
+    font-weight: 500;
+    font-size: 1.35rem;
+    line-height: 1.15;
+    color: var(--ink);
+  }
+  .brand-criterion__body {
+    margin: 0;
+    font-size: 0.96rem;
+    line-height: 1.5;
+    color: var(--ink-70);
+  }
+{%- endstylesheet -%}
+
+{% schema %}
+{
+  "name": "Editorial · El criterio",
+  "tag": "section",
+  "class": "section",
+  "settings": [
+    {
+      "type": "select",
+      "id": "background",
+      "label": "Fondo",
+      "options": [
+        { "value": "cream", "label": "Crema" },
+        { "value": "white", "label": "Blanco" },
+        { "value": "sage", "label": "Verde salvia" },
+        { "value": "ink", "label": "Tinta (oscuro)" }
+      ],
+      "default": "cream"
+    },
+    {
+      "type": "text",
+      "id": "eyebrow",
+      "label": "Antetítulo",
+      "default": "El criterio"
+    },
+    {
+      "type": "inline_richtext",
+      "id": "heading",
+      "label": "Título",
+      "info": "Usa cursiva para resaltar una palabra en coral.",
+      "default": "Por qué Mafe eligió <em>estos</em> productos."
+    },
+    {
+      "type": "textarea",
+      "id": "body",
+      "label": "Texto",
+      "default": "No teoría. Lo que vivo cada día en mis Airbnbs. Cada pieza pasó por la misma prueba: ¿hace que el huésped se sienta cuidado y que el espacio funcione?"
+    },
+    {
+      "type": "text",
+      "id": "kicker",
+      "label": "Nota manuscrita",
+      "default": "↓ lo más importante"
+    },
+    {
+      "type": "header",
+      "content": "Espaciado"
+    },
+    {
+      "type": "range",
+      "id": "padding_top",
+      "min": 0,
+      "max": 180,
+      "step": 4,
+      "unit": "px",
+      "label": "Espacio superior",
+      "default": 96
+    },
+    {
+      "type": "range",
+      "id": "padding_bottom",
+      "min": 0,
+      "max": 180,
+      "step": 4,
+      "unit": "px",
+      "label": "Espacio inferior",
+      "default": 96
+    }
+  ],
+  "blocks": [
+    {
+      "type": "criterio",
+      "name": "Criterio",
+      "settings": [
+        {
+          "type": "select",
+          "id": "icon",
+          "label": "Ícono",
+          "options": [
+            { "value": "check", "label": "Aprobado (círculo con check)" },
+            { "value": "star", "label": "Calidad (estrella)" },
+            { "value": "truck", "label": "Entrega (camión)" }
+          ],
+          "default": "check"
+        },
+        {
+          "type": "text",
+          "id": "title",
+          "label": "Título",
+          "default": "Probado en mis Airbnbs"
+        },
+        {
+          "type": "textarea",
+          "id": "body",
+          "label": "Texto",
+          "default": "Nada entra al catálogo sin haber vivido en una de mis propiedades primero. Si no lo pondría en mi casa, no lo vendo."
+        }
+      ]
+    }
+  ],
+  "max_blocks": 6,
+  "presets": [
+    {
+      "name": "Editorial · El criterio",
+      "blocks": [
+        {
+          "type": "criterio",
+          "settings": {
+            "icon": "check",
+            "title": "Probado en mis Airbnbs",
+            "body": "Nada entra al catálogo sin haber vivido en una de mis propiedades primero. Si no lo pondría en mi casa, no lo vendo."
+          }
+        },
+        {
+          "type": "criterio",
+          "settings": {
+            "icon": "star",
+            "title": "Calidad hotelera",
+            "body": "Materiales que aguantan rotación constante de huéspedes sin verse gastados. Lo que usan los buenos hoteles, a escala de anfitrión."
+          }
+        },
+        {
+          "type": "criterio",
+          "settings": {
+            "icon": "truck",
+            "title": "Entrega rápida en Medellín",
+            "body": "Pides hoy, llega hoy. Porque entre check-out y check-in no siempre hay tiempo para esperar un envío de tres días."
+          }
+        }
+      ]
+    }
+  ]
+}
+{% endschema %}

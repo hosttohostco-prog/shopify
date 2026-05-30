@@ -82,6 +82,49 @@
         "padding_bottom": 72
       }
     },
+    "editorial_split": {
+      "type": "editorial-split",
+      "blocks": {
+        "criterio-1": {
+          "type": "criterio",
+          "settings": {
+            "icon": "check",
+            "title": "Probado en mis Airbnbs",
+            "body": "Nada entra al catálogo sin haber vivido en una de mis propiedades primero. Si no lo pondría en mi casa, no lo vendo."
+          }
+        },
+        "criterio-2": {
+          "type": "criterio",
+          "settings": {
+            "icon": "star",
+            "title": "Calidad hotelera",
+            "body": "Materiales que aguantan rotación constante de huéspedes sin verse gastados. Lo que usan los buenos hoteles, a escala de anfitrión."
+          }
+        },
+        "criterio-3": {
+          "type": "criterio",
+          "settings": {
+            "icon": "truck",
+            "title": "Entrega rápida en Medellín",
+            "body": "Pides hoy, llega hoy. Porque entre check-out y check-in no siempre hay tiempo para esperar un envío de tres días."
+          }
+        }
+      },
+      "block_order": [
+        "criterio-1",
+        "criterio-2",
+        "criterio-3"
+      ],
+      "settings": {
+        "background": "cream",
+        "eyebrow": "El criterio",
+        "heading": "Por qué Mafe eligió <em>estos</em> productos.",
+        "body": "No teoría. Lo que vivo cada día en mis Airbnbs. Cada pieza pasó por la misma prueba: ¿hace que el huésped se sienta cuidado y que el espacio funcione?",
+        "kicker": "↓ lo más importante",
+        "padding_top": 96,
+        "padding_bottom": 96
+      }
+    },
     "collage": {
       "type": "collage",
       "blocks": {
@@ -191,6 +234,7 @@
     "hero",
     "manifesto",
     "featured_collection",
+    "editorial_split",
     "rich_text",
     "collage",
     "video",
