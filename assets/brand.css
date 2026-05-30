@@ -54,10 +54,13 @@
 .hth-bg-cream-deep { background: var(--cream-deep); }
 .hth-bg-ink { background: var(--ink); color: var(--cream); }
 
-/* ---------- Type ramp ---------- */
+/* ---------- Type ramp ----------
+   NOTE: Dawn sets `html { font-size: 62.5% }`, so 1rem = 10px on this theme.
+   Brand copy is sized against that base — standard body ≈ 1.5–1.7rem (15–17px),
+   NOT 1rem. Size new bespoke sections the same way (don't port 16px-base rems). */
 .eyebrow {
   font-family: var(--sans);
-  font-size: 0.72rem;
+  font-size: 1.15rem;
   font-weight: 600;
   letter-spacing: 0.18em;
   text-transform: uppercase;
@@ -74,7 +77,7 @@
   font-weight: 400;
   line-height: 1;
   letter-spacing: -0.015em;
-  font-size: clamp(2.7rem, 6.4vw, 5rem);
+  font-size: clamp(4.3rem, 6.4vw, 8rem);
   margin: 0;
   text-wrap: balance;
 }
@@ -83,14 +86,14 @@
   font-weight: 400;
   line-height: 1.04;
   letter-spacing: -0.012em;
-  font-size: clamp(2rem, 4.2vw, 3.4rem);
+  font-size: clamp(3.2rem, 4.2vw, 5.45rem);
   margin: 0;
   text-wrap: balance;
 }
 .h3-display {
   font-family: var(--serif);
   font-weight: 500;
-  font-size: 1.5rem;
+  font-size: 2.4rem;
   line-height: 1.15;
   margin: 0;
 }
@@ -98,15 +101,15 @@
 .in-coral { color: var(--coral); }
 .in-sage { color: var(--sage); }
 .lead {
-  font-size: 1.075rem;
+  font-size: 1.72rem;
   line-height: 1.6;
   color: var(--ink-70);
   max-width: 46ch;
   text-wrap: pretty;
 }
-.script { font-family: var(--script); font-size: 1.5rem; line-height: 1.2; color: var(--sage); }
+.script { font-family: var(--script); font-size: 2.4rem; line-height: 1.2; color: var(--sage); }
 .mono { font-family: var(--mono); letter-spacing: 0.02em; }
-.price { font-family: var(--mono); font-size: 0.95rem; letter-spacing: 0.01em; color: var(--ink); }
+.price { font-family: var(--mono); font-size: 1.52rem; letter-spacing: 0.01em; color: var(--ink); }
 
 /* ---------- Buttons ----------
    Matches the design-handoff lock (.btn): full pill, ink primary on cream
@@ -289,7 +292,7 @@ details[open] > .header__menu-item {
 .drawer__heading {
   font-family: var(--serif);
   font-weight: 500;
-  font-size: 1.5rem;
+  font-size: 2.4rem;
 }
 
 /* ---------- Featured collection ("Kit base") + product cards ----------
@@ -384,7 +387,7 @@ details[open] > .header__menu-item {
    Sized on both the wrapper and the price item so it actually shrinks. */
 .card-wrapper .card__content--kit .price,
 .card-wrapper .card__content--kit .price .price-item {
-  font-size: 0.95rem;
+  font-size: 1.52rem;
   line-height: 1;
   letter-spacing: 0;
 }
@@ -401,7 +404,7 @@ details[open] > .header__menu-item {
   min-width: 0;
   min-height: 0;
   padding: 0.5rem 1.15rem;
-  font-size: 0.8rem;
+  font-size: 1.28rem;
   letter-spacing: 0.01em;
   background-color: transparent;
   color: var(--ink);
