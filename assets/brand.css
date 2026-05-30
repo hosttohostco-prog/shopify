@@ -22,7 +22,20 @@
   --ink-70: rgba(64, 62, 63, 0.7);
   --ink-55: rgba(64, 62, 63, 0.55);
   --ink-40: rgba(64, 62, 63, 0.4);
-  --hairline: rgba(64, 62, 63, 0.14);
+  --hairline: rgba(64, 62, 63, 0.12);
+
+  /* Variant-D direction (2026-05-30): warm cream page base + white card surfaces.
+     --paper is wired into Dawn via scheme-1's background in settings_data.json
+     (scheme-1 is emitted to :root, so the .gradient body paints with it). This
+     token mirrors it for bespoke sections that need the page colour directly. */
+  --paper: #faf5ed;
+  --card-surface: #ffffff;
+  /* Coral kept as the bright brand accent (italic words, underlines, hovers).
+     CTA fill deepens to --coral-cta for ≥4.5:1 white-text contrast (WCAG AA). */
+  --coral-cta: #c14d2e;
+  /* Soft, warm-tinted shadows (raigal feel — tinted to the warm bg, not black). */
+  --shadow-rest: 0 1rem 2.6rem -2rem rgba(94, 83, 64, 0.34);
+  --shadow-soft: 0 2.4rem 5rem -2.8rem rgba(94, 83, 64, 0.42);
 
   --serif: 'Fraunces', Georgia, serif;
   --sans: 'DM Sans', system-ui, -apple-system, sans-serif;
@@ -33,6 +46,7 @@
   --hth-gutter: clamp(20px, 5vw, 64px);
   --hth-radius: 28px;
   --hth-radius-sm: 18px;
+  --hth-radius-card: 14px; /* Variant-D product/media surfaces */
   --hth-radius-pill: 999px;
 
   /* Wire Dawn's font variables to the brand faces */
@@ -140,11 +154,14 @@ button.shopify-payment-button__button--unbranded {
   --color-button-text: 251, 242, 233;  /* cream #fbf2e9 */
 }
 
-/* CTA — brand coral, the few highest-intent moments only (hero, checkout) */
+/* CTA — deepened coral + WHITE text, the few highest-intent moments only
+   (hero, checkout). Variant-D direction (2026-05-30): fill deepened from the
+   bright accent #ee7954 to #c14d2e so white label text clears WCAG AA
+   (≈4.8:1). Bright --coral stays the accent elsewhere (italic words, hovers). */
 .button.cta:not(.button--secondary):not(.button--tertiary),
 .button.button--cta:not(.button--secondary):not(.button--tertiary) {
-  --color-button: 238, 121, 84;        /* coral #ee7954 */
-  --color-button-text: 251, 242, 233;  /* cream #fbf2e9 */
+  --color-button: 193, 77, 46;         /* deep coral #c14d2e */
+  --color-button-text: 255, 255, 255;  /* white */
 }
 
 /* Subtle press/hover feedback (handoff darkens primary, brightens CTA down) */
