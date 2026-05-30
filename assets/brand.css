@@ -262,6 +262,36 @@ details[open] > .header__menu-item {
   box-shadow: 0 1px 0 var(--hairline), 0 12px 28px -24px rgba(64, 62, 63, 0.55);
 }
 
+/* ---------- Cart drawer ----------
+   Plan calls for a slide-out drawer (cart_type=drawer in settings_data). The
+   drawer surface stays Dawn scheme-1 (white), matching the page background.
+   Brand touches, steer-don't-fight: round the drawer's leading (left) edge to
+   match the mockup's card radius, soften Dawn's ink-0.2 border/footer rules to
+   the brand hairline, and set the cart title in Fraunces. The checkout button
+   carries the coral .cta class (added in cart-drawer + main-cart-footer
+   liquid) — checkout is one of the few highest-intent CTA moments (see Buttons). */
+
+/* Leading edge rounded like a card; right edge stays flush to the viewport.
+   overflow is already hidden/scroll on .drawer__inner, so corners clip cleanly. */
+.drawer__inner {
+  border-top-left-radius: var(--hth-radius);
+  border-bottom-left-radius: var(--hth-radius);
+  border-color: var(--hairline);
+}
+
+/* Soften Dawn's ink-0.2 footer + note-details rules to the brand hairline */
+.drawer__footer,
+.drawer__footer > details {
+  border-color: var(--hairline);
+}
+
+/* Cart title in Fraunces (Dawn leaves .drawer__heading at default sizing) */
+.drawer__heading {
+  font-family: var(--serif);
+  font-weight: 500;
+  font-size: 1.5rem;
+}
+
 @media (prefers-reduced-motion: reduce) {
   html:focus-within { scroll-behavior: auto; }
   .button:not([disabled]):active { transform: none; }
