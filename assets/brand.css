@@ -364,11 +364,20 @@ details[open] > .header__menu-item {
 .card-wrapper .card__content--kit .card-information {
   flex: 1 1 0;
   min-width: 0;
+  align-self: center;
+  margin: 0;
 }
 .card-wrapper .card__content--kit .quick-add {
   flex: 0 0 auto;
-  margin-left: auto;
+  align-self: center;
+  margin: 0 0 0 auto;
+}
+/* zero any inherited vertical margins so the two boxes share a centre line */
+.card-wrapper .card__content--kit .card-information > *,
+.card-wrapper .card__content--kit .price,
+.card-wrapper .card__content--kit .quick-add__submit {
   margin-top: 0;
+  margin-bottom: 0;
 }
 
 /* Card price — keep it small/quiet (DM Mono); Dawn's card price runs large.
@@ -376,7 +385,7 @@ details[open] > .header__menu-item {
 .card-wrapper .card__content--kit .price,
 .card-wrapper .card__content--kit .price .price-item {
   font-size: 0.95rem;
-  line-height: 1.2;
+  line-height: 1;
   letter-spacing: 0;
 }
 
