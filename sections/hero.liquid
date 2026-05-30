@@ -1,0 +1,300 @@
+{%- comment -%}
+  HostToHost — Hero (bespoke, text-led)
+  Phase 2 · Step F. Editorial cream hero per the design handoff (index.html
+  .hero copy) and CLAUDE-DESIGN-BRIEF §5.1: eyebrow chip → Caveat script
+  subhead → mixed upright/italic Fraunces display headline → DM Sans lead →
+  coral CTA + ghost WhatsApp. James chose a text-led cream hero (no photo
+  yet — Mafe drops a lifestyle image in later). Reuses Dawn's .button + the
+  Phase-1 brand.css .cta hook for the pills; layout/type live in this
+  section's own {% stylesheet %} block, on brand tokens from brand.css :root.
+{%- endcomment -%}
+
+{%- style -%}
+  .section-{{ section.id }}-padding {
+    padding-top: {{ section.settings.padding_top | times: 0.7 | round: 0 }}px;
+    padding-bottom: {{ section.settings.padding_bottom | times: 0.7 | round: 0 }}px;
+  }
+  @media screen and (min-width: 750px) {
+    .section-{{ section.id }}-padding {
+      padding-top: {{ section.settings.padding_top }}px;
+      padding-bottom: {{ section.settings.padding_bottom }}px;
+    }
+  }
+{%- endstyle -%}
+
+<div class="brand-hero brand-hero--{{ section.settings.background }} section-{{ section.id }}-padding">
+  <div class="brand-hero__wrap">
+    {%- if section.settings.show_badge and section.settings.badge_text != blank -%}
+      <span class="brand-hero__badge">{{ section.settings.badge_text }}</span>
+    {%- endif -%}
+
+    <div class="brand-hero__copy">
+      {%- if section.settings.eyebrow != blank -%}
+        <span class="brand-hero__eyebrow"><span class="brand-hero__dot"></span>{{ section.settings.eyebrow }}</span>
+      {%- endif -%}
+
+      {%- if section.settings.script != blank -%}
+        <span class="brand-hero__script">{{ section.settings.script }}</span>
+      {%- endif -%}
+
+      {%- if section.settings.heading != blank -%}
+        <h1 class="brand-hero__title">{{ section.settings.heading }}</h1>
+      {%- endif -%}
+
+      {%- if section.settings.lead != blank -%}
+        <div class="brand-hero__lead">{{ section.settings.lead }}</div>
+      {%- endif -%}
+
+      {%- if section.settings.button_label != blank or section.settings.button_secondary_label != blank -%}
+        <div class="brand-hero__ctas">
+          {%- if section.settings.button_label != blank -%}
+            <a
+              href="{{ section.settings.button_link | default: '#' }}"
+              class="button cta brand-hero__cta"
+            >{{ section.settings.button_label }}</a>
+          {%- endif -%}
+          {%- if section.settings.button_secondary_label != blank -%}
+            <a
+              href="{{ section.settings.button_secondary_link | default: '#' }}"
+              {% if section.settings.button_secondary_link contains 'wa.me' or section.settings.button_secondary_link contains 'whatsapp' %}target="_blank" rel="noopener"{% endif %}
+              class="button button--secondary brand-hero__cta"
+            >{{ section.settings.button_secondary_label }}</a>
+          {%- endif -%}
+        </div>
+      {%- endif -%}
+    </div>
+  </div>
+</div>
+
+{%- stylesheet -%}
+  .brand-hero {
+    position: relative;
+    overflow: hidden;
+  }
+  .brand-hero--cream { background: var(--cream); }
+  .brand-hero--white { background: #fff; }
+  .brand-hero--sage { background: var(--sage-soft); }
+  .brand-hero--ink { background: var(--ink); color: var(--cream); }
+
+  .brand-hero__wrap {
+    position: relative;
+    max-width: var(--hth-maxw);
+    margin-inline: auto;
+    padding-inline: var(--hth-gutter);
+  }
+
+  .brand-hero__copy {
+    max-width: 20ch;
+    max-width: min(100%, 720px);
+  }
+
+  .brand-hero__eyebrow {
+    display: inline-flex;
+    align-items: center;
+    gap: 0.55em;
+    font-family: var(--sans);
+    font-size: 0.72rem;
+    font-weight: 600;
+    letter-spacing: 0.18em;
+    text-transform: uppercase;
+    color: var(--sage);
+  }
+  .brand-hero--ink .brand-hero__eyebrow { color: var(--gold); }
+  .brand-hero__dot {
+    width: 7px;
+    height: 7px;
+    border-radius: 50%;
+    background: var(--coral);
+    flex: none;
+  }
+
+  .brand-hero__script {
+    display: block;
+    margin-top: 1.1rem;
+    font-family: var(--script);
+    font-size: 1.6rem;
+    line-height: 1.1;
+    color: var(--sage);
+  }
+  .brand-hero--ink .brand-hero__script { color: var(--peach); }
+
+  .brand-hero__title {
+    margin: 0.5rem 0 0;
+    font-family: var(--serif);
+    font-weight: 400;
+    line-height: 1;
+    letter-spacing: -0.015em;
+    font-size: clamp(2.7rem, 6.4vw, 5rem);
+    text-wrap: balance;
+    color: inherit;
+  }
+  .brand-hero__title em,
+  .brand-hero__title i {
+    font-style: italic;
+    color: var(--coral);
+  }
+
+  .brand-hero__lead {
+    margin-top: 1.4rem;
+    max-width: 46ch;
+    font-family: var(--sans);
+    font-size: 1.075rem;
+    line-height: 1.6;
+    color: var(--ink-70);
+    text-wrap: pretty;
+  }
+  .brand-hero--ink .brand-hero__lead { color: rgba(251, 242, 233, 0.78); }
+  .brand-hero__lead > :first-child { margin-top: 0; }
+  .brand-hero__lead > :last-child { margin-bottom: 0; }
+
+  .brand-hero__ctas {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 0.85rem;
+    margin-top: 2rem;
+  }
+  .brand-hero__cta { margin: 0; }
+
+  .brand-hero__badge {
+    position: absolute;
+    top: 0;
+    right: var(--hth-gutter);
+    display: inline-block;
+    transform: rotate(3deg);
+    padding: 0.5em 0.95em;
+    border-radius: var(--hth-radius-pill);
+    background: var(--coral);
+    color: var(--cream);
+    font-family: var(--sans);
+    font-size: 0.72rem;
+    font-weight: 600;
+    letter-spacing: 0.06em;
+    text-transform: uppercase;
+  }
+  @media screen and (max-width: 749px) {
+    .brand-hero__badge {
+      position: static;
+      transform: none;
+      margin-bottom: 1.25rem;
+    }
+  }
+{%- endstylesheet -%}
+
+{% schema %}
+{
+  "name": "Hero",
+  "tag": "section",
+  "class": "section",
+  "settings": [
+    {
+      "type": "select",
+      "id": "background",
+      "label": "Fondo",
+      "options": [
+        { "value": "cream", "label": "Crema" },
+        { "value": "white", "label": "Blanco" },
+        { "value": "sage", "label": "Verde salvia" },
+        { "value": "ink", "label": "Tinta (oscuro)" }
+      ],
+      "default": "cream"
+    },
+    {
+      "type": "text",
+      "id": "eyebrow",
+      "label": "Etiqueta superior",
+      "default": "Superhost · Medellín"
+    },
+    {
+      "type": "text",
+      "id": "script",
+      "label": "Subtítulo manuscrito",
+      "default": "Lo que uso cada día."
+    },
+    {
+      "type": "inline_richtext",
+      "id": "heading",
+      "label": "Título",
+      "info": "Usa cursiva para resaltar una palabra en coral (p. ej. Airbnb).",
+      "default": "Productos para tu <em>Airbnb</em>, curados por una Superhost."
+    },
+    {
+      "type": "richtext",
+      "id": "lead",
+      "label": "Párrafo",
+      "default": "<p>Copas, cubiertos, utensilios y detalles que probé en mis propias propiedades. Calidad hotelera, criterio de anfitriona.</p>"
+    },
+    {
+      "type": "header",
+      "content": "Botones"
+    },
+    {
+      "type": "text",
+      "id": "button_label",
+      "label": "Botón principal — texto",
+      "default": "Ver la tienda"
+    },
+    {
+      "type": "url",
+      "id": "button_link",
+      "label": "Botón principal — enlace"
+    },
+    {
+      "type": "text",
+      "id": "button_secondary_label",
+      "label": "Botón secundario — texto",
+      "default": "Hablar por WhatsApp"
+    },
+    {
+      "type": "url",
+      "id": "button_secondary_link",
+      "label": "Botón secundario — enlace",
+      "info": "Pega el enlace de WhatsApp (https://wa.me/57…)."
+    },
+    {
+      "type": "header",
+      "content": "Insignia"
+    },
+    {
+      "type": "checkbox",
+      "id": "show_badge",
+      "label": "Mostrar insignia",
+      "default": false
+    },
+    {
+      "type": "text",
+      "id": "badge_text",
+      "label": "Texto de la insignia",
+      "default": "Envío mismo día · Medellín"
+    },
+    {
+      "type": "header",
+      "content": "Espaciado"
+    },
+    {
+      "type": "range",
+      "id": "padding_top",
+      "min": 0,
+      "max": 180,
+      "step": 4,
+      "unit": "px",
+      "label": "Espacio superior",
+      "default": 112
+    },
+    {
+      "type": "range",
+      "id": "padding_bottom",
+      "min": 0,
+      "max": 180,
+      "step": 4,
+      "unit": "px",
+      "label": "Espacio inferior",
+      "default": 112
+    }
+  ],
+  "presets": [
+    {
+      "name": "Hero"
+    }
+  ]
+}
+{% endschema %}
