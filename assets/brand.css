@@ -1,0 +1,113 @@
+/* ============================================================
+   HostToHost — brand layer over Dawn
+   Tokens + type system ported from the locked design handoff
+   (host-to-host/project/styles.css). Accent = palette blue.
+   Page base = white; cream/sage-soft are secondary surfaces.
+   ============================================================ */
+
+:root {
+  --cream: #fbf2e9;
+  --coral: #597bbd;
+  --orange: #597bbd;
+  --peach: #96a1d2;
+  --gold: #fab95b;
+  --blue: #597bbd;
+  --periwinkle: #96a1d2;
+  --sage: #989c6f;
+  --sage-soft: #ebf1db;
+  --ink: #403e3f;
+
+  --cream-deep: #f4e7d8;
+  --peach-tint: #fae3d6;
+  --ink-70: rgba(64, 62, 63, 0.7);
+  --ink-55: rgba(64, 62, 63, 0.55);
+  --ink-40: rgba(64, 62, 63, 0.4);
+  --hairline: rgba(64, 62, 63, 0.14);
+
+  --serif: 'Fraunces', Georgia, serif;
+  --sans: 'DM Sans', system-ui, -apple-system, sans-serif;
+  --mono: 'DM Mono', 'SFMono-Regular', monospace;
+  --script: 'Caveat', cursive;
+
+  --hth-maxw: 1280px;
+  --hth-gutter: clamp(20px, 5vw, 64px);
+  --hth-radius: 28px;
+  --hth-radius-sm: 18px;
+  --hth-radius-pill: 999px;
+
+  /* Wire Dawn's font variables to the brand faces */
+  --font-body-family: var(--sans);
+  --font-body-style: normal;
+  --font-body-weight: 400;
+  --font-body-weight-bold: 600;
+  --font-heading-family: var(--serif);
+  --font-heading-style: normal;
+  --font-heading-weight: 400;
+}
+
+/* ---------- Layout helpers ---------- */
+.hth-wrap { max-width: var(--hth-maxw); margin-inline: auto; padding-inline: var(--hth-gutter); }
+.hth-section { padding-block: clamp(56px, 9vw, 120px); }
+.hth-section--tight { padding-block: clamp(40px, 6vw, 72px); }
+.hth-bg-sage { background: var(--sage-soft); }
+.hth-bg-cream { background: var(--cream); }
+.hth-bg-cream-deep { background: var(--cream-deep); }
+.hth-bg-ink { background: var(--ink); color: var(--cream); }
+
+/* ---------- Type ramp ---------- */
+.eyebrow {
+  font-family: var(--sans);
+  font-size: 0.72rem;
+  font-weight: 600;
+  letter-spacing: 0.18em;
+  text-transform: uppercase;
+  color: var(--sage);
+  display: inline-flex;
+  align-items: center;
+  gap: 0.55em;
+}
+.eyebrow::before { content: ""; width: 7px; height: 7px; border-radius: 50%; background: currentColor; flex: none; }
+.eyebrow--coral { color: var(--orange); }
+
+.display {
+  font-family: var(--serif);
+  font-weight: 400;
+  line-height: 1;
+  letter-spacing: -0.015em;
+  font-size: clamp(2.7rem, 6.4vw, 5rem);
+  margin: 0;
+  text-wrap: balance;
+}
+.h2-display {
+  font-family: var(--serif);
+  font-weight: 400;
+  line-height: 1.04;
+  letter-spacing: -0.012em;
+  font-size: clamp(2rem, 4.2vw, 3.4rem);
+  margin: 0;
+  text-wrap: balance;
+}
+.h3-display {
+  font-family: var(--serif);
+  font-weight: 500;
+  font-size: 1.5rem;
+  line-height: 1.15;
+  margin: 0;
+}
+.ital { font-style: italic; }
+.in-coral { color: var(--coral); }
+.in-sage { color: var(--sage); }
+.lead {
+  font-size: 1.075rem;
+  line-height: 1.6;
+  color: var(--ink-70);
+  max-width: 46ch;
+  text-wrap: pretty;
+}
+.script { font-family: var(--script); font-size: 1.5rem; line-height: 1.2; color: var(--sage); }
+.mono { font-family: var(--mono); letter-spacing: 0.02em; }
+.price { font-family: var(--mono); font-size: 0.95rem; letter-spacing: 0.01em; color: var(--ink); }
+
+@media (prefers-reduced-motion: reduce) {
+  html:focus-within { scroll-behavior: auto; }
+}
