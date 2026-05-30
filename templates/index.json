@@ -59,21 +59,27 @@
     "featured_collection": {
       "type": "featured-collection",
       "settings": {
-        "title": "Featured products",
-        "heading_size": "h2",
-        "collection": "all",
-        "products_to_show": 8,
-        "columns_desktop": 4,
+        "title": "Piezas para <em>empezar</em>.",
+        "heading_size": "h1",
+        "description": "<p>El kit base — lo que uso en cada cocina.</p>",
+        "show_description": false,
+        "collection": "kit-base",
+        "products_to_show": 6,
+        "columns_desktop": 3,
+        "enable_desktop_slider": false,
         "color_scheme": "scheme-1",
-        "show_view_all": false,
-        "swipe_on_mobile": false,
-        "image_ratio": "adapt",
-        "show_secondary_image": true,
+        "show_view_all": true,
+        "view_all_style": "outline",
+        "swipe_on_mobile": true,
+        "image_ratio": "square",
+        "image_shape": "default",
+        "show_secondary_image": false,
         "show_vendor": false,
         "show_rating": false,
+        "quick_add": "standard",
         "columns_mobile": "2",
-        "padding_top": 28,
-        "padding_bottom": 36
+        "padding_top": 64,
+        "padding_bottom": 72
       }
     },
     "collage": {
@@ -184,8 +190,8 @@
   "order": [
     "hero",
     "manifesto",
-    "rich_text",
     "featured_collection",
+    "rich_text",
     "collage",
     "video",
     "multicolumn"

@@ -292,7 +292,69 @@ details[open] > .header__menu-item {
   font-size: 1.5rem;
 }
 
+/* ---------- Featured collection ("Kit base") + product cards ----------
+   Phase 2 · Step H. Restyle Dawn's featured-collection + card-product toward
+   the design-handoff "Kit base" treatment — steer-don't-fight, like Phase 1.
+   Coral italic section title, soft brand cards, coral slider arrows + quick-add.
+   Scoped to the card machinery so the collection page inherits the same look.
+*/
+
+/* Section heading: italic word → coral (set <em> in the title setting, like
+   the hero). Heading font is already Fraunces via --font-heading-family. */
+.collection__title .title em,
+.collection__title .title i {
+  font-style: italic;
+  color: var(--coral);
+}
+
+/* Product card surface — soft radius, hairline, gentle hover lift */
+.card-wrapper .card,
+.card-wrapper .card__inner,
+.card-wrapper .card__media {
+  border-radius: var(--hth-radius-sm);
+}
+.card-wrapper .card--standard .card__media {
+  border: 1px solid var(--hairline);
+}
+.card-wrapper {
+  transition: transform 0.25s ease;
+}
+.card-wrapper:hover {
+  transform: translateY(-3px);
+}
+.card-wrapper .card__heading a {
+  font-family: var(--sans);
+  font-weight: 500;
+}
+
+/* Slider arrows — brand hairline circle, coral on hover (handoff scroll-nav) */
+.slider-button {
+  border: 1px solid var(--hairline);
+  border-radius: 50%;
+  color: var(--ink);
+  background: #fff;
+  transition: color 0.2s ease, border-color 0.2s ease, background 0.2s ease;
+}
+.slider-button:not([disabled]):hover {
+  color: var(--cream);
+  background: var(--coral);
+  border-color: var(--coral);
+}
+.slider-counter--current { color: var(--coral); }
+
+/* Quick-add → coral pill (reuses the Step B CTA hue for the highest-intent
+   in-card action). The floating "+" overlay from the handoff would need markup
+   changes; kept as a brand pill button for now (see status note). */
+.quick-add__submit {
+  --buttons-radius: var(--hth-radius-pill);
+  --buttons-radius-outset: var(--hth-radius-pill);
+  background-color: var(--coral);
+  color: var(--cream);
+}
+
 @media (prefers-reduced-motion: reduce) {
   html:focus-within { scroll-behavior: auto; }
   .button:not([disabled]):active { transform: none; }
+  .card-wrapper { transition: none; }
+  .card-wrapper:hover { transform: none; }
 }
