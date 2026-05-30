@@ -18,6 +18,16 @@
         "padding_bottom": 112
       }
     },
+    "manifesto": {
+      "type": "manifesto",
+      "settings": {
+        "background": "cream",
+        "quote": "Un espacio bonito y un espacio que funciona no son lo mismo.",
+        "attribution": "— Mafe",
+        "padding_top": 88,
+        "padding_bottom": 88
+      }
+    },
     "rich_text": {
       "type": "rich-text",
       "blocks": {
@@ -173,6 +183,7 @@
   },
   "order": [
     "hero",
+    "manifesto",
     "rich_text",
     "featured_collection",
     "collage",
