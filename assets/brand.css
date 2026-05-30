@@ -327,24 +327,47 @@ details[open] > .header__menu-item {
   color: var(--coral);
 }
 
-/* Product card surface — soft radius, hairline, gentle hover lift */
+/* Product card surface — Variant-D (2026-05-30): 14px radius, soft warm-tinted
+   shadow at rest, deeper shadow + coral border + image zoom on hover (raigal
+   feel). Media radius/shadow only show once a product has a photo; the name +
+   category + price line below render regardless. */
 .card-wrapper .card,
 .card-wrapper .card__inner,
 .card-wrapper .card__media {
-  border-radius: var(--hth-radius-sm);
+  border-radius: var(--hth-radius-card);
 }
-.card-wrapper .card--standard .card__media {
-  border: 1px solid var(--hairline);
+.card-wrapper .card__media {
+  box-shadow: var(--shadow-rest);
+  border: 1px solid transparent;
+  transition: box-shadow 0.3s ease, border-color 0.3s ease;
 }
 .card-wrapper {
   transition: transform 0.25s ease;
 }
 .card-wrapper:hover {
-  transform: translateY(-3px);
+  transform: translateY(-4px);
 }
+.card-wrapper:hover .card__media {
+  box-shadow: var(--shadow-soft);
+  border-color: var(--coral);
+}
+/* Image zoom on hover (.media already clips overflow in Dawn) */
+.card-wrapper .card__media .media img {
+  transition: transform 0.5s cubic-bezier(0.16, 1, 0.3, 1);
+}
+.card-wrapper:hover .card__media .media img {
+  transform: scale(1.04);
+}
+/* Product name → Fraunces (Variant-D card name; was DM Sans in Step H) */
+.card-wrapper .card__heading,
 .card-wrapper .card__heading a {
-  font-family: var(--sans);
+  font-family: var(--serif);
   font-weight: 500;
+  letter-spacing: -0.01em;
+}
+.card-wrapper .card__content--kit .card__heading {
+  font-size: 2.1rem;
+  line-height: 1.15;
 }
 
 /* Slider arrows — brand hairline circle, coral on hover (handoff scroll-nav) */
@@ -407,6 +430,33 @@ details[open] > .header__menu-item {
   font-size: 1.52rem;
   line-height: 1;
   letter-spacing: 0;
+}
+
+/* Category label (product.type → Mesa / Cocina / Baño / Experiencia): DM Mono,
+   sage, uppercase, tracked — sits on its own line above the Fraunces name. */
+.card-wrapper .card__content--kit .card__category {
+  flex: 0 0 100%;
+  margin: 0 0 0.4rem;
+  font-family: var(--mono);
+  font-size: 1.2rem;
+  font-weight: 500;
+  letter-spacing: 0.14em;
+  text-transform: uppercase;
+  color: var(--sage);
+}
+
+/* Price + sell-unit on one baseline ("$100.000 · pack de 2"). Sell-unit is the
+   custom.sell_unit product metafield, quiet DM Mono in muted ink. */
+.card-wrapper .card__content--kit .card__price-line {
+  display: inline-flex;
+  align-items: baseline;
+  flex-wrap: wrap;
+  gap: 0.5rem;
+}
+.card-wrapper .card__content--kit .card__sell-unit {
+  font-family: var(--mono);
+  font-size: 1.3rem;
+  color: var(--ink-55);
 }
 
 /* Quick-add → small outlined pill: transparent fill, light-coral border, ink
