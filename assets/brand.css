@@ -227,6 +227,41 @@ textarea.field__input {
   box-shadow: 0 0 0 calc(0.1rem + var(--inputs-border-width)) var(--coral);
 }
 
+/* ---------- Header + logo lockup ----------
+   Mockup (design-handoff home): coral wordmark lockup left, centered DM Sans
+   nav, search + cart right, clean borderless white. Layout (logo middle-left,
+   inline menu, no line separator, 28px air) is set in header-group.json; the
+   logo itself is settings.logo (transparent coral lockup in Files). Here we
+   only nudge Dawn's own header pieces: nav type + coral underline, the cart
+   count chip to coral, and a soft shadow for the now-borderless sticky bar. */
+
+/* Nav links — brand DM Sans with a hair of tracking. Ink-at-.75 color and the
+   underline geometry come from scheme-1 / Dawn; we just recolour the underline
+   to coral on hover, on the active item, and on an open dropdown. */
+.header__menu-item {
+  font-family: var(--sans);
+  letter-spacing: 0.01em;
+}
+.header__menu-item:hover span,
+.header__active-menu-item,
+details[open] > .header__menu-item {
+  text-decoration-color: var(--coral);
+}
+
+/* Cart count chip — coral fill / cream text (Dawn defaults it to the ink
+   --color-button). Matches the mockup's coral count bubble. */
+.cart-count-bubble {
+  background-color: var(--coral);
+  color: var(--cream);
+}
+
+/* Borderless header: we turned off Dawn's static line separator, so give the
+   sticky bar a soft hairline + drop shadow once it floats over scrolled
+   content (.scrolled-past-header is set on the ancestor by Dawn's sticky JS). */
+.scrolled-past-header .shopify-section-header-sticky .header-wrapper {
+  box-shadow: 0 1px 0 var(--hairline), 0 12px 28px -24px rgba(64, 62, 63, 0.55);
+}
+
 @media (prefers-reduced-motion: reduce) {
   html:focus-within { scroll-behavior: auto; }
   .button:not([disabled]):active { transform: none; }

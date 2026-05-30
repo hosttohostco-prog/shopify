@@ -2,7 +2,8 @@
   "current": "Default",
   "presets": {
     "Default": {
-      "logo_width": 90,
+      "logo": "shopify://shop_images/logo-coral.png",
+      "logo_width": 120,
       "color_schemes": {
         "scheme-1": {
           "settings": {
