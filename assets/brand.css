@@ -159,6 +159,74 @@ button.shopify-payment-button__button--unbranded {
   --color-button-text: 64, 62, 63;     /* ink   */
 }
 
+/* ---------- Forms / inputs ----------
+   Handoff lock (design-handoff .news-form input): single-line fields are a
+   full pill, cream fill, ink text, a hairline border, and a coral focus ring.
+   Dawn renders the field border + focus as a box-shadow on the .field:after
+   pseudo using --color-foreground, so we steer its own --inputs-radius var for
+   the pill and recolour the ring to hairline / coral — matching the lock
+   without rebuilding the field machinery. Textareas keep the soft (non-pill)
+   radius so tall boxes don't read as lozenges. */
+
+/* Pill radius — set on the wrappers so the control + its :after both inherit */
+.field,
+.select,
+.customer .field,
+.customer select,
+.localization-form__select {
+  --inputs-radius: var(--hth-radius-pill);
+  --inputs-radius-outset: var(--hth-radius-pill);
+}
+
+/* Textareas + their wrapper take the soft radius instead of a full pill */
+.text-area,
+textarea.field__input {
+  --inputs-radius: var(--hth-radius-sm);
+  --inputs-radius-outset: var(--hth-radius-sm);
+}
+
+/* Control surface: cream fill, ink text, brand sans */
+.field__input,
+.select__select,
+.customer .field input,
+.customer select {
+  background-color: var(--cream);
+  color: var(--ink);
+  font-family: var(--sans);
+}
+.field__input::placeholder { color: var(--ink-55); opacity: 1; }
+
+/* Resting border = brand hairline (Dawn keeps its own border-width geometry) */
+.field:after,
+.select:after,
+.customer .field:after,
+.customer select:after,
+.localization-form__select:after {
+  box-shadow: 0 0 0 var(--inputs-border-width) var(--hairline);
+}
+
+/* Hover = a touch stronger, still soft */
+.field:hover.field:after,
+.select:hover.select:after,
+.select__select:hover.select__select:after,
+.customer .field:hover.field:after,
+.customer select:hover.select:after,
+.localization-form__select:hover.localization-form__select:after {
+  box-shadow: 0 0 0 calc(0.1rem + var(--inputs-border-width)) var(--ink-40);
+}
+
+/* Focus = coral ring (the handoff's input focus signal) */
+.field__input:focus,
+.field__input:focus-visible,
+.select__select:focus,
+.select__select:focus-visible,
+.customer .field input:focus,
+.customer .field input:focus-visible,
+.customer select:focus,
+.customer select:focus-visible {
+  box-shadow: 0 0 0 calc(0.1rem + var(--inputs-border-width)) var(--coral);
+}
+
 @media (prefers-reduced-motion: reduce) {
   html:focus-within { scroll-behavior: auto; }
   .button:not([disabled]):active { transform: none; }
