@@ -322,7 +322,9 @@ details[open] > .header__menu-item {
 /* Section heading: italic word → coral (set <em> in the title setting, like
    the hero). Heading font is already Fraunces via --font-heading-family. */
 .collection__title .title em,
-.collection__title .title i {
+.collection__title .title i,
+.collection-list-title em,
+.collection-list-title i {
   font-style: italic;
   color: var(--coral);
 }
@@ -365,7 +367,8 @@ details[open] > .header__menu-item {
   font-weight: 500;
   letter-spacing: -0.01em;
 }
-.card-wrapper .card__content--kit .card__heading {
+.card-wrapper .card__content--kit .card__heading,
+.collection-list .card__heading {
   font-size: 2.1rem;
   line-height: 1.15;
 }

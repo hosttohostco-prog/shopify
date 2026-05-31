@@ -227,10 +227,51 @@
         "padding_top": 36,
         "padding_bottom": 36
       }
+    },
+    "collection_list": {
+      "type": "collection-list",
+      "blocks": {
+        "cocina": {
+          "type": "featured_collection",
+          "settings": {
+            "collection": "cocina"
+          }
+        },
+        "bano": {
+          "type": "featured_collection",
+          "settings": {
+            "collection": "bano"
+          }
+        },
+        "ambiente": {
+          "type": "featured_collection",
+          "settings": {
+            "collection": "ambiente"
+          }
+        }
+      },
+      "block_order": [
+        "cocina",
+        "bano",
+        "ambiente"
+      ],
+      "settings": {
+        "title": "Cada rincón de tu <em>Airbnb</em>.",
+        "heading_size": "h1",
+        "image_ratio": "square",
+        "columns_desktop": 3,
+        "color_scheme": "scheme-1",
+        "show_view_all": false,
+        "columns_mobile": "2",
+        "swipe_on_mobile": false,
+        "padding_top": 64,
+        "padding_bottom": 72
+      }
     }
   },
   "order": [
     "hero",
+    "collection_list",
     "manifesto",
     "featured_collection",
     "editorial_split",
