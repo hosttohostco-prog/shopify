@@ -3,19 +3,18 @@
     "hero": {
       "type": "hero",
       "settings": {
-        "background": "cream",
-        "eyebrow": "Superhost · Medellín",
-        "script": "Lo que uso cada día.",
+        "scrim": "light",
+        "text_color": "dark",
+        "eyebrow": "Curado por una Superhost en Medellín",
         "heading": "Productos para tu <em>Airbnb</em>, curados por una Superhost.",
         "lead": "<p>Copas, cubiertos, utensilios y detalles que probé en mis propias propiedades. Calidad hotelera, criterio de anfitriona.</p>",
         "button_label": "Ver la tienda",
         "button_link": "shopify://collections/all",
         "button_secondary_label": "Hablar por WhatsApp",
         "button_secondary_link": "",
-        "show_badge": false,
-        "badge_text": "Envío mismo día · Medellín",
-        "padding_top": 112,
-        "padding_bottom": 112
+        "photo_tag": "Foto: el kit en una cocina real",
+        "padding_top": 96,
+        "padding_bottom": 96
       }
     },
     "manifesto": {
@@ -41,7 +40,7 @@
         "text": {
           "type": "text",
           "settings": {
-            "text": "<p>Share information about your brand with your customers. Describe a product, make announcements, or welcome customers to your store.<\/p>"
+            "text": "<p>Share information about your brand with your customers. Describe a product, make announcements, or welcome customers to your store.</p>"
           }
         }
       },
@@ -183,7 +182,7 @@
           "type": "column",
           "settings": {
             "title": "Column",
-            "text": "<p>Pair text with an image to focus on your chosen product, collection, or blog post. Add details on availability, style, or even provide a review.<\/p>",
+            "text": "<p>Pair text with an image to focus on your chosen product, collection, or blog post. Add details on availability, style, or even provide a review.</p>",
             "link_label": "",
             "link": ""
           }
@@ -192,7 +191,7 @@
           "type": "column",
           "settings": {
             "title": "Column",
-            "text": "<p>Pair text with an image to focus on your chosen product, collection, or blog post. Add details on availability, style, or even provide a review.<\/p>",
+            "text": "<p>Pair text with an image to focus on your chosen product, collection, or blog post. Add details on availability, style, or even provide a review.</p>",
             "link_label": "",
             "link": ""
           }
@@ -201,7 +200,7 @@
           "type": "column",
           "settings": {
             "title": "Column",
-            "text": "<p>Pair text with an image to focus on your chosen product, collection, or blog post. Add details on availability, style, or even provide a review.<\/p>",
+            "text": "<p>Pair text with an image to focus on your chosen product, collection, or blog post. Add details on availability, style, or even provide a review.</p>",
             "link_label": "",
             "link": ""
           }

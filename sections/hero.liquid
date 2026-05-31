@@ -1,40 +1,58 @@
 {%- comment -%}
-  HostToHost — Hero (bespoke, text-led)
-  Phase 2 · Step F. Editorial cream hero per the design handoff (index.html
-  .hero copy) and CLAUDE-DESIGN-BRIEF §5.1: eyebrow chip → Caveat script
-  subhead → mixed upright/italic Fraunces display headline → DM Sans lead →
-  coral CTA + ghost WhatsApp. James chose a text-led cream hero (no photo
-  yet — Mafe drops a lifestyle image in later). Reuses Dawn's .button + the
-  Phase-1 brand.css .cta hook for the pills; layout/type live in this
-  section's own {% stylesheet %} block, on brand tokens from brand.css :root.
+  HostToHost — Hero (bespoke, image-behind)
+  Phase 2 · Variant-D Step 3. Reworks the Step-F text-led hero into ONE
+  full-bleed section with the image BEHIND the text (visual lock:
+  design-handoff/alt-prototype/index-alt-3.html .hero). Until Mafe drops a
+  lifestyle photo in (image_picker setting), the background is a warm tinted
+  gradient placeholder. A readability scrim + text-colour toggle keep the copy
+  legible over any future photo (Variant-D decision #2). Caveat script dropped
+  (decision #5). Eyebrow → DM Mono. Coral .cta reuses the Phase-1 brand hook;
+  secondary CTA → text link with arrow (prototype .linkbtn). Layout/type live
+  in this section's own {% stylesheet %} on brand.css tokens. NOTE: brand.css
+  documents Dawn's 10px rem base — prototype rems (16px base) are ×1.6 here;
+  px terms (eyebrow/lead/tag) are ported as-is.
 {%- endcomment -%}
 
 {%- style -%}
   .section-{{ section.id }}-padding {
-    padding-top: {{ section.settings.padding_top | times: 0.7 | round: 0 }}px;
-    padding-bottom: {{ section.settings.padding_bottom | times: 0.7 | round: 0 }}px;
+    --brand-hero-pad-top: {{ section.settings.padding_top | times: 0.7 | round: 0 }}px;
+    --brand-hero-pad-bottom: {{ section.settings.padding_bottom | times: 0.7 | round: 0 }}px;
   }
   @media screen and (min-width: 750px) {
     .section-{{ section.id }}-padding {
-      padding-top: {{ section.settings.padding_top }}px;
-      padding-bottom: {{ section.settings.padding_bottom }}px;
+      --brand-hero-pad-top: {{ section.settings.padding_top }}px;
+      --brand-hero-pad-bottom: {{ section.settings.padding_bottom }}px;
     }
   }
 {%- endstyle -%}
 
-<div class="brand-hero brand-hero--{{ section.settings.background }} section-{{ section.id }}-padding">
-  <div class="brand-hero__wrap">
-    {%- if section.settings.show_badge and section.settings.badge_text != blank -%}
-      <span class="brand-hero__badge">{{ section.settings.badge_text }}</span>
+<div
+  class="brand-hero brand-hero--text-{{ section.settings.text_color }} brand-hero--scrim-{{ section.settings.scrim }} section-{{ section.id }}-padding"
+>
+  <div class="brand-hero__bg{% unless section.settings.image %} brand-hero__bg--placeholder{% endunless %}">
+    {%- if section.settings.image -%}
+      {{
+        section.settings.image
+        | image_url: width: 2200
+        | image_tag:
+          loading: 'eager',
+          fetchpriority: 'high',
+          sizes: '100vw',
+          widths: '750, 1100, 1500, 1900, 2200',
+          class: 'brand-hero__img',
+          alt: section.settings.image.alt | default: section.settings.heading | strip_html
+      }}
     {%- endif -%}
+  </div>
 
+  {%- if section.settings.scrim != 'none' -%}
+    <div class="brand-hero__scrim"></div>
+  {%- endif -%}
+
+  <div class="brand-hero__wrap">
     <div class="brand-hero__copy">
       {%- if section.settings.eyebrow != blank -%}
-        <span class="brand-hero__eyebrow"><span class="brand-hero__dot"></span>{{ section.settings.eyebrow }}</span>
-      {%- endif -%}
-
-      {%- if section.settings.script != blank -%}
-        <span class="brand-hero__script">{{ section.settings.script }}</span>
+        <p class="brand-hero__eyebrow">{{ section.settings.eyebrow }}</p>
       {%- endif -%}
 
       {%- if section.settings.heading != blank -%}
@@ -57,76 +75,103 @@
             <a
               href="{{ section.settings.button_secondary_link | default: '#' }}"
               {% if section.settings.button_secondary_link contains 'wa.me' or section.settings.button_secondary_link contains 'whatsapp' %}target="_blank" rel="noopener"{% endif %}
-              class="button button--secondary brand-hero__cta"
-            >{{ section.settings.button_secondary_label }}</a>
+              class="brand-hero__linkbtn"
+            >{{ section.settings.button_secondary_label }}<span class="brand-hero__arrow" aria-hidden="true">&rarr;</span></a>
           {%- endif -%}
         </div>
       {%- endif -%}
     </div>
   </div>
+
+  {%- if section.settings.photo_tag != blank -%}
+    <span class="brand-hero__tag">{{ section.settings.photo_tag }}</span>
+  {%- endif -%}
 </div>
 
 {%- stylesheet -%}
   .brand-hero {
     position: relative;
+    isolation: isolate;
+    display: flex;
+    align-items: center;
     overflow: hidden;
+    min-height: clamp(540px, 84vh, 780px);
   }
-  .brand-hero--cream { background: var(--cream); }
-  .brand-hero--white { background: #fff; }
-  .brand-hero--sage { background: var(--sage-soft); }
-  .brand-hero--ink { background: var(--ink); color: var(--cream); }
 
+  /* ---- Background layer: future lifestyle photo, gradient placeholder until then ---- */
+  .brand-hero__bg {
+    position: absolute;
+    inset: 0;
+    z-index: -2;
+  }
+  .brand-hero__bg--placeholder {
+    background: linear-gradient(120deg, var(--cream-deep), var(--peach-tint) 46%, var(--sage-soft));
+  }
+  .brand-hero__img {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+    display: block;
+  }
+
+  /* ---- Scrim: keeps text readable over any image (left-weighted) ---- */
+  .brand-hero__scrim {
+    position: absolute;
+    inset: 0;
+    z-index: -1;
+  }
+  .brand-hero--scrim-light .brand-hero__scrim {
+    background: linear-gradient(
+      90deg,
+      rgba(250, 245, 237, 0.92) 0%,
+      rgba(250, 245, 237, 0.7) 36%,
+      rgba(250, 245, 237, 0.16) 70%,
+      rgba(250, 245, 237, 0) 100%
+    );
+  }
+  .brand-hero--scrim-dark .brand-hero__scrim {
+    background: linear-gradient(
+      90deg,
+      rgba(38, 36, 34, 0.78) 0%,
+      rgba(38, 36, 34, 0.52) 38%,
+      rgba(38, 36, 34, 0.12) 72%,
+      rgba(38, 36, 34, 0) 100%
+    );
+  }
+
+  /* ---- Copy ---- */
   .brand-hero__wrap {
     position: relative;
+    width: 100%;
     max-width: var(--hth-maxw);
     margin-inline: auto;
     padding-inline: var(--hth-gutter);
+    padding-block: var(--brand-hero-pad-top, 80px) var(--brand-hero-pad-bottom, 80px);
   }
-
   .brand-hero__copy {
-    max-width: 20ch;
-    max-width: min(100%, 720px);
+    max-width: min(100%, 660px);
   }
 
   .brand-hero__eyebrow {
-    display: inline-flex;
-    align-items: center;
-    gap: 0.55em;
-    font-family: var(--sans);
-    font-size: 1.15rem;
-    font-weight: 600;
-    letter-spacing: 0.18em;
+    margin: 0 0 26px;
+    font-family: var(--mono);
+    font-size: 12.5px;
+    font-weight: 500;
+    letter-spacing: 0.16em;
     text-transform: uppercase;
     color: var(--sage);
   }
-  .brand-hero--ink .brand-hero__eyebrow { color: var(--gold); }
-  .brand-hero__dot {
-    width: 7px;
-    height: 7px;
-    border-radius: 50%;
-    background: var(--coral);
-    flex: none;
-  }
-
-  .brand-hero__script {
-    display: block;
-    margin-top: 1.1rem;
-    font-family: var(--script);
-    font-size: 2.56rem;
-    line-height: 1.1;
-    color: var(--sage);
-  }
-  .brand-hero--ink .brand-hero__script { color: var(--peach); }
 
   .brand-hero__title {
-    margin: 0.5rem 0 0;
+    margin: 0;
     font-family: var(--serif);
     font-weight: 400;
     line-height: 1;
-    letter-spacing: -0.015em;
-    font-size: clamp(4.3rem, 6.4vw, 8rem);
+    letter-spacing: -0.02em;
+    font-size: clamp(4.6rem, 6.2vw, 9rem);
+    max-width: 15ch;
     text-wrap: balance;
-    color: inherit;
+    color: var(--ink);
   }
   .brand-hero__title em,
   .brand-hero__title i {
@@ -135,48 +180,63 @@
   }
 
   .brand-hero__lead {
-    margin-top: 1.4rem;
-    max-width: 46ch;
+    margin: 24px 0 0;
+    max-width: 44ch;
     font-family: var(--sans);
-    font-size: 1.72rem;
-    line-height: 1.6;
+    font-size: 18px;
+    line-height: 1.62;
     color: var(--ink-70);
     text-wrap: pretty;
   }
-  .brand-hero--ink .brand-hero__lead { color: rgba(251, 242, 233, 0.78); }
   .brand-hero__lead > :first-child { margin-top: 0; }
   .brand-hero__lead > :last-child { margin-bottom: 0; }
 
   .brand-hero__ctas {
     display: flex;
     flex-wrap: wrap;
-    gap: 0.85rem;
-    margin-top: 2rem;
+    align-items: center;
+    gap: 10px;
+    margin-top: 34px;
   }
   .brand-hero__cta { margin: 0; }
 
-  .brand-hero__badge {
-    position: absolute;
-    top: 0;
-    right: var(--hth-gutter);
-    display: inline-block;
-    transform: rotate(3deg);
-    padding: 0.5em 0.95em;
-    border-radius: var(--hth-radius-pill);
-    background: var(--coral);
-    color: var(--cream);
+  .brand-hero__linkbtn {
+    display: inline-flex;
+    align-items: center;
+    gap: 8px;
+    padding: 14px 6px;
     font-family: var(--sans);
-    font-size: 1.15rem;
     font-weight: 600;
-    letter-spacing: 0.06em;
-    text-transform: uppercase;
+    font-size: 15px;
+    color: var(--ink);
+    text-decoration: none;
+    transition: gap 0.2s ease, color 0.2s ease;
   }
-  @media screen and (max-width: 749px) {
-    .brand-hero__badge {
-      position: static;
-      transform: none;
-      margin-bottom: 1.25rem;
-    }
+  .brand-hero__linkbtn:hover { color: var(--coral); }
+  .brand-hero__arrow { transition: transform 0.25s cubic-bezier(0.16, 1, 0.3, 1); }
+  .brand-hero__linkbtn:hover .brand-hero__arrow { transform: translateX(4px); }
+
+  /* ---- Light-text variant (for a dark lifestyle photo + dark scrim) ---- */
+  .brand-hero--text-light .brand-hero__title,
+  .brand-hero--text-light .brand-hero__linkbtn { color: var(--cream); }
+  .brand-hero--text-light .brand-hero__eyebrow { color: var(--peach); }
+  .brand-hero--text-light .brand-hero__lead { color: rgba(251, 242, 233, 0.82); }
+  .brand-hero--text-light .brand-hero__title em { color: var(--peach); }
+  .brand-hero--text-light .brand-hero__linkbtn:hover { color: var(--peach); }
+
+  /* ---- Photo caption tag (bottom-right) ---- */
+  .brand-hero__tag {
+    position: absolute;
+    right: clamp(16px, 3vw, 40px);
+    bottom: clamp(16px, 3vw, 32px);
+    font-family: var(--mono);
+    font-size: 11.5px;
+    letter-spacing: 0.08em;
+    color: var(--ink-55);
+    background: rgba(255, 255, 255, 0.66);
+    backdrop-filter: blur(2px);
+    padding: 7px 13px;
+    border-radius: var(--hth-radius-pill);
   }
 {%- endstylesheet -%}
 
@@ -187,28 +247,38 @@
   "class": "section",
   "settings": [
     {
+      "type": "image_picker",
+      "id": "image",
+      "label": "Imagen de fondo",
+      "info": "Foto de estilo de vida a todo el ancho. Sin imagen se muestra un degradado cálido como marcador."
+    },
+    {
       "type": "select",
-      "id": "background",
-      "label": "Fondo",
+      "id": "scrim",
+      "label": "Velo de legibilidad",
+      "info": "Capa que mantiene el texto legible sobre la foto.",
       "options": [
-        { "value": "cream", "label": "Crema" },
-        { "value": "white", "label": "Blanco" },
-        { "value": "sage", "label": "Verde salvia" },
-        { "value": "ink", "label": "Tinta (oscuro)" }
+        { "value": "light", "label": "Claro (texto oscuro)" },
+        { "value": "dark", "label": "Oscuro (texto claro)" },
+        { "value": "none", "label": "Ninguno" }
       ],
-      "default": "cream"
+      "default": "light"
+    },
+    {
+      "type": "select",
+      "id": "text_color",
+      "label": "Color del texto",
+      "options": [
+        { "value": "dark", "label": "Oscuro" },
+        { "value": "light", "label": "Claro" }
+      ],
+      "default": "dark"
     },
     {
       "type": "text",
       "id": "eyebrow",
       "label": "Etiqueta superior",
-      "default": "Superhost · Medellín"
-    },
-    {
-      "type": "text",
-      "id": "script",
-      "label": "Subtítulo manuscrito",
-      "default": "Lo que uso cada día."
+      "default": "Curado por una Superhost en Medellín"
     },
     {
       "type": "inline_richtext",
@@ -241,30 +311,25 @@
     {
       "type": "text",
       "id": "button_secondary_label",
-      "label": "Botón secundario — texto",
+      "label": "Enlace secundario — texto",
       "default": "Hablar por WhatsApp"
     },
     {
       "type": "url",
       "id": "button_secondary_link",
-      "label": "Botón secundario — enlace",
+      "label": "Enlace secundario — enlace",
       "info": "Pega el enlace de WhatsApp (https://wa.me/57…)."
     },
     {
       "type": "header",
-      "content": "Insignia"
-    },
-    {
-      "type": "checkbox",
-      "id": "show_badge",
-      "label": "Mostrar insignia",
-      "default": false
+      "content": "Pie de foto"
     },
     {
       "type": "text",
-      "id": "badge_text",
-      "label": "Texto de la insignia",
-      "default": "Envío mismo día · Medellín"
+      "id": "photo_tag",
+      "label": "Etiqueta de la foto",
+      "info": "Pequeño pie en la esquina inferior derecha. Déjalo vacío para ocultarlo.",
+      "default": "Foto: el kit en una cocina real"
     },
     {
       "type": "header",
@@ -278,7 +343,7 @@
       "step": 4,
       "unit": "px",
       "label": "Espacio superior",
-      "default": 112
+      "default": 96
     },
     {
       "type": "range",
@@ -288,7 +353,7 @@
       "step": 4,
       "unit": "px",
       "label": "Espacio inferior",
-      "default": 112
+      "default": 96
     }
   ],
   "presets": [
