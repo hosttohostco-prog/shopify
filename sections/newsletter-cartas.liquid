@@ -1,0 +1,315 @@
+{%- comment -%}
+  HostToHost — Newsletter "Cartas de anfitriona" (bespoke)
+  Phase 2 · closing section. Two-column editorial split per the design handoff
+  (design-handoff/project/index.html, the "NEWSLETTER" section). Left: DM Mono
+  eyebrow + Fraunces title (italic word in coral via inline_richtext <em>).
+  Right: email signup form + a quiet reassurance note.
+
+  The signup reuses Dawn's {% form 'customer' %} machinery (the same form Dawn's
+  stock newsletter posts to, tagged "newsletter") so it really subscribes the
+  customer and surfaces Dawn's success/error states — no fighting the platform.
+  Caveat script dropped per the Variant-D decisions; the note is quiet DM Sans.
+
+  Conventions match hero.liquid / manifesto.liquid / favorite-product.liquid:
+  self-contained {% stylesheet %} on brand.css tokens, per-section padding via
+  {% style %}+id. Prototype rems (16px base) ×1.6 for Dawn's 10px rem base.
+{%- endcomment -%}
+
+{%- style -%}
+  .section-{{ section.id }}-padding {
+    padding-top: {{ section.settings.padding_top | times: 0.7 | round: 0 }}px;
+    padding-bottom: {{ section.settings.padding_bottom | times: 0.7 | round: 0 }}px;
+  }
+  @media screen and (min-width: 750px) {
+    .section-{{ section.id }}-padding {
+      padding-top: {{ section.settings.padding_top }}px;
+      padding-bottom: {{ section.settings.padding_bottom }}px;
+    }
+  }
+{%- endstyle -%}
+
+<div class="brand-news brand-news--{{ section.settings.background }} section-{{ section.id }}-padding">
+  <div class="brand-news__wrap">
+    <div class="brand-news__copy">
+      {%- if section.settings.eyebrow != blank -%}
+        <span class="brand-news__eyebrow">{{ section.settings.eyebrow }}</span>
+      {%- endif -%}
+      {%- if section.settings.heading != blank -%}
+        <h2 class="brand-news__heading">{{ section.settings.heading }}</h2>
+      {%- endif -%}
+    </div>
+
+    <div class="brand-news__form-col">
+      {%- form 'customer', id: 'newsletter-cartas-' | append: section.id, class: 'brand-news__form' -%}
+        <input type="hidden" name="contact[tags]" value="newsletter">
+
+        {%- if form.posted_successfully? -%}
+          <p class="brand-news__success" role="status" tabindex="-1">
+            {{ section.settings.success_text }}
+          </p>
+        {%- else -%}
+          <div class="brand-news__field">
+            <label class="visually-hidden" for="NewsletterCartas-{{ section.id }}">
+              {{ section.settings.placeholder }}
+            </label>
+            <input
+              id="NewsletterCartas-{{ section.id }}"
+              type="email"
+              name="contact[email]"
+              class="brand-news__input"
+              value="{{ form.email }}"
+              placeholder="{{ section.settings.placeholder }}"
+              aria-required="true"
+              autocorrect="off"
+              autocapitalize="off"
+              autocomplete="email"
+              {% if form.errors %}
+                autofocus
+                aria-invalid="true"
+                aria-describedby="NewsletterCartas-error-{{ section.id }}"
+              {% endif %}
+              required
+            >
+            <button type="submit" name="commit" class="brand-news__btn">
+              {{ section.settings.button_label }}
+            </button>
+          </div>
+
+          {%- if form.errors -%}
+            <small class="brand-news__error" id="NewsletterCartas-error-{{ section.id }}">
+              {{ form.errors.translated_fields.email | capitalize }}
+              {{ form.errors.messages.email }}
+            </small>
+          {%- elsif section.settings.note != blank -%}
+            <p class="brand-news__note">{{ section.settings.note }}</p>
+          {%- endif -%}
+        {%- endif -%}
+      {%- endform -%}
+    </div>
+  </div>
+</div>
+
+{%- stylesheet -%}
+  .brand-news--cream { background: var(--cream); }
+  .brand-news--paper { background: var(--paper); }
+  .brand-news--white { background: #fff; }
+  .brand-news--sage { background: var(--sage-soft); }
+  .brand-news--ink { background: var(--ink); color: var(--cream); }
+
+  .brand-news__wrap {
+    max-width: var(--hth-maxw);
+    margin-inline: auto;
+    padding-inline: var(--hth-gutter);
+    display: grid;
+    grid-template-columns: 1fr;
+    gap: clamp(24px, 4vw, 48px);
+    align-items: center;
+  }
+  @media screen and (min-width: 900px) {
+    .brand-news__wrap {
+      grid-template-columns: 1fr 1fr;
+      gap: clamp(32px, 5vw, 64px);
+    }
+  }
+
+  .brand-news__eyebrow {
+    display: block;
+    font-family: var(--mono);
+    font-size: 1.25rem;
+    letter-spacing: 0.14em;
+    text-transform: uppercase;
+    color: var(--sage);
+  }
+  .brand-news--ink .brand-news__eyebrow { color: var(--peach); }
+
+  .brand-news__heading {
+    margin: 1.4rem 0 0;
+    max-width: 16ch;
+    font-family: var(--serif);
+    font-weight: 500;
+    line-height: 1.12;
+    letter-spacing: -0.015em;
+    font-size: clamp(2.72rem, 3.2vw, 4rem);
+    text-wrap: balance;
+    color: inherit;
+  }
+  .brand-news__heading em,
+  .brand-news__heading i {
+    font-style: italic;
+    color: var(--coral);
+  }
+
+  .brand-news__form-col {
+    display: flex;
+    flex-direction: column;
+    gap: 14px;
+  }
+
+  .brand-news__field {
+    display: flex;
+    gap: 10px;
+    flex-wrap: wrap;
+  }
+
+  .brand-news__input {
+    flex: 1;
+    min-width: 200px;
+    font-family: var(--font-body-family);
+    font-size: 1.6rem;
+    padding: 0.95em 1.3em;
+    border: 1.5px solid var(--hairline);
+    border-radius: var(--hth-radius-pill);
+    background: #fff;
+    color: var(--ink);
+  }
+  .brand-news__input::placeholder { color: var(--ink-40); }
+  .brand-news__input:focus {
+    outline: none;
+    border-color: var(--coral);
+  }
+
+  /* Ink primary pill, matches the Step B default button */
+  .brand-news__btn {
+    flex: 0 0 auto;
+    font-family: var(--font-body-family);
+    font-weight: 600;
+    font-size: 1.5rem;
+    letter-spacing: 0.01em;
+    padding: 0.95em 1.9em;
+    border: 1.5px solid var(--ink);
+    border-radius: var(--hth-radius-pill);
+    background: var(--ink);
+    color: var(--cream);
+    cursor: pointer;
+    transition: background 0.18s ease, color 0.18s ease, border-color 0.18s ease;
+  }
+  .brand-news__btn:hover {
+    background: transparent;
+    color: var(--ink);
+  }
+  .brand-news--ink .brand-news__btn {
+    border-color: var(--cream);
+    background: var(--cream);
+    color: var(--ink);
+  }
+  .brand-news--ink .brand-news__btn:hover {
+    background: transparent;
+    color: var(--cream);
+  }
+
+  .brand-news__note {
+    margin: 0;
+    font-size: 1.4rem;
+    font-style: italic;
+    color: var(--ink-55);
+  }
+  .brand-news--ink .brand-news__note { color: var(--peach); }
+
+  .brand-news__error {
+    display: block;
+    font-size: 1.4rem;
+    color: #c0392b;
+  }
+
+  .brand-news__success {
+    margin: 0;
+    font-family: var(--serif);
+    font-style: italic;
+    font-size: 2.1rem;
+    line-height: 1.2;
+    color: var(--coral);
+  }
+{%- endstylesheet -%}
+
+{% schema %}
+{
+  "name": "Newsletter",
+  "tag": "section",
+  "class": "section",
+  "settings": [
+    {
+      "type": "select",
+      "id": "background",
+      "label": "Fondo",
+      "options": [
+        { "value": "sage", "label": "Verde salvia" },
+        { "value": "cream", "label": "Crema cálida" },
+        { "value": "paper", "label": "Crema (página)" },
+        { "value": "white", "label": "Blanco" },
+        { "value": "ink", "label": "Tinta (oscuro)" }
+      ],
+      "default": "sage"
+    },
+    {
+      "type": "text",
+      "id": "eyebrow",
+      "label": "Antetítulo",
+      "default": "Cartas de anfitriona"
+    },
+    {
+      "type": "inline_richtext",
+      "id": "heading",
+      "label": "Título",
+      "info": "Usa cursiva para resaltar una palabra en coral.",
+      "default": "Una idea útil para anfitriones, <em>cada semana</em>."
+    },
+    {
+      "type": "header",
+      "content": "Formulario"
+    },
+    {
+      "type": "text",
+      "id": "placeholder",
+      "label": "Texto del campo de correo",
+      "default": "tu@correo.com"
+    },
+    {
+      "type": "text",
+      "id": "button_label",
+      "label": "Botón",
+      "default": "Suscribirme"
+    },
+    {
+      "type": "text",
+      "id": "note",
+      "label": "Nota bajo el formulario",
+      "default": "Sin spam, prometido."
+    },
+    {
+      "type": "text",
+      "id": "success_text",
+      "label": "Mensaje de éxito",
+      "default": "¡Listo! Te escribiré pronto."
+    },
+    {
+      "type": "header",
+      "content": "Espaciado"
+    },
+    {
+      "type": "range",
+      "id": "padding_top",
+      "min": 0,
+      "max": 180,
+      "step": 4,
+      "unit": "px",
+      "label": "Espacio superior",
+      "default": 88
+    },
+    {
+      "type": "range",
+      "id": "padding_bottom",
+      "min": 0,
+      "max": 180,
+      "step": 4,
+      "unit": "px",
+      "label": "Espacio inferior",
+      "default": 88
+    }
+  ],
+  "presets": [
+    {
+      "name": "Newsletter"
+    }
+  ]
+}
+{% endschema %}
