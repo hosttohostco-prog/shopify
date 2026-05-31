@@ -1,0 +1,449 @@
+{%- comment -%}
+  HostToHost — Featured single product "La pieza favorita" (bespoke)
+  Phase 2 · Step K. Editorial split per the design handoff
+  (design-handoff/project/index.html, the "FEATURED SINGLE PRODUCT" section).
+  Left: media card (variant/product photo or warm gradient placeholder) with a
+  floating "Envío mismo día · Medellín" stat badge. Right: white panel —
+  coral eyebrow + Fraunces title (italic word in coral via inline_richtext <em>)
+  + DM Sans lead + hairline divider + DM Mono price·sell-unit + two CTAs:
+  coral "Ver producto" link + ghost "Agregar al carrito".
+
+  The add-to-cart reuses Dawn's <product-form> + {% form 'product' %} machinery
+  (so it feeds the Step E cart drawer), pinned to a chosen variant resolved by
+  option value (default "Gold") via section.settings.variant_option.
+
+  Conventions match hero.liquid / editorial-split.liquid: self-contained
+  {% stylesheet %} on brand.css tokens, per-section padding via {% style %}+id.
+  Prototype rems (16px base) ×1.6 for Dawn's 10px rem base; px ported as-is.
+{%- endcomment -%}
+
+{%- liquid
+  assign product = section.settings.product
+  assign target = section.settings.variant_option | downcase | strip
+
+  assign fav_variant = product.selected_or_first_available_variant
+  if target != blank
+    for v in product.variants
+      assign opt = v.option1 | downcase | strip
+      if opt == target
+        assign fav_variant = v
+        break
+      endif
+    endfor
+  endif
+
+  assign fav_media = fav_variant.featured_media | default: product.featured_media
+-%}
+
+{%- style -%}
+  .section-{{ section.id }}-padding {
+    padding-top: {{ section.settings.padding_top | times: 0.7 | round: 0 }}px;
+    padding-bottom: {{ section.settings.padding_bottom | times: 0.7 | round: 0 }}px;
+  }
+  @media screen and (min-width: 750px) {
+    .section-{{ section.id }}-padding {
+      padding-top: {{ section.settings.padding_top }}px;
+      padding-bottom: {{ section.settings.padding_bottom }}px;
+    }
+  }
+{%- endstyle -%}
+
+<div class="brand-fav brand-fav--{{ section.settings.background }} section-{{ section.id }}-padding">
+  <div class="brand-fav__wrap">
+    <div class="brand-fav__feat">
+      <div class="brand-fav__media{% unless fav_media %} brand-fav__media--placeholder{% endunless %}">
+        {%- if fav_media -%}
+          {{
+            fav_media
+            | image_url: width: 1400
+            | image_tag:
+              loading: 'lazy',
+              sizes: '(min-width: 900px) 52vw, 100vw',
+              widths: '400, 600, 800, 1000, 1200, 1400',
+              alt: product.title
+          }}
+        {%- else -%}
+          <span class="brand-fav__placeholder-tag">Foto pendiente</span>
+        {%- endif -%}
+
+        {%- if section.settings.show_stat -%}
+          <div class="brand-fav__stat">
+            <span class="brand-fav__stat-dot" aria-hidden="true">●</span>
+            <b>{{ section.settings.stat_label }}</b>
+            {%- if section.settings.stat_sub != blank -%}
+              <span>{{ section.settings.stat_sub }}</span>
+            {%- endif -%}
+          </div>
+        {%- endif -%}
+      </div>
+
+      <div class="brand-fav__panel">
+        {%- if section.settings.eyebrow != blank -%}
+          <span class="brand-fav__eyebrow">{{ section.settings.eyebrow }}</span>
+        {%- endif -%}
+        {%- if section.settings.heading != blank -%}
+          <h2 class="brand-fav__heading">{{ section.settings.heading }}</h2>
+        {%- endif -%}
+        {%- if section.settings.body != blank -%}
+          <p class="brand-fav__lead">{{ section.settings.body }}</p>
+        {%- endif -%}
+
+        <div class="brand-fav__divider" aria-hidden="true"></div>
+
+        {%- if product != blank -%}
+          <p class="brand-fav__price">
+            {{ fav_variant.price | money }}
+            {%- assign sell_unit = product.metafields.custom.sell_unit -%}
+            {%- if sell_unit != blank -%}
+              <span class="brand-fav__sell-unit">· {{ sell_unit }}</span>
+            {%- endif -%}
+          </p>
+
+          <div class="brand-fav__ctas">
+            <a href="{{ product.url }}" class="cta brand-fav__view">
+              {{- section.settings.button_label -}}
+            </a>
+
+            {%- assign product_form_id = 'fav-product-form-' | append: section.id -%}
+            <product-form
+              class="product-form brand-fav__form"
+              data-section-id="{{ section.id }}"
+            >
+              <div class="product-form__error-message-wrapper" role="alert" hidden>
+                <span class="svg-wrapper">{{- 'icon-error.svg' | inline_asset_content -}}</span>
+                <span class="product-form__error-message"></span>
+              </div>
+
+              {%- form 'product',
+                product,
+                id: product_form_id,
+                class: 'form',
+                novalidate: 'novalidate',
+                data-type: 'add-to-cart-form'
+              -%}
+                <input
+                  type="hidden"
+                  name="id"
+                  value="{{ fav_variant.id }}"
+                  {% if fav_variant.available == false %}disabled{% endif %}
+                  class="product-variant-id"
+                >
+                <button
+                  type="submit"
+                  name="add"
+                  class="button brand-fav__add"
+                  {% if fav_variant.available == false %}disabled{% endif %}
+                >
+                  <span>
+                    {%- if fav_variant.available -%}
+                      {{ section.settings.add_label }}
+                    {%- else -%}
+                      {{ 'products.product.sold_out' | t }}
+                    {%- endif -%}
+                  </span>
+                  {%- render 'loading-spinner' -%}
+                </button>
+              {%- endform -%}
+            </product-form>
+          </div>
+        {%- endif -%}
+      </div>
+    </div>
+  </div>
+</div>
+
+{%- if product != blank -%}
+  <script src="{{ 'product-form.js' | asset_url }}" defer="defer"></script>
+{%- endif -%}
+
+{%- stylesheet -%}
+  .brand-fav--cream { background: var(--cream); }
+  .brand-fav--paper { background: var(--paper); }
+  .brand-fav--white { background: #fff; }
+  .brand-fav--sage { background: var(--sage-soft); }
+
+  .brand-fav__wrap {
+    max-width: var(--hth-maxw);
+    margin-inline: auto;
+    padding-inline: var(--hth-gutter);
+  }
+
+  .brand-fav__feat {
+    display: grid;
+    grid-template-columns: 1fr;
+    gap: clamp(28px, 4vw, 56px);
+    align-items: stretch;
+  }
+  @media screen and (min-width: 900px) {
+    .brand-fav__feat {
+      grid-template-columns: 1.05fr 0.95fr;
+      gap: clamp(28px, 4vw, 64px);
+    }
+  }
+
+  /* Media */
+  .brand-fav__media {
+    position: relative;
+    border-radius: var(--hth-radius);
+    overflow: hidden;
+    aspect-ratio: 4 / 5;
+    background: var(--card-surface);
+    box-shadow: var(--shadow-rest);
+    min-height: 320px;
+  }
+  .brand-fav__media img {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+    display: block;
+  }
+  .brand-fav__media--placeholder {
+    background: linear-gradient(145deg, var(--cream-deep) 0%, var(--peach-tint) 52%, var(--sage-soft) 100%);
+    display: grid;
+    place-items: center;
+  }
+  .brand-fav__placeholder-tag {
+    font-family: var(--mono);
+    font-size: 1.3rem;
+    letter-spacing: 0.08em;
+    text-transform: uppercase;
+    color: var(--ink-55);
+  }
+
+  /* Floating stat badge */
+  .brand-fav__stat {
+    position: absolute;
+    left: 18px;
+    bottom: 18px;
+    z-index: 3;
+    display: flex;
+    align-items: center;
+    gap: 9px;
+    background: rgba(255, 255, 255, 0.92);
+    backdrop-filter: blur(8px) saturate(140%);
+    -webkit-backdrop-filter: blur(8px) saturate(140%);
+    border: 1px solid rgba(64, 62, 63, 0.08);
+    border-radius: var(--hth-radius-pill);
+    padding: 9px 15px;
+  }
+  .brand-fav__stat-dot { color: var(--coral); font-size: 1.15rem; line-height: 0; }
+  .brand-fav__stat b { font-weight: 600; font-size: 1.44rem; color: var(--ink); }
+  .brand-fav__stat span { color: var(--ink-70); font-size: 1.31rem; }
+
+  /* Panel */
+  .brand-fav__panel {
+    background: var(--card-surface);
+    border: 1px solid var(--hairline);
+    border-radius: var(--hth-radius);
+    box-shadow: var(--shadow-rest);
+    padding: clamp(30px, 4.5vw, 64px);
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: flex-start;
+    gap: 22px;
+  }
+
+  .brand-fav__eyebrow {
+    font-family: var(--font-body-family);
+    font-size: 1.15rem;
+    font-weight: 600;
+    letter-spacing: 0.18em;
+    text-transform: uppercase;
+    color: var(--coral);
+  }
+
+  .brand-fav__heading {
+    margin: 0;
+    font-family: var(--serif);
+    font-weight: 500;
+    line-height: 1.12;
+    letter-spacing: -0.015em;
+    font-size: clamp(2.72rem, 3vw, 3.68rem);
+    text-wrap: balance;
+    color: var(--ink);
+  }
+  .brand-fav__heading em,
+  .brand-fav__heading i {
+    font-style: italic;
+    color: var(--coral);
+  }
+
+  .brand-fav__lead {
+    margin: 0;
+    max-width: 38ch;
+    font-size: clamp(1.6rem, 1.4vw, 1.81rem);
+    line-height: 1.55;
+    color: var(--ink-70);
+  }
+
+  .brand-fav__divider {
+    width: 48px;
+    height: 1px;
+    background: var(--hairline);
+    margin: 2px 0;
+  }
+
+  .brand-fav__price {
+    margin: 0;
+    font-family: var(--mono);
+    font-weight: 500;
+    font-size: 2.32rem;
+    letter-spacing: -0.01em;
+    color: var(--ink);
+  }
+  .brand-fav__sell-unit {
+    font-size: 1.5rem;
+    color: var(--ink-55);
+  }
+
+  .brand-fav__ctas {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 14px;
+    align-items: center;
+    width: 100%;
+  }
+  .brand-fav__view { text-decoration: none; }
+
+  /* Ghost add-to-cart (reuses Dawn product-form machinery, brand-styled) */
+  .brand-fav__form { display: inline-flex; }
+  .brand-fav__add {
+    --shadow-horizontal-offset: 0;
+    --shadow-vertical-offset: 0;
+    --shadow-blur-radius: 0;
+    --shadow-opacity: 0;
+    background: transparent;
+    color: var(--ink);
+    border: 1px solid var(--ink);
+    border-radius: var(--hth-radius-pill);
+    padding: 1.05em 1.8em;
+    font-family: var(--font-body-family);
+    font-weight: 600;
+    font-size: 1.5rem;
+    letter-spacing: 0.01em;
+    cursor: pointer;
+    transition: background 0.18s ease, color 0.18s ease;
+  }
+  .brand-fav__add::after { display: none; }
+  .brand-fav__add:hover:not([disabled]) {
+    background: var(--ink);
+    color: var(--cream);
+  }
+{%- endstylesheet -%}
+
+{% schema %}
+{
+  "name": "La pieza favorita",
+  "tag": "section",
+  "class": "section",
+  "settings": [
+    {
+      "type": "product",
+      "id": "product",
+      "label": "Producto destacado"
+    },
+    {
+      "type": "text",
+      "id": "variant_option",
+      "label": "Variante a destacar",
+      "info": "Valor de la opción (color) a mostrar y agregar al carrito, p. ej. Gold. Vacío = primera disponible.",
+      "default": "Gold"
+    },
+    {
+      "type": "select",
+      "id": "background",
+      "label": "Fondo",
+      "options": [
+        { "value": "paper", "label": "Crema (página)" },
+        { "value": "cream", "label": "Crema cálida" },
+        { "value": "white", "label": "Blanco" },
+        { "value": "sage", "label": "Verde salvia" }
+      ],
+      "default": "paper"
+    },
+    {
+      "type": "text",
+      "id": "eyebrow",
+      "label": "Antetítulo",
+      "default": "La pieza favorita"
+    },
+    {
+      "type": "inline_richtext",
+      "id": "heading",
+      "label": "Título",
+      "info": "Usa cursiva para resaltar una palabra en coral.",
+      "default": "Vasos irrompibles, en <em>dorado</em>."
+    },
+    {
+      "type": "textarea",
+      "id": "body",
+      "label": "Texto",
+      "default": "El detalle que más comentan mis huéspedes. Mismo peso y tacto que el cristal — pero no se rompen, ni a las 11 pm. En dorado: elegantes en la foto del listing, resistentes en el lavavajillas."
+    },
+    {
+      "type": "text",
+      "id": "button_label",
+      "label": "Botón principal (Ver producto)",
+      "default": "Ver producto"
+    },
+    {
+      "type": "text",
+      "id": "add_label",
+      "label": "Botón secundario (Agregar)",
+      "default": "Agregar al carrito"
+    },
+    {
+      "type": "header",
+      "content": "Insignia sobre la foto"
+    },
+    {
+      "type": "checkbox",
+      "id": "show_stat",
+      "label": "Mostrar insignia",
+      "default": true
+    },
+    {
+      "type": "text",
+      "id": "stat_label",
+      "label": "Texto principal",
+      "default": "Envío mismo día"
+    },
+    {
+      "type": "text",
+      "id": "stat_sub",
+      "label": "Texto secundario",
+      "default": "Medellín"
+    },
+    {
+      "type": "header",
+      "content": "Espaciado"
+    },
+    {
+      "type": "range",
+      "id": "padding_top",
+      "min": 0,
+      "max": 180,
+      "step": 4,
+      "unit": "px",
+      "label": "Espacio superior",
+      "default": 88
+    },
+    {
+      "type": "range",
+      "id": "padding_bottom",
+      "min": 0,
+      "max": 180,
+      "step": 4,
+      "unit": "px",
+      "label": "Espacio inferior",
+      "default": 88
+    }
+  ],
+  "presets": [
+    {
+      "name": "La pieza favorita"
+    }
+  ]
+}
+{% endschema %}

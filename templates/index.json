@@ -124,6 +124,24 @@
         "padding_bottom": 96
       }
     },
+    "favorite_product": {
+      "type": "favorite-product",
+      "settings": {
+        "product": "vasos-irrompibles",
+        "variant_option": "Gold",
+        "background": "paper",
+        "eyebrow": "La pieza favorita",
+        "heading": "Vasos irrompibles, en <em>dorado</em>.",
+        "body": "El detalle que más comentan mis huéspedes. Mismo peso y tacto que el cristal — pero no se rompen, ni a las 11 pm. En dorado: elegantes en la foto del listing, resistentes en el lavavajillas.",
+        "button_label": "Ver producto",
+        "add_label": "Agregar al carrito",
+        "show_stat": true,
+        "stat_label": "Envío mismo día",
+        "stat_sub": "Medellín",
+        "padding_top": 88,
+        "padding_bottom": 88
+      }
+    },
     "collage": {
       "type": "collage",
       "blocks": {
@@ -275,6 +293,7 @@
     "manifesto",
     "featured_collection",
     "editorial_split",
+    "favorite_product",
     "rich_text",
     "collage",
     "video",
