@@ -4,6 +4,8 @@
     "Default": {
       "logo": "shopify://shop_images/logo-coral.png",
       "logo_width": 120,
+      "brand_headline": "HostToHost",
+      "brand_description": "<p>Productos, formación y recursos de una Superhost con 9 años hospedando en Colombia.</p>",
       "color_schemes": {
         "scheme-1": {
           "settings": {

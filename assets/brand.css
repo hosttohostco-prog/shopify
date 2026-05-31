@@ -489,6 +489,72 @@ details[open] > .header__menu-item {
   color: var(--ink);
 }
 
+/* ---------- Footer (steer-don't-fight, Phase 2 closing step) ----------
+   Dawn's footer set to scheme-5 (ink bg / cream text) in footer-group.json.
+   This is purely cosmetic restyle toward the design-handoff dark footer:
+   peach column headings, cream links, a Fraunces brand wordmark + muted
+   tagline, and a "Hecho en Medellín" line appended to the copyright row.
+   Sizes on Dawn's 10px rem base (see top of file). No markup edits. */
+.footer {
+  border-top: 0;
+}
+
+/* Column headings → peach, uppercase, tracked (handoff .fcol h4) */
+.footer .footer-block__heading {
+  font-family: var(--font-body-family);
+  font-size: 1.2rem;
+  font-weight: 600;
+  letter-spacing: 0.16em;
+  text-transform: uppercase;
+  color: var(--peach);
+  margin-bottom: 1.6rem;
+}
+
+/* Link columns → cream at rest, full cream on hover */
+.footer .footer-block--menu .list-menu__item--link,
+.footer .footer-block__details-content a {
+  font-family: var(--font-body-family);
+  font-size: 1.5rem;
+  color: rgba(251, 242, 233, 0.82);
+  transition: color 0.15s ease;
+}
+.footer .footer-block--menu .list-menu__item--link:hover,
+.footer .footer-block__details-content a:hover {
+  color: var(--cream);
+  text-decoration: none;
+}
+.footer .footer-block--menu .footer-block__details-content { gap: 1.1rem; }
+
+/* Brand column: Fraunces wordmark (override the generic peach heading rule)
+   + muted tagline */
+.footer .footer-block__brand-info .footer-block__heading {
+  font-family: var(--serif);
+  font-weight: 500;
+  font-size: 2.6rem;
+  letter-spacing: -0.01em;
+  text-transform: none;
+  color: var(--cream);
+  margin-bottom: 1.2rem;
+}
+.footer .footer-block__brand-info .rte {
+  max-width: 30ch;
+  font-size: 1.5rem;
+  line-height: 1.5;
+  color: rgba(251, 242, 233, 0.68);
+}
+
+/* Bottom bar: muted copyright + appended "Hecho en Medellín" line */
+.footer .footer__copyright .copyright__content {
+  color: rgba(251, 242, 233, 0.68);
+}
+.footer .footer__copyright::after {
+  display: block;
+  content: "Hecho en Medellín 🇨🇴";
+  margin-top: 0.6rem;
+  font-size: 1.25rem;
+  color: rgba(251, 242, 233, 0.68);
+}
+
 @media (prefers-reduced-motion: reduce) {
   html:focus-within { scroll-behavior: auto; }
   .button:not([disabled]):active { transform: none; }
