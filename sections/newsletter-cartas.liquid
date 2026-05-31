@@ -40,7 +40,8 @@
     </div>
 
     <div class="brand-news__form-col">
-      {%- form 'customer', id: 'newsletter-cartas-' | append: section.id, class: 'brand-news__form' -%}
+      {%- assign news_form_id = 'newsletter-cartas-' | append: section.id -%}
+      {%- form 'customer', id: news_form_id, class: 'brand-news__form' -%}
         <input type="hidden" name="contact[tags]" value="newsletter">
 
         {%- if form.posted_successfully? -%}
