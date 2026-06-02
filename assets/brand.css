@@ -196,7 +196,9 @@
 .tag--cream { background: var(--cream); color: var(--ink); }
 
 .mono { font-family: var(--font-label); letter-spacing: 0.02em; }
-.price { font-family: var(--font-label); font-size: 1.52rem; letter-spacing: 0.01em; color: var(--ink); }
+/* Price (approved .price): Outfit, medium, tight. Font-size left to context
+   (Dawn component-price for PDP/cart; card override for cards). */
+.price { font-family: var(--font-display); font-weight: 500; letter-spacing: -0.01em; color: var(--ink); }
 
 /* ---------- Buttons ----------
    Matches the design-handoff lock (.btn): full pill, ink primary on cream
@@ -320,32 +322,49 @@ textarea.field__input {
   box-shadow: 0 0 0 calc(0.1rem + var(--inputs-border-width)) var(--coral);
 }
 
-/* ---------- Header + logo lockup ----------
-   Mockup (design-handoff home): coral wordmark lockup left, centered DM Sans
-   nav, search + cart right, clean borderless white. Layout (logo middle-left,
-   inline menu, no line separator, 28px air) is set in header-group.json; the
-   logo itself is settings.logo (transparent coral lockup in Files). Here we
-   only nudge Dawn's own header pieces: nav type + coral underline, the cart
-   count chip to coral, and a soft shadow for the now-borderless sticky bar. */
+/* ---------- Header + nav (approved) ----------
+   Phase 2: align Dawn's header chrome to the approved Nav (Home Page/styles.css
+   .nav). Translucent cream bar with blur, Archivo-uppercase nav links with a
+   periwinkle underline, ink→periwinkle icon hovers, coral cart count. Layout
+   (logo middle-left, inline menu, no line separator, 28px air) is set in
+   header-group.json; the logo is settings.logo. We only nudge Dawn's own header
+   pieces — no markup edits. */
 
-/* Nav links — brand DM Sans with a hair of tracking. Ink-at-.75 color and the
-   underline geometry come from scheme-1 / Dawn; we just recolour the underline
-   to coral on hover, on the active item, and on an open dropdown. */
+/* Translucent cream bar + blur (approved .nav). Sits over the cream canvas; the
+   sticky JS adds the floating shadow once scrolled (rule below). */
+.header-wrapper {
+  background: rgba(252, 243, 233, 0.82);
+  backdrop-filter: blur(16px) saturate(1.2);
+  -webkit-backdrop-filter: blur(16px) saturate(1.2);
+}
+
+/* Nav links — Archivo, uppercase, small, tracked. The underline geometry comes
+   from scheme-1 / Dawn; we recolour it to periwinkle on hover, on the active
+   item, and on an open dropdown (approved .nav-links a). */
 .header__menu-item {
-  font-family: var(--sans);
-  letter-spacing: 0.01em;
+  font-family: var(--font-label);
+  text-transform: uppercase;
+  letter-spacing: 0.1em;
+  font-weight: 600;
+  font-size: 1.25rem;
 }
 .header__menu-item:hover span,
 .header__active-menu-item,
 details[open] > .header__menu-item {
-  text-decoration-color: var(--coral);
+  text-decoration-color: var(--periwinkle-deep);
 }
 
-/* Cart count chip — coral fill / cream text (Dawn defaults it to the ink
-   --color-button). Matches the mockup's coral count bubble. */
+/* Action icons (search / account / cart) — ink → periwinkle on hover, matching
+   the approved .nav-icon. */
+.header__icon:hover {
+  color: var(--periwinkle-deep);
+}
+
+/* Cart count chip — coral fill / white text (approved .count; Dawn defaults it
+   to the ink --color-button). */
 .cart-count-bubble {
   background-color: var(--coral);
-  color: var(--cream);
+  color: var(--white);
 }
 
 /* Borderless header: we turned off Dawn's static line separator, so give the
@@ -360,7 +379,7 @@ details[open] > .header__menu-item {
    drawer surface stays Dawn scheme-1 (white), matching the page background.
    Brand touches, steer-don't-fight: round the drawer's leading (left) edge to
    match the mockup's card radius, soften Dawn's ink-0.2 border/footer rules to
-   the brand hairline, and set the cart title in Fraunces. The checkout button
+   the brand hairline, and set the cart title in Outfit. The checkout button
    carries the coral .cta class (added in cart-drawer + main-cart-footer
    liquid) — checkout is one of the few highest-intent CTA moments (see Buttons). */
 
@@ -378,22 +397,22 @@ details[open] > .header__menu-item {
   border-color: var(--hairline);
 }
 
-/* Cart title in Fraunces (Dawn leaves .drawer__heading at default sizing) */
+/* Cart title in Outfit (Dawn leaves .drawer__heading at default sizing) */
 .drawer__heading {
-  font-family: var(--serif);
+  font-family: var(--font-display);
   font-weight: 500;
   font-size: 2.4rem;
 }
 
-/* ---------- Featured collection ("Kit base") + product cards ----------
-   Phase 2 · Step H. Restyle Dawn's featured-collection + card-product toward
-   the design-handoff "Kit base" treatment — steer-don't-fight, like Phase 1.
-   Coral italic section title, soft brand cards, coral slider arrows + quick-add.
-   Scoped to the card machinery so the collection page inherits the same look.
-*/
+/* ---------- Featured collection + product cards (approved) ----------
+   Phase 2: align Dawn's featured-collection + card-product to the approved
+   ProductCard (Home Page/styles.css .card). Soft-radius media with a hover lift
+   + zoom, Archivo-caps category, Outfit name, Outfit price + quiet sell-unit
+   meta, and a hover-revealed cream "Agregar" bar overlaid on the media bottom.
+   Steer Dawn's card machinery — no markup edits; the quick-add keeps ALL Dawn
+   behavior (variant modal, bulk, sold-out) and is only repositioned/restyled. */
 
-/* Section heading: italic word → coral (set <em> in the title setting, like
-   the hero). Heading font is already Fraunces via --font-heading-family. */
+/* Section heading: italic word → coral (set <em> in the title setting). */
 .collection__title .title em,
 .collection__title .title i,
 .collection-list-title em,
@@ -402,14 +421,13 @@ details[open] > .header__menu-item {
   color: var(--coral);
 }
 
-/* Product card surface — Variant-D (2026-05-30): 14px radius, soft warm-tinted
-   shadow at rest, deeper shadow + coral border + image zoom on hover (raigal
-   feel). Media radius/shadow only show once a product has a photo; the name +
-   category + price line below render regardless. */
+/* Card media surface — approved 20px radius, soft warm shadow at rest, deeper
+   shadow + coral hairline + image zoom on hover. Media only shows once a product
+   has a photo; the category + name + price line below render regardless. */
 .card-wrapper .card,
 .card-wrapper .card__inner,
 .card-wrapper .card__media {
-  border-radius: var(--hth-radius-card);
+  border-radius: var(--radius);
 }
 .card-wrapper .card__media {
   box-shadow: var(--shadow-rest);
@@ -433,20 +451,22 @@ details[open] > .header__menu-item {
 .card-wrapper:hover .card__media .media img {
   transform: scale(1.04);
 }
-/* Product name → Fraunces (Variant-D card name; was DM Sans in Step H) */
+
+/* Product name → Outfit, medium, tight (approved .card-title). */
 .card-wrapper .card__heading,
 .card-wrapper .card__heading a {
-  font-family: var(--serif);
+  font-family: var(--font-display);
   font-weight: 500;
-  letter-spacing: -0.01em;
+  letter-spacing: -0.018em;
+  color: var(--ink);
 }
 .card-wrapper .card__content--kit .card__heading,
 .collection-list .card__heading {
-  font-size: 2.1rem;
-  line-height: 1.15;
+  font-size: 2rem;
+  line-height: 1.1;
 }
 
-/* Slider arrows — brand hairline circle, coral on hover (handoff scroll-nav) */
+/* Slider arrows — brand hairline circle, coral on hover (scroll-nav). */
 .slider-button {
   border: 1px solid var(--hairline);
   border-radius: 50%;
@@ -461,68 +481,53 @@ details[open] > .header__menu-item {
 }
 .slider-counter--current { color: var(--coral); }
 
-/* Card footer: title on its own line, then price (left) + quick-add (right)
-   on one row. `display: contents` dissolves Dawn's .card__information box so
-   the title + price block become flex siblings of the .quick-add button.
-   Scoped to the .card__content--kit modifier (card-product.liquid) so only the
-   standard content block is affected, not the no-media title overlay. */
+/* Card body — approved column: category, name, price row. .card__content--kit is
+   the positioning context for the hover-reveal quick-add overlay below. */
 .card-wrapper .card__content--kit {
-  display: flex;
-  flex-wrap: wrap;
-  align-items: center;
-  column-gap: 0.75rem;
-  row-gap: 0.5rem;
+  position: relative;
+  padding-top: 1.6rem;
 }
-.card-wrapper .card__content--kit > .card__information {
-  display: contents;
+.card-wrapper .card__content--kit .card__information {
+  display: flex;
+  flex-direction: column;
+  gap: 0.6rem;
+  margin: 0;
 }
 .card-wrapper .card__content--kit .card__heading {
-  flex: 0 0 100%;
   margin: 0;
 }
 .card-wrapper .card__content--kit .card-information {
-  flex: 1 1 0;
-  min-width: 0;
-  align-self: center;
   margin: 0;
 }
-.card-wrapper .card__content--kit .quick-add {
-  flex: 0 0 auto;
-  align-self: center;
-  margin: 0 0 0 auto;
-}
-/* zero any inherited vertical margins so the two boxes share a centre line */
 .card-wrapper .card__content--kit .card-information > *,
-.card-wrapper .card__content--kit .price,
-.card-wrapper .card__content--kit .quick-add__submit {
+.card-wrapper .card__content--kit .price {
   margin-top: 0;
   margin-bottom: 0;
 }
 
-/* Card price — keep it small/quiet (DM Mono); Dawn's card price runs large.
-   Sized on both the wrapper and the price item so it actually shrinks. */
+/* Card price — Outfit, quiet, sits on one baseline with the sell-unit meta. */
 .card-wrapper .card__content--kit .price,
 .card-wrapper .card__content--kit .price .price-item {
-  font-size: 1.52rem;
+  font-size: 1.7rem;
   line-height: 1;
-  letter-spacing: 0;
+  letter-spacing: -0.01em;
 }
 
-/* Category label (product.type → Mesa / Cocina / Baño / Experiencia): DM Mono,
-   sage, uppercase, tracked — sits on its own line above the Fraunces name. */
+/* Category label (product.type → Cocina / Baño / Ambiente): Archivo, uppercase,
+   tracked, muted — sits above the Outfit name (approved .card-cat). */
 .card-wrapper .card__content--kit .card__category {
-  flex: 0 0 100%;
-  margin: 0 0 0.4rem;
-  font-family: var(--mono);
-  font-size: 1.2rem;
-  font-weight: 500;
-  letter-spacing: 0.14em;
+  margin: 0;
+  font-family: var(--font-label);
+  font-size: 1.05rem;
+  font-weight: 600;
+  letter-spacing: 0.16em;
   text-transform: uppercase;
-  color: var(--sage);
+  color: var(--ink-soft);
 }
 
 /* Price + sell-unit on one baseline ("$100.000 · pack de 2"). Sell-unit is the
-   custom.sell_unit product metafield, quiet DM Mono in muted ink. */
+   EXISTING custom.sell_unit metafield (retained from prior work, not added this
+   phase); Archivo, uppercase, muted (approved .card-meta). */
 .card-wrapper .card__content--kit .card__price-line {
   display: inline-flex;
   align-items: baseline;
@@ -530,78 +535,109 @@ details[open] > .header__menu-item {
   gap: 0.5rem;
 }
 .card-wrapper .card__content--kit .card__sell-unit {
-  font-family: var(--mono);
-  font-size: 1.3rem;
-  color: var(--ink-55);
+  font-family: var(--font-label);
+  text-transform: uppercase;
+  letter-spacing: 0.12em;
+  font-size: 1.05rem;
+  font-weight: 600;
+  color: var(--ink-soft);
 }
 
-/* Quick-add → small outlined pill: transparent fill, light-coral border, ink
-   text, auto width (not Dawn's full-width). Override Dawn's ::after shadow-
-   border with a real border so the outline is the light coral the brand wants.
-   Scoped under .card-wrapper to beat .button--full-width. */
+/* Quick-add → approved hover-reveal "Agregar" bar overlaid on the media bottom.
+   The .quick-add stays a child of .card__content--kit in the DOM (no markup
+   move — all Dawn quick-add behavior is preserved); we anchor it above the
+   content block (bottom: 100% + gap) so it floats over the media regardless of
+   image height. Revealed on hover/focus for pointer devices; always visible on
+   touch (no hover) for accessibility. */
+.card-wrapper .card__content--kit .quick-add {
+  position: absolute;
+  left: 1.2rem;
+  right: 1.2rem;
+  bottom: calc(100% + 1.2rem);
+  margin: 0;
+  z-index: 4;
+}
+@media (hover: hover) {
+  .card-wrapper .card__content--kit .quick-add {
+    opacity: 0;
+    transform: translateY(1rem);
+    pointer-events: none;
+    transition: opacity 0.4s var(--ease), transform 0.4s var(--ease);
+  }
+  .card-wrapper:hover .card__content--kit .quick-add,
+  .card-wrapper:focus-within .card__content--kit .quick-add {
+    opacity: 1;
+    transform: translateY(0);
+    pointer-events: auto;
+  }
+}
+/* The button itself → cream bar, Archivo-caps label, ink fill on hover (the
+   approved .card-add). Override Dawn's ::after shadow-border + full-width. */
 .card-wrapper .quick-add__submit {
-  --buttons-radius: var(--hth-radius-pill);
-  --buttons-radius-outset: var(--hth-radius-pill);
+  --buttons-radius: 1.2rem;
+  --buttons-radius-outset: 1.2rem;
   display: inline-flex;
-  width: auto;
+  width: 100%;
   min-width: 0;
   min-height: 0;
-  padding: 0.5rem 1.15rem;
-  font-size: 1.28rem;
-  letter-spacing: 0.01em;
-  background-color: transparent;
+  padding: 1.1rem 1.6rem;
+  font-family: var(--font-label);
+  text-transform: uppercase;
+  letter-spacing: 0.12em;
+  font-size: 1.1rem;
+  font-weight: 600;
+  background-color: var(--cream);
   color: var(--ink);
-  border: 1px solid var(--peach);
+  box-shadow: 0 1.8rem 3rem -1.8rem rgba(64, 62, 63, 0.5);
 }
 .card-wrapper .quick-add__submit::after {
   display: none;
 }
 .card-wrapper .quick-add__submit:not([disabled]):hover {
-  border-color: var(--coral);
-  background-color: var(--peach-tint);
-  color: var(--ink);
+  background-color: var(--ink);
+  color: var(--cream);
 }
 
-/* ---------- Footer (steer-don't-fight, Phase 2 closing step) ----------
-   Dawn's footer set to scheme-5 (ink bg / cream text) in footer-group.json.
-   This is purely cosmetic restyle toward the design-handoff dark footer:
-   peach column headings, cream links, a Fraunces brand wordmark + muted
-   tagline, and a "Hecho en Medellín" line appended to the copyright row.
-   Sizes on Dawn's 10px rem base (see top of file). No markup edits. */
+/* ---------- Footer (approved) ----------
+   Phase 2: align Dawn's footer (scheme-5 ink/cream, set in footer-group.json) to
+   the approved Footer (Home Page/styles.css .foot): Archivo-caps column headings,
+   cream links → coral on hover, a Shantell-Sans brand tagline, and circular social
+   chips. Logo + social links come from theme settings; socials are enabled in
+   footer-group.json. Sizes on Dawn's 10px rem base. No markup edits. */
 .footer {
   border-top: 0;
 }
 
-/* Column headings → peach, uppercase, tracked (handoff .fcol h4) */
+/* Column headings → Archivo, uppercase, tracked, muted-cream (approved .foot-col h4) */
 .footer .footer-block__heading {
-  font-family: var(--font-body-family);
-  font-size: 1.2rem;
+  font-family: var(--font-label);
+  font-size: 1.15rem;
   font-weight: 600;
-  letter-spacing: 0.16em;
+  letter-spacing: 0.14em;
   text-transform: uppercase;
-  color: var(--peach);
-  margin-bottom: 1.6rem;
+  color: rgba(252, 243, 233, 0.55);
+  margin-bottom: 1.8rem;
 }
 
-/* Link columns → cream at rest, full cream on hover */
+/* Link columns → cream at rest, coral on hover (approved .foot-col a) */
 .footer .footer-block--menu .list-menu__item--link,
 .footer .footer-block__details-content a {
-  font-family: var(--font-body-family);
-  font-size: 1.5rem;
-  color: rgba(251, 242, 233, 0.82);
-  transition: color 0.15s ease;
+  font-family: var(--font-display);
+  font-size: 1.45rem;
+  color: rgba(252, 243, 233, 0.88);
+  transition: color 0.3s var(--ease);
 }
 .footer .footer-block--menu .list-menu__item--link:hover,
 .footer .footer-block__details-content a:hover {
-  color: var(--cream);
+  color: var(--coral);
   text-decoration: none;
 }
-.footer .footer-block--menu .footer-block__details-content { gap: 1.1rem; }
+.footer .footer-block--menu .footer-block__details-content { gap: 1.2rem; }
 
-/* Brand column: Fraunces wordmark (override the generic peach heading rule)
-   + muted tagline */
+/* Brand column: Shantell-Sans tagline in coral (approved .foot-tagline). If a
+   text heading is used instead of the logo image, render it cream (not peach). */
 .footer .footer-block__brand-info .footer-block__heading {
-  font-family: var(--serif);
+  font-family: var(--font-display);
   font-weight: 500;
   font-size: 2.6rem;
   letter-spacing: -0.01em;
@@ -610,27 +646,176 @@ details[open] > .header__menu-item {
   margin-bottom: 1.2rem;
 }
 .footer .footer-block__brand-info .rte {
-  max-width: 30ch;
-  font-size: 1.5rem;
-  line-height: 1.5;
-  color: rgba(251, 242, 233, 0.68);
+  max-width: 24ch;
+  font-family: var(--font-hand);
+  font-weight: 600;
+  font-size: 2rem;
+  line-height: 1.2;
+  color: var(--coral);
 }
 
-/* Bottom bar: muted copyright + appended "Hecho en Medellín" line */
-.footer .footer__copyright .copyright__content {
-  color: rgba(251, 242, 233, 0.68);
+/* Social chips → circular, hairline border, coral on hover (approved .foot-socials) */
+.footer .list-social__link {
+  border: 1px solid rgba(252, 243, 233, 0.24);
+  border-radius: 50%;
+  color: var(--cream);
+  transition: background 0.3s var(--ease), border-color 0.3s var(--ease), color 0.3s var(--ease);
 }
-.footer .footer__copyright::after {
-  display: block;
-  content: "Hecho en Medellín 🇨🇴";
-  margin-top: 0.6rem;
-  font-size: 1.25rem;
-  color: rgba(251, 242, 233, 0.68);
+.footer .list-social__link:hover {
+  background: var(--coral);
+  border-color: var(--coral);
+  color: var(--white);
+}
+
+/* Bottom bar: muted Archivo-caps meta (approved .foot-meta) */
+.footer .footer__copyright,
+.footer .footer__copyright .copyright__content {
+  font-family: var(--font-label);
+  text-transform: uppercase;
+  letter-spacing: 0.14em;
+  font-size: 1.1rem;
+  color: rgba(252, 243, 233, 0.5);
+}
+
+/* ---------- Announcement / utility bar (approved) ----------
+   Phase 2: align Dawn's utility bar to the approved .announce — ink bar (set to
+   scheme-5 in header-group.json), centered Archivo-uppercase microcopy, coral
+   emphasis, and an optional WhatsApp link (settings.whatsapp_link, rendered in
+   announcement-bar.liquid). Cosmetic only; announcement blocks stay editable. */
+.utility-bar {
+  border: 0;
+}
+.announcement-bar__message {
+  font-family: var(--font-label);
+  text-transform: uppercase;
+  letter-spacing: 0.16em;
+  font-weight: 500;
+  font-size: 1.15rem;
+}
+.announcement-bar__message strong,
+.announcement-bar__message b {
+  color: var(--coral);
+  font-weight: 600;
+}
+/* WhatsApp CTA (approved .announce .wa) */
+.utility-bar__wa {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.7rem;
+  font-family: var(--font-label);
+  text-transform: uppercase;
+  letter-spacing: 0.16em;
+  font-weight: 600;
+  font-size: 1.15rem;
+  color: var(--cream);
+  opacity: 0.85;
+  transition: opacity 0.3s var(--ease);
+}
+.utility-bar__wa:hover {
+  opacity: 1;
+  color: var(--cream);
+  text-decoration: none;
+}
+.utility-bar__wa svg {
+  width: 1.5rem;
+  height: 1.5rem;
+}
+
+/* ---------- Collection / room cards (approved) ----------
+   Phase 2: align Dawn's collection card to the approved room card (Home Page
+   styles .room): large radius, image with a brand-tinted legibility wash, the
+   title/copy overlaid bottom-left in cream, hover lift + zoom. Reusable card
+   treatment only — the homepage's asymmetric mosaic layout is Phase 3. */
+.collection-card-wrapper {
+  position: relative;
+  transition: transform 0.55s var(--ease);
+}
+.collection-card-wrapper:hover {
+  transform: translateY(-6px);
+}
+.collection-card-wrapper .card,
+.collection-card-wrapper .card__inner,
+.collection-card-wrapper .card__media {
+  border-radius: var(--radius-lg);
+}
+.collection-card-wrapper .card__media {
+  overflow: hidden;
+  box-shadow: 0 2.6rem 5rem -3.8rem rgba(64, 62, 63, 0.55);
+}
+.collection-card-wrapper .card__media .media img {
+  transition: transform 0.55s var(--ease);
+}
+.collection-card-wrapper:hover .card__media .media img {
+  transform: scale(1.055);
+}
+/* Legibility wash, weighted to the bottom (approved .room-grad) */
+.collection-card-wrapper .card__inner::after {
+  content: "";
+  position: absolute;
+  inset: 0;
+  z-index: 1;
+  pointer-events: none;
+  border-radius: var(--radius-lg);
+  background: linear-gradient(to top, rgba(38, 33, 56, 0.82) 0%, rgba(38, 33, 56, 0.34) 30%, rgba(38, 33, 56, 0) 56%);
+}
+/* Title + caption overlaid bottom-left, cream (approved .room-meta) */
+.collection-card-wrapper .card__content {
+  position: absolute;
+  inset: auto 0 0 0;
+  z-index: 2;
+  padding: clamp(2rem, 2.2vw, 3.4rem);
+}
+.collection-card-wrapper .card__heading {
+  margin: 0;
+}
+.collection-card-wrapper .card__heading a {
+  font-family: var(--font-display);
+  font-weight: 400;
+  letter-spacing: -0.02em;
+  line-height: 0.98;
+  font-size: clamp(2.8rem, 2.7vw, 4.2rem);
+  color: var(--cream);
+}
+.collection-card-wrapper .card__caption {
+  margin-top: 0.9rem;
+  max-width: 26ch;
+  font-size: 1.5rem;
+  line-height: 1.4;
+  color: rgba(252, 243, 233, 0.9);
+}
+.collection-card-wrapper .icon-wrap {
+  color: var(--cream);
+}
+
+/* ---------- Variant picker (approved) ----------
+   Phase 2: align variant pills + swatches to the approved system — pill radius,
+   periwinkle selected state, hairline rest border. Behavior (Dawn variant JS) is
+   untouched; PDP-specific layout is Phase 5. */
+.product-form__input--pill input[type='radio'] + label {
+  border-radius: var(--radius-pill);
+  border-color: var(--hairline);
+  font-family: var(--font-label);
+  letter-spacing: 0.04em;
+}
+.product-form__input--pill input[type='radio'] + label:hover {
+  border-color: var(--periwinkle-deep);
+}
+.product-form__input--pill input[type='radio']:checked + label {
+  background-color: var(--periwinkle-deep);
+  border-color: var(--periwinkle-deep);
+  color: var(--white);
+}
+.swatch-input__input:checked + .swatch-input__label {
+  box-shadow: 0 0 0 0.2rem var(--cream), 0 0 0 0.4rem var(--periwinkle-deep);
 }
 
 @media (prefers-reduced-motion: reduce) {
   html:focus-within { scroll-behavior: auto; }
   .button:not([disabled]):active { transform: none; }
-  .card-wrapper { transition: none; }
-  .card-wrapper:hover { transform: none; }
+  .card-wrapper,
+  .collection-card-wrapper { transition: none; }
+  .card-wrapper:hover,
+  .collection-card-wrapper:hover { transform: none; }
+  .card-wrapper:hover .card__media .media img,
+  .collection-card-wrapper:hover .card__media .media img { transform: none; }
 }

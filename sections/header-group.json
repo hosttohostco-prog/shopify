@@ -4,6 +4,9 @@
   "sections": {
     "announcement-bar": {
       "type": "announcement-bar",
+      "settings": {
+        "color_scheme": "scheme-5"
+      },
       "blocks": {
         "announcement-bar-0": {
           "type": "announcement",
