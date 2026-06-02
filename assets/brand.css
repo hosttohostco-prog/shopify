@@ -1,62 +1,98 @@
 /* ============================================================
    HostToHost — brand layer over Dawn
-   Tokens + type system ported from the locked design handoff
-   (design-handoff/project/styles.css). Accent = coral (Mafe's brand);
-   blue = secondary/trust. Page base = white; cream/sage-soft secondary.
+   Phase 1 (approved global foundation, 2026-06-02): migrated from the
+   Fraunces / DM Sans / DM Mono / Caveat (Variant-D) layer to the approved
+   periwinkle-led system — Outfit (display + body), Archivo (labels), Shantell
+   Sans (hand). Token VALUES come from the approved React source of truth
+   (../Home Page/styles.css). Legacy token names (--serif/--sans/--mono/--script,
+   --coral/--cream/etc., --hth-*) are retained as aliases mapped onto the approved
+   values so existing Dawn-steering rules and the not-yet-refactored Fraunces-era
+   sections keep rendering until Phase 2/3. Periwinkle leads; coral is the warm
+   accent; cream is the canvas. NOTE: Dawn sets html{font-size:62.5%} (1rem=10px);
+   the approved type ramp below uses absolute px clamps from the source, which are
+   rem-base-independent and reproduce the approved scale exactly.
    ============================================================ */
 
 :root {
-  --cream: #fbf2e9;
-  --coral: #ee7954;
-  --orange: #f15f2a;
-  --peach: #f39878;
-  --gold: #fab95b;
-  --blue: #597bbd;
-  --periwinkle: #96a1d2;
-  --sage: #989c6f;
-  --sage-soft: #ebf1db;
-  --ink: #403e3f;
+  /* ---- Approved palette (canonical — from approved styles.css) ---- */
+  --periwinkle: #96a1d2;       /* lead brand colour */
+  --periwinkle-deep: #7c89c4;  /* hover / active / depth */
+  --indigo: #597bbd;           /* trust / secondary */
+  --coral: #f39878;            /* warm accent (italic words, hovers) */
+  --coral-deep: #e8825f;       /* accent depth */
+  --orange: #f1602b;           /* secondary warm accent */
+  --yellow: #fab95b;           /* highlight / badge */
+  --yellow-light: #fde0b4;
+  --olive: #989c6f;            /* trust / supporting earth tone */
+  --green-deep: #566041;
+  --sage-soft: #ebf1db;        /* pale-sage section background */
+  --cream: #fcf3e9;            /* canvas */
+  --cream-deep: #f6e9d8;
+  --warm-gray: #e6e2d9;
+  --ink: #403e3f;              /* primary text / dark surfaces */
+  --ink-soft: #6a6566;         /* approved muted text */
+  --white: #ffffff;
 
-  --cream-deep: #f4e7d8;
-  --peach-tint: #fae3d6;
+  /* Roles */
+  --brand: var(--periwinkle);
+  --canvas: var(--cream);
+  --card-surface: var(--white);
+
+  /* Derived ink alphas / hairline (kept from Variant-D, still used by Dawn rules) */
   --ink-70: rgba(64, 62, 63, 0.7);
   --ink-55: rgba(64, 62, 63, 0.55);
   --ink-40: rgba(64, 62, 63, 0.4);
   --hairline: rgba(64, 62, 63, 0.12);
 
-  /* Variant-D direction (2026-05-30): warm cream page base + white card surfaces.
-     --paper is wired into Dawn via scheme-1's background in settings_data.json
-     (scheme-1 is emitted to :root, so the .gradient body paints with it). This
-     token mirrors it for bespoke sections that need the page colour directly. */
-  --paper: #faf5ed;
-  --card-surface: #ffffff;
-  /* Coral kept as the bright brand accent (italic words, underlines, hovers).
-     CTA fill deepens to --coral-cta for ≥4.5:1 white-text contrast (WCAG AA). */
+  /* CTA fill: the approved coral fails AA with white text, so the highest-intent
+     .cta moments keep a deepened coral (≈4.8:1). Bright --coral stays the accent
+     everywhere else. (Resolved 2026-06-02, James: keep the deepened CTA.) */
   --coral-cta: #c14d2e;
-  /* Soft, warm-tinted shadows (raigal feel — tinted to the warm bg, not black). */
+
+  /* Soft, warm-tinted shadows */
   --shadow-rest: 0 1rem 2.6rem -2rem rgba(94, 83, 64, 0.34);
   --shadow-soft: 0 2.4rem 5rem -2.8rem rgba(94, 83, 64, 0.42);
 
-  --serif: 'Fraunces', Georgia, serif;
-  --sans: 'DM Sans', system-ui, -apple-system, sans-serif;
-  --mono: 'DM Mono', 'SFMono-Regular', monospace;
-  --script: 'Caveat', cursive;
+  /* ---- Approved type faces (canonical) ---- */
+  --font-display: 'Outfit', system-ui, -apple-system, sans-serif;
+  --font-label: 'Archivo', system-ui, sans-serif;
+  --font-hand: 'Shantell Sans', cursive;
 
-  --hth-maxw: 1280px;
-  --hth-gutter: clamp(20px, 5vw, 64px);
-  --hth-radius: 28px;
-  --hth-radius-sm: 18px;
-  --hth-radius-card: 14px; /* Variant-D product/media surfaces */
-  --hth-radius-pill: 999px;
+  /* ---- Approved layout tokens (canonical) ---- */
+  --maxw: 1280px;
+  --gutter: clamp(20px, 4.5vw, 64px);
+  --radius: 20px;        /* approved card radius */
+  --radius-lg: 30px;     /* approved hero / media / editorial radius */
+  --radius-pill: 999px;
+  --ease: cubic-bezier(.22, .61, .36, 1);
 
-  /* Wire Dawn's font variables to the brand faces */
-  --font-body-family: var(--sans);
+  /* ---- Legacy aliases (back-compat for Dawn-steering rules + Fraunces-era
+     sections refactored in Phase 2/3). Mapped onto the approved system. ---- */
+  --serif: var(--font-display);   /* was Fraunces — headings now Outfit */
+  --sans: var(--font-display);    /* was DM Sans — body now Outfit */
+  --mono: var(--font-label);      /* was DM Mono — labels/specs now Archivo */
+  --script: var(--font-hand);     /* was Caveat — hand now Shantell Sans */
+  --peach: var(--coral);
+  --peach-tint: rgba(243, 152, 120, 0.2);
+  --gold: var(--yellow);
+  --blue: var(--indigo);
+  --sage: var(--olive);           /* legacy --sage was the olive text colour */
+  --paper: var(--cream);
+  --hth-maxw: var(--maxw);
+  --hth-gutter: var(--gutter);
+  --hth-radius: var(--radius-lg);
+  --hth-radius-sm: var(--radius);
+  --hth-radius-card: 14px;        /* card surface radius held until Phase 2 */
+  --hth-radius-pill: var(--radius-pill);
+
+  /* Wire Dawn's font variables to the approved faces */
+  --font-body-family: var(--font-display);
   --font-body-style: normal;
   --font-body-weight: 400;
   --font-body-weight-bold: 600;
-  --font-heading-family: var(--serif);
+  --font-heading-family: var(--font-display);
   --font-heading-style: normal;
-  --font-heading-weight: 400;
+  --font-heading-weight: 500;
 }
 
 /* ---------- Layout helpers ---------- */
@@ -68,17 +104,42 @@
 .hth-bg-cream-deep { background: var(--cream-deep); }
 .hth-bg-ink { background: var(--ink); color: var(--cream); }
 
-/* ---------- Type ramp ----------
-   NOTE: Dawn sets `html { font-size: 62.5% }`, so 1rem = 10px on this theme.
-   Brand copy is sized against that base — standard body ≈ 1.5–1.7rem (15–17px),
-   NOT 1rem. Size new bespoke sections the same way (don't port 16px-base rems). */
-.eyebrow {
-  font-family: var(--sans);
-  font-size: 1.15rem;
-  font-weight: 600;
-  letter-spacing: 0.18em;
+/* ---------- Type ramp (approved system) ----------
+   Sizes use absolute px clamps from the approved source. px is independent of
+   Dawn's 62.5% rem base, so these reproduce the approved scale exactly. The
+   approved display face is Outfit at light weights (300–500); accent words use
+   periwinkle-deep (.em) or coral-deep (.em-coral). Labels/kickers are Archivo.
+
+   Approved utility classes (.kicker, .display, .h-hero/.h-1/.h-2/.h-3, .lead,
+   .body, .hand, .tag, .tlink) are what Phase 2–5 sections consume. Legacy
+   classes (.eyebrow, .h2-display, .h3-display, .script, .mono, .price) are
+   retained, restyled onto the approved system, so Fraunces-era sections survive
+   the interim. */
+
+/* -- Kicker / eyebrow (Archivo, uppercase, coral-deep) -- */
+.kicker {
+  font-family: var(--font-label);
   text-transform: uppercase;
-  color: var(--sage);
+  letter-spacing: 0.24em;
+  font-weight: 600;
+  font-size: 12.5px;
+  color: var(--coral-deep);
+  display: inline-flex;
+  align-items: center;
+  gap: 12px;
+  margin: 0;
+}
+.kicker::before { content: ""; width: 26px; height: 1.5px; background: currentColor; display: inline-block; opacity: 0.6; }
+.kicker--plain::before { display: none; }
+
+/* legacy .eyebrow → approved kicker look (dot marker kept) */
+.eyebrow {
+  font-family: var(--font-label);
+  font-size: 12.5px;
+  font-weight: 600;
+  letter-spacing: 0.24em;
+  text-transform: uppercase;
+  color: var(--coral-deep);
   display: inline-flex;
   align-items: center;
   gap: 0.55em;
@@ -86,44 +147,56 @@
 .eyebrow::before { content: ""; width: 7px; height: 7px; border-radius: 50%; background: currentColor; flex: none; }
 .eyebrow--coral { color: var(--orange); }
 
+/* -- Display + headings (Outfit, light, tight) -- */
 .display {
-  font-family: var(--serif);
-  font-weight: 400;
-  line-height: 1;
-  letter-spacing: -0.015em;
-  font-size: clamp(4.3rem, 6.4vw, 8rem);
+  font-family: var(--font-display);
+  font-weight: 300;
+  line-height: 0.98;
+  letter-spacing: -0.035em;
+  font-size: clamp(38px, 5.4vw, 72px);
   margin: 0;
   text-wrap: balance;
 }
-.h2-display {
-  font-family: var(--serif);
-  font-weight: 400;
-  line-height: 1.04;
-  letter-spacing: -0.012em;
-  font-size: clamp(3.2rem, 4.2vw, 5.45rem);
-  margin: 0;
-  text-wrap: balance;
-}
-.h3-display {
-  font-family: var(--serif);
-  font-weight: 500;
-  font-size: 2.4rem;
-  line-height: 1.15;
-  margin: 0;
-}
+.display b, .display strong { font-weight: 600; }
+.display .em { color: var(--periwinkle-deep); font-weight: 500; }
+.display .em-coral { color: var(--coral-deep); font-weight: 500; }
+
+.h-hero { font-size: clamp(42px, 5.7vw, 82px); }
+.h-1 { font-size: clamp(38px, 5.4vw, 72px); }
+.h-2 { font-family: var(--font-display); font-weight: 400; font-size: clamp(30px, 3.8vw, 50px); letter-spacing: -0.028em; line-height: 1.02; margin: 0; text-wrap: balance; }
+.h-3 { font-family: var(--font-display); font-weight: 500; font-size: clamp(22px, 2.4vw, 30px); letter-spacing: -0.02em; line-height: 1.08; margin: 0; }
+
+/* legacy heading aliases → approved scale */
+.h2-display { font-family: var(--font-display); font-weight: 400; font-size: clamp(30px, 3.8vw, 50px); letter-spacing: -0.028em; line-height: 1.02; margin: 0; text-wrap: balance; }
+.h3-display { font-family: var(--font-display); font-weight: 500; font-size: clamp(22px, 2.4vw, 30px); letter-spacing: -0.02em; line-height: 1.08; margin: 0; }
+
 .ital { font-style: italic; }
-.in-coral { color: var(--coral); }
-.in-sage { color: var(--sage); }
-.lead {
-  font-size: 1.72rem;
-  line-height: 1.6;
-  color: var(--ink-70);
-  max-width: 46ch;
-  text-wrap: pretty;
+.in-coral { color: var(--coral-deep); }
+.in-peri { color: var(--periwinkle-deep); }
+.in-sage { color: var(--olive); }
+
+/* -- Body copy -- */
+.lead { font-size: clamp(17px, 1.35vw, 20px); line-height: 1.6; color: var(--ink-soft); max-width: 52ch; margin: 0; text-wrap: pretty; }
+.body { font-size: 17px; line-height: 1.62; color: var(--ink-soft); }
+.muted { color: var(--ink-soft); }
+
+/* -- Hand / script (Shantell Sans) -- */
+.hand { font-family: var(--font-hand); font-weight: 600; color: var(--coral-deep); line-height: 1.2; }
+.script { font-family: var(--font-hand); font-weight: 600; font-size: 18px; line-height: 1.2; color: var(--coral-deep); }
+
+/* -- Labels / price (Archivo) -- */
+.tag {
+  display: inline-flex; align-items: center; gap: 6px;
+  font-family: var(--font-label); text-transform: uppercase; letter-spacing: 0.12em;
+  font-weight: 600; font-size: 11px; padding: 5px 11px; border-radius: var(--radius-pill);
 }
-.script { font-family: var(--script); font-size: 2.4rem; line-height: 1.2; color: var(--sage); }
-.mono { font-family: var(--mono); letter-spacing: 0.02em; }
-.price { font-family: var(--mono); font-size: 1.52rem; letter-spacing: 0.01em; color: var(--ink); }
+.tag--peri { background: rgba(150, 161, 210, 0.16); color: var(--periwinkle-deep); }
+.tag--olive { background: rgba(152, 156, 111, 0.18); color: var(--green-deep); }
+.tag--coral { background: rgba(243, 152, 120, 0.2); color: var(--coral-deep); }
+.tag--cream { background: var(--cream); color: var(--ink); }
+
+.mono { font-family: var(--font-label); letter-spacing: 0.02em; }
+.price { font-family: var(--font-label); font-size: 1.52rem; letter-spacing: 0.01em; color: var(--ink); }
 
 /* ---------- Buttons ----------
    Matches the design-handoff lock (.btn): full pill, ink primary on cream

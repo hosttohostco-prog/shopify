@@ -34,6 +34,17 @@
     ]
   },
   {
+    "name": "Brand & contact",
+    "settings": [
+      {
+        "type": "url",
+        "id": "whatsapp_link",
+        "label": "WhatsApp link",
+        "info": "Shared destination for WhatsApp CTAs across the storefront (e.g. https://wa.me/57...)."
+      }
+    ]
+  },
+  {
     "name": "t:settings_schema.colors.name",
     "settings": [
       {
