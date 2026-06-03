@@ -1582,6 +1582,33 @@ details[open] > .header__menu-item {
 /* Spinner colour inside the pill */
 #product-grid .quick-add__submit .loading__spinner { --color-spinner: white; }
 
+/* ---- More Categories — uniform 2-col room cards ---- */
+/*
+  Scope: .collection-list:not(.collection-list--mosaic) keeps the homepage
+  mosaic layout completely untouched. The category page always uses
+  layout=uniform which produces a non-mosaic list.
+*/
+.collection-list:not(.collection-list--mosaic) .collection-list__item {
+  /* Equal height items in the grid row */
+  display: flex; flex-direction: column;
+}
+.collection-list:not(.collection-list--mosaic) .collection-card-wrapper,
+.collection-list:not(.collection-list--mosaic) .collection-card-wrapper .card {
+  flex: 1; width: 100%;
+}
+/* Force uniform 3:2 landscape ratio regardless of image dimensions */
+.collection-list:not(.collection-list--mosaic) .collection-card-wrapper .card__inner.ratio::before {
+  padding-top: 66.67% !important; /* 3:2 = 66.67% */
+}
+/* Ensure card is full-height and image fills it */
+.collection-list:not(.collection-list--mosaic) .collection-card-wrapper .card,
+.collection-list:not(.collection-list--mosaic) .collection-card-wrapper .card__inner {
+  border-radius: 20px !important; overflow: hidden;
+}
+.collection-list:not(.collection-list--mosaic) .collection-card-wrapper .card__media img {
+  object-fit: cover; width: 100%; height: 100%;
+}
+
 /* ---- CTA footer ---- */
 .cat-cta { padding-block: clamp(28px, 3.5vw, 44px); }
 .cat-cta-inner {
