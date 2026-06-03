@@ -1480,6 +1480,34 @@ details[open] > .header__menu-item {
 .cat-grid-head .shead { margin-bottom: clamp(22px, 2.8vw, 34px); }
 .cat-grid-head .display { color: var(--ink); }
 .cat-grid-head .display em { font-style: normal; font-weight: 500; color: var(--periwinkle-deep); }
+.cat-grid-right {
+  display: flex; flex-direction: column; align-items: flex-end; gap: 6px; justify-content: flex-end;
+}
+.cat-grid-count {
+  margin: 0; font-family: var(--font-label); text-transform: uppercase;
+  letter-spacing: 0.14em; font-size: 11px; font-weight: 600; color: var(--ink-soft);
+  white-space: nowrap;
+}
+
+/* ---- Product grid card overrides ---- */
+#product-grid .card-wrapper { border-radius: 0; }
+#product-grid .card { border: none !important; box-shadow: none !important; background: transparent !important; }
+#product-grid .card__inner { border: none !important; border-radius: 0 !important; background: transparent !important; }
+#product-grid .card__media,
+#product-grid .card .media {
+  border-radius: 12px !important; overflow: hidden;
+}
+#product-grid .card__content { padding: 0; }
+#product-grid .card__information { padding: clamp(10px, 1.2vw, 14px) 0 0; }
+#product-grid .card__heading,
+#product-grid .card__heading a {
+  font-family: var(--font-display) !important; font-weight: 400 !important;
+  font-size: clamp(15px, 1.4vw, 18px) !important; letter-spacing: -0.01em;
+  color: var(--ink) !important; text-decoration: none !important;
+}
+#product-grid .price { font-family: var(--font-display); font-size: clamp(13px, 1.2vw, 16px); color: var(--ink-soft); }
+#product-grid .price__regular .price-item { font-weight: 400; letter-spacing: -0.01em; }
+#product-grid .card-wrapper:hover .card__heading a { color: var(--coral) !important; }
 
 /* ---- CTA footer ---- */
 .cat-cta { padding-block: clamp(28px, 3.5vw, 44px); }

@@ -48,11 +48,14 @@
             <h2 class="display h-2">{{ section.settings.grid_heading }}</h2>
           {%- endif -%}
         </div>
-        {%- if section.settings.header_link_label != blank -%}
-          <a class="tlink" href="{{ section.settings.header_link_url | default: routes.collections_url }}">
-            {{ section.settings.header_link_label }}<span class="arr" aria-hidden="true"> →</span>
-          </a>
-        {%- endif -%}
+        <div class="cat-grid-right">
+          <p class="cat-grid-count">{{ collection.products_count }} piezas</p>
+          {%- if section.settings.header_link_label != blank -%}
+            <a class="tlink" href="{{ section.settings.header_link_url | default: routes.collections_url }}">
+              {{ section.settings.header_link_label }}<span class="arr" aria-hidden="true"> →</span>
+            </a>
+          {%- endif -%}
+        </div>
       </div>
     </div>
   {%- endif -%}
