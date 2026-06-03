@@ -37,6 +37,25 @@
 {%- endstyle -%}
 
 <div class="section-{{ section.id }}-padding gradient color-{{ section.settings.color_scheme }}">
+  {%- if section.settings.kicker != blank or section.settings.grid_heading != blank -%}
+    <div class="hth-wrap cat-grid-head">
+      <div class="shead">
+        <div class="shead-l">
+          {%- if section.settings.kicker != blank -%}
+            <p class="kicker">{{ section.settings.kicker }}</p>
+          {%- endif -%}
+          {%- if section.settings.grid_heading != blank -%}
+            <h2 class="display h-2">{{ section.settings.grid_heading }}</h2>
+          {%- endif -%}
+        </div>
+        {%- if section.settings.header_link_label != blank -%}
+          <a class="tlink" href="{{ section.settings.header_link_url | default: routes.collections_url }}">
+            {{ section.settings.header_link_label }}<span class="arr" aria-hidden="true"> →</span>
+          </a>
+        {%- endif -%}
+      </div>
+    </div>
+  {%- endif -%}
   {%- paginate collection.products by section.settings.products_per_page -%}
     {% comment %} Sort is the first tabbable element when filter type is vertical {% endcomment %}
     {%- if section.settings.enable_sorting and section.settings.filter_type == 'vertical' -%}
@@ -200,6 +219,29 @@
   "name": "t:sections.main-collection-product-grid.name",
   "class": "section",
   "settings": [
+    { "type": "header", "content": "Encabezado de sección" },
+    {
+      "type": "text",
+      "id": "kicker",
+      "label": "Etiqueta superior"
+    },
+    {
+      "type": "inline_richtext",
+      "id": "grid_heading",
+      "label": "Título",
+      "info": "Usa cursiva (<em>) para resaltar palabras en periwinkle."
+    },
+    {
+      "type": "text",
+      "id": "header_link_label",
+      "label": "Enlace de cabecera — texto"
+    },
+    {
+      "type": "url",
+      "id": "header_link_url",
+      "label": "Enlace de cabecera — destino"
+    },
+    { "type": "header", "content": "Cuadrícula de productos" },
     {
       "type": "range",
       "id": "products_per_page",

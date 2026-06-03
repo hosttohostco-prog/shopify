@@ -1,0 +1,230 @@
+{%- comment -%}
+  HostToHost — Collection Support (Phase 4)
+  Multi-block editorial section for category pages. Three block types:
+  · note     — Compact Mafe Note (sage-soft bg, metafield custom.mafe_note)
+  · featured — Compact Featured Product (metafield custom.featured_product)
+  · cta      — WhatsApp / link CTA footer (metafields custom.cta_text / cta_link)
+  Blocks render in sequence in their block_order. Each has its own background
+  and compact padding defined in assets/brand.css (.cat-note / .cat-feat / .cat-cta).
+{%- endcomment -%}
+
+{%- liquid
+  assign reveal = ''
+  if settings.animations_reveal_on_scroll
+    assign reveal = ' scroll-trigger animate--slide-in'
+  endif
+-%}
+
+{%- for block in section.blocks -%}
+  {%- case block.type -%}
+
+  {%- when 'note' -%}
+    {%- if collection.metafields.custom.mafe_note != blank or block.settings.note_fallback != blank -%}
+      <div class="cat-note" {{ block.shopify_attributes }}>
+        <div class="hth-wrap">
+          <div class="cat-note-inner{{ reveal }}">
+            <div class="cat-note-avatar-wrap" aria-hidden="true">
+              <div class="cat-note-avatar">
+                {%- if block.settings.avatar != blank -%}
+                  {{ block.settings.avatar | image_url: width: 200 | image_tag: loading: 'lazy', alt: '' }}
+                {%- endif -%}
+              </div>
+            </div>
+            <div class="cat-note-body">
+              <p class="cat-note-label">
+                <span>{{ block.settings.label_before | default: 'Nota de Mafe' }}</span>
+                <span class="cat-note-sep" aria-hidden="true">·</span>
+                <span>{{ block.settings.label_after | default: 'Para esta colección' }}</span>
+              </p>
+              {%- if collection.metafields.custom.mafe_note != blank -%}
+                <div class="cat-note-quote rte">{{ collection.metafields.custom.mafe_note | metafield_tag }}</div>
+              {%- elsif block.settings.note_fallback != blank -%}
+                <div class="cat-note-quote rte">{{ block.settings.note_fallback }}</div>
+              {%- endif -%}
+              <p class="cat-note-attr">
+                <span class="cat-note-name">{{ block.settings.author_name | default: 'Mafe' }}</span>
+                <span class="cat-note-role">{{ block.settings.author_role | default: 'Superhost · Medellín' }}</span>
+              </p>
+            </div>
+          </div>
+        </div>
+      </div>
+    {%- endif -%}
+
+  {%- when 'featured' -%}
+    {%- liquid
+      assign feat_product = collection.metafields.custom.featured_product.value
+      if feat_product == blank
+        assign feat_product = block.settings.product_override
+      endif
+    -%}
+    {%- if feat_product != blank -%}
+      <div class="cat-feat" {{ block.shopify_attributes }}>
+        <div class="hth-wrap">
+          <div class="cat-feat-inner{{ reveal }}">
+            <div class="cat-feat-media">
+              <div class="cat-feat-frame">
+                {%- if feat_product.featured_image != blank -%}
+                  {{ feat_product.featured_image | image_url: width: 900 | image_tag:
+                    loading: 'lazy',
+                    sizes: '(min-width: 860px) 46vw, 100vw',
+                    widths: '480, 720, 900',
+                    class: 'cat-feat-img',
+                    alt: feat_product.featured_image.alt | default: feat_product.title | escape
+                  }}
+                {%- else -%}
+                  <div class="cat-feat-ph">
+                    {%- if feat_product.title != blank -%}
+                      <span class="card-watermark">{{ feat_product.title | truncatewords: 3, '' }}</span>
+                    {%- endif -%}
+                  </div>
+                {%- endif -%}
+              </div>
+              {%- if block.settings.media_badge != blank -%}
+                <span class="tag tag--coral cat-feat-badge">{{ block.settings.media_badge }}</span>
+              {%- endif -%}
+            </div>
+            <div class="cat-feat-body">
+              {%- if block.settings.kicker != blank -%}
+                <p class="kicker">{{ block.settings.kicker }}</p>
+              {%- endif -%}
+              <h2 class="cat-feat-title">{{ feat_product.title }}</h2>
+              {%- if block.settings.host_note != blank -%}
+                <p class="cat-feat-note hand">{{ block.settings.host_note }}</p>
+              {%- endif -%}
+              <div class="cat-feat-price">
+                <span>{{ feat_product.price | money }}</span>
+                {%- if feat_product.metafields.custom.sell_unit != blank -%}
+                  <span class="cat-feat-unit">· {{ feat_product.metafields.custom.sell_unit }}</span>
+                {%- endif -%}
+              </div>
+              <div class="cat-feat-actions">
+                <a class="btn btn--coral" href="{{ feat_product.url }}">
+                  {{ block.settings.cta_label | default: 'Ver producto' }}
+                  <span class="arr" aria-hidden="true">→</span>
+                </a>
+                {%- if block.settings.secondary_label != blank -%}
+                  <a class="tlink" href="{{ feat_product.url }}">
+                    {{ block.settings.secondary_label }}
+                    <span class="arr" aria-hidden="true">→</span>
+                  </a>
+                {%- endif -%}
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    {%- endif -%}
+
+  {%- when 'cta' -%}
+    {%- liquid
+      assign cta_text = collection.metafields.custom.cta_text | default: block.settings.cta_text_fallback
+      assign cta_link_val = collection.metafields.custom.cta_link | default: block.settings.cta_link_fallback | default: settings.whatsapp_link
+    -%}
+    {%- if block.settings.cta_btn_label != blank -%}
+      <div class="cat-cta" {{ block.shopify_attributes }}>
+        <div class="hth-wrap">
+          <div class="cat-cta-inner{{ reveal }}">
+            {%- if cta_text != blank -%}
+              <p class="cat-cta-text hand">{{ cta_text }}</p>
+            {%- endif -%}
+            <a class="btn btn--outline" href="{{ cta_link_val | default: '#' }}">
+              <svg class="cat-cta-icon" viewBox="0 0 24 24" width="18" height="18" fill="currentColor" aria-hidden="true">
+                <path d="M17.472 14.382c-.297-.149-1.758-.867-2.03-.967-.273-.099-.471-.148-.67.15-.197.297-.767.966-.94 1.164-.173.199-.347.223-.644.075-.297-.15-1.255-.463-2.39-1.475-.883-.788-1.48-1.761-1.653-2.059-.173-.297-.018-.458.13-.606.134-.133.298-.347.446-.52.149-.174.198-.298.298-.497.099-.198.05-.371-.025-.52-.075-.149-.669-1.612-.916-2.207-.242-.579-.487-.5-.669-.51-.173-.008-.371-.01-.57-.01-.198 0-.52.074-.792.372-.272.297-1.04 1.016-1.04 2.479 0 1.462 1.065 2.875 1.213 3.074.149.198 2.096 3.2 5.077 4.487.709.306 1.262.489 1.694.625.712.227 1.36.195 1.871.118.571-.085 1.758-.719 2.006-1.413.248-.694.248-1.289.173-1.413-.074-.124-.272-.198-.57-.347m-5.421 7.403h-.004a9.87 9.87 0 01-5.031-1.378l-.361-.214-3.741.982.998-3.648-.235-.374a9.86 9.86 0 01-1.51-5.26c.001-5.45 4.436-9.884 9.888-9.884 2.64 0 5.122 1.03 6.988 2.898a9.825 9.825 0 012.893 6.994c-.003 5.45-4.437 9.884-9.885 9.884m8.413-18.297A11.815 11.815 0 0012.05 0C5.495 0 .16 5.335.157 11.892c0 2.096.547 4.142 1.588 5.945L.057 24l6.305-1.654a11.882 11.882 0 005.683 1.448h.005c6.554 0 11.89-5.335 11.893-11.893a11.821 11.821 0 00-3.48-8.413z"/>
+              </svg>
+              {{ block.settings.cta_btn_label }}
+            </a>
+          </div>
+        </div>
+      </div>
+    {%- endif -%}
+
+  {%- endcase -%}
+{%- endfor -%}
+
+{% schema %}
+{
+  "name": "Soporte de colección",
+  "tag": "section",
+  "class": "section",
+  "max_blocks": 6,
+  "settings": [],
+  "blocks": [
+    {
+      "type": "note",
+      "name": "Nota de Mafe",
+      "limit": 1,
+      "settings": [
+        { "type": "header", "content": "Contenido" },
+        {
+          "type": "richtext",
+          "id": "note_fallback",
+          "label": "Nota (respaldo)",
+          "info": "Se usa cuando custom.mafe_note está vacío en la colección.",
+          "default": "<p>Cada pieza que ves aquí la probé primero en mi propio Airbnb. Si no aguantó mis huéspedes, no está aquí.</p>"
+        },
+        { "type": "image_picker", "id": "avatar", "label": "Foto / logomark" },
+        { "type": "text", "id": "label_before", "label": "Etiqueta izquierda", "default": "Nota de Mafe" },
+        { "type": "text", "id": "label_after", "label": "Etiqueta derecha", "default": "Para esta colección" },
+        { "type": "text", "id": "author_name", "label": "Nombre", "default": "Mafe" },
+        { "type": "text", "id": "author_role", "label": "Rol / ubicación", "default": "Superhost · Medellín" }
+      ]
+    },
+    {
+      "type": "featured",
+      "name": "Producto destacado",
+      "limit": 1,
+      "settings": [
+        { "type": "header", "content": "Producto" },
+        {
+          "type": "product",
+          "id": "product_override",
+          "label": "Producto (respaldo)",
+          "info": "Se usa cuando custom.featured_product está vacío en la colección."
+        },
+        { "type": "header", "content": "Texto editorial" },
+        { "type": "text", "id": "kicker", "label": "Etiqueta superior", "default": "Empieza aquí" },
+        { "type": "text", "id": "media_badge", "label": "Badge en imagen", "default": "Mi favorito" },
+        { "type": "text", "id": "host_note", "label": "Nota de Mafe", "default": "El que más recomiendo para empezar." },
+        { "type": "text", "id": "cta_label", "label": "Botón principal", "default": "Ver producto" },
+        { "type": "text", "id": "secondary_label", "label": "Enlace secundario", "default": "¿Por qué la elijo?" }
+      ]
+    },
+    {
+      "type": "cta",
+      "name": "Llamada a la acción",
+      "limit": 1,
+      "settings": [
+        {
+          "type": "text",
+          "id": "cta_text_fallback",
+          "label": "Texto (respaldo)",
+          "info": "Se usa cuando custom.cta_text está vacío en la colección.",
+          "default": "¿Buscas algo específico para tu espacio?"
+        },
+        {
+          "type": "url",
+          "id": "cta_link_fallback",
+          "label": "Enlace (respaldo)",
+          "info": "Se usa cuando custom.cta_link está vacío. Por defecto usa el WhatsApp global."
+        },
+        {
+          "type": "text",
+          "id": "cta_btn_label",
+          "label": "Texto del botón",
+          "default": "Escríbeme por WhatsApp"
+        }
+      ]
+    }
+  ],
+  "presets": [
+    {
+      "name": "Soporte de colección",
+      "blocks": [
+        { "type": "note" },
+        { "type": "featured" }
+      ]
+    }
+  ]
+}
+{% endschema %}

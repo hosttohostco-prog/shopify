@@ -1,0 +1,33 @@
+{%- comment -%}
+  HostToHost — Breadcrumb snippet (Phase 4 / Phase 5)
+  Usage: {%- render 'breadcrumb' -%}
+  Renders a semantic Archivo-caps breadcrumb trail for collection and product
+  pages. Reusable; does not output any block-level wrapper — the calling section
+  handles placement. Styling in assets/brand.css (.hth-breadcrumb).
+{%- endcomment -%}
+
+<nav class="hth-breadcrumb" aria-label="Breadcrumb">
+  <ol class="hth-breadcrumb__list">
+    <li class="hth-breadcrumb__item">
+      <a class="hth-breadcrumb__link" href="{{ routes.root_url }}">Inicio</a>
+    </li>
+    <li class="hth-breadcrumb__sep" aria-hidden="true">/</li>
+    <li class="hth-breadcrumb__item">
+      <a class="hth-breadcrumb__link" href="{{ routes.collections_url }}">Tienda</a>
+    </li>
+    {%- if template.name == 'collection' -%}
+      <li class="hth-breadcrumb__sep" aria-hidden="true">/</li>
+      <li class="hth-breadcrumb__item hth-breadcrumb__item--current" aria-current="page">{{ collection.title }}</li>
+    {%- elsif template.name == 'product' -%}
+      {%- if product.collections.size > 0 -%}
+        {%- assign bc_col = product.collections | first -%}
+        <li class="hth-breadcrumb__sep" aria-hidden="true">/</li>
+        <li class="hth-breadcrumb__item">
+          <a class="hth-breadcrumb__link" href="{{ bc_col.url }}">{{ bc_col.title }}</a>
+        </li>
+      {%- endif -%}
+      <li class="hth-breadcrumb__sep" aria-hidden="true">/</li>
+      <li class="hth-breadcrumb__item hth-breadcrumb__item--current" aria-current="page">{{ product.title }}</li>
+    {%- endif -%}
+  </ol>
+</nav>

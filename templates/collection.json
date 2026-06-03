@@ -1,32 +1,98 @@
 {
   "sections": {
-    "banner": {
-      "type": "main-collection-banner",
+    "hero-editorial": {
+      "type": "collection-hero-editorial",
       "settings": {
-        "show_collection_description": true,
-        "show_collection_image": false,
-        "color_scheme": "scheme-1"
+        "kicker_fallback": "Colección",
+        "subtitle_fallback": "",
+        "caption_fallback": ""
       }
+    },
+    "editorial-support": {
+      "type": "collection-support",
+      "blocks": {
+        "note-1": {
+          "type": "note",
+          "settings": {
+            "note_fallback": "<p>Cada pieza que ves aquí la probé primero en mi propio Airbnb. Si no aguantó mis huéspedes, no está aquí.</p>",
+            "label_before": "Nota de Mafe",
+            "label_after": "Para esta colección",
+            "author_name": "Mafe",
+            "author_role": "Superhost · Medellín"
+          }
+        },
+        "featured-1": {
+          "type": "featured",
+          "settings": {
+            "kicker": "Empieza aquí",
+            "media_badge": "Mi favorito",
+            "host_note": "El que más recomiendo para empezar.",
+            "cta_label": "Ver producto",
+            "secondary_label": "¿Por qué la elijo?"
+          }
+        }
+      },
+      "block_order": ["note-1", "featured-1"],
+      "settings": {}
     },
     "product-grid": {
       "type": "main-collection-product-grid",
       "settings": {
-        "products_per_page": 16,
-        "columns_desktop": 4,
-        "image_ratio": "adapt",
+        "kicker": "La colección",
+        "grid_heading": "Todo lo que <em>probé y aprobé.</em>",
+        "header_link_label": "Ver toda la tienda",
+        "header_link_url": "/collections/all",
+        "products_per_page": 12,
+        "columns_desktop": 3,
+        "image_ratio": "portrait",
         "show_secondary_image": false,
         "show_vendor": false,
         "show_rating": false,
         "enable_filtering": true,
+        "filter_type": "horizontal",
         "enable_sorting": true,
+        "quick_add": "standard",
         "columns_mobile": "2",
-        "padding_top": 36,
-        "padding_bottom": 36
+        "color_scheme": "scheme-1",
+        "padding_top": 0,
+        "padding_bottom": 48
+      }
+    },
+    "cta-support": {
+      "type": "collection-support",
+      "blocks": {
+        "cta-1": {
+          "type": "cta",
+          "settings": {
+            "cta_text_fallback": "¿Buscas algo específico para tu espacio?",
+            "cta_btn_label": "Escríbeme por WhatsApp"
+          }
+        }
+      },
+      "block_order": ["cta-1"],
+      "settings": {}
+    },
+    "more-categories": {
+      "type": "collection-list",
+      "settings": {
+        "kicker": "Sigue explorando",
+        "title": "Las otras habitaciones.",
+        "header_link_label": "",
+        "layout": "uniform",
+        "columns_desktop": 2,
+        "image_ratio": "adapt",
+        "show_view_all": false,
+        "color_scheme": "scheme-2",
+        "padding_top": 48,
+        "padding_bottom": 64
       }
     }
   },
   "order": [
-    "banner",
-    "product-grid"
+    "hero-editorial",
+    "editorial-support",
+    "product-grid",
+    "cta-support",
+    "more-categories"
   ]
 }

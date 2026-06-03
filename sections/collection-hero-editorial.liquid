@@ -1,0 +1,89 @@
+{%- comment -%}
+  HostToHost — Collection Hero Editorial (Phase 4)
+  Replaces main-collection-banner on approved category pages. Reads editorial
+  content from collection metafields (custom.hero_kicker / hero_subtitle /
+  hero_caption) with section-setting fallbacks. Includes the breadcrumb snippet
+  above the hero frame so both share the hth-wrap padding without a section gap.
+  Styling in assets/brand.css (.cat-hero / .cat-hero-frame / .cat-hero-copy).
+{%- endcomment -%}
+
+{%- liquid
+  assign kicker = collection.metafields.custom.hero_kicker | default: section.settings.kicker_fallback
+  assign subtitle = collection.metafields.custom.hero_subtitle | default: section.settings.subtitle_fallback
+  assign caption = collection.metafields.custom.hero_caption | default: section.settings.caption_fallback
+  assign reveal = ''
+  if settings.animations_reveal_on_scroll
+    assign reveal = ' scroll-trigger animate--slide-in'
+  endif
+-%}
+
+<div class="cat-hero">
+  <div class="hth-wrap">
+    {%- render 'breadcrumb' -%}
+    <div class="cat-hero-frame">
+
+      {%- if collection.image -%}
+        {{ collection.image | image_url: width: 2000 | image_tag:
+          loading: 'eager',
+          fetchpriority: 'high',
+          sizes: '(min-width: 1280px) 1200px, (min-width: 750px) calc(100vw - 2 * var(--gutter)), 100vw',
+          widths: '800, 1200, 1600, 2000',
+          class: 'cat-hero-img',
+          alt: collection.image.alt | default: collection.title | escape
+        }}
+      {%- else -%}
+        <div class="cat-hero-ph" aria-hidden="true"></div>
+      {%- endif -%}
+
+      <div class="cat-hero-scrim" aria-hidden="true"></div>
+
+      {%- if caption != blank -%}
+        <div class="cat-hero-cap">{{ caption }}</div>
+      {%- endif -%}
+
+      <div class="cat-hero-copy{{ reveal }}">
+        {%- if kicker != blank -%}
+          <p class="cat-hero-kicker">{{ kicker }}</p>
+        {%- endif -%}
+        <h1 class="cat-hero-title">{{ collection.title }}</h1>
+        {%- if subtitle != blank -%}
+          <p class="cat-hero-sub">{{ subtitle }}</p>
+        {%- endif -%}
+      </div>
+
+    </div>
+  </div>
+</div>
+
+{% schema %}
+{
+  "name": "Hero de colección",
+  "tag": "section",
+  "class": "section",
+  "settings": [
+    { "type": "header", "content": "Contenido de respaldo" },
+    {
+      "type": "text",
+      "id": "kicker_fallback",
+      "label": "Etiqueta (respaldo)",
+      "info": "Se usa cuando custom.hero_kicker está vacío en la colección.",
+      "default": "Colección"
+    },
+    {
+      "type": "textarea",
+      "id": "subtitle_fallback",
+      "label": "Subtítulo (respaldo)",
+      "info": "Se usa cuando custom.hero_subtitle está vacío."
+    },
+    {
+      "type": "textarea",
+      "id": "caption_fallback",
+      "label": "Leyenda de fotografía (respaldo)",
+      "info": "Badge flotante arriba a la derecha. Se usa cuando custom.hero_caption está vacío."
+    }
+  ],
+  "presets": [
+    { "name": "Hero de colección" }
+  ]
+}
+{% endschema %}
