@@ -1596,11 +1596,18 @@ details[open] > .header__menu-item {
 .collection-list:not(.collection-list--mosaic) .collection-card-wrapper .card {
   flex: 1; width: 100%;
 }
-/* Force uniform 3:2 landscape ratio regardless of image dimensions */
-.collection-list:not(.collection-list--mosaic) .collection-card-wrapper .card__inner.ratio::before {
-  padding-top: 66.67% !important; /* 3:2 = 66.67% */
+/* Force uniform 3:2 landscape ratio regardless of image dimensions.
+   Use aspect-ratio + suppress the ::before padding-top hack Dawn uses —
+   this reliably beats the inline --ratio-percent value. */
+.collection-list:not(.collection-list--mosaic) .collection-card-wrapper .card__inner.ratio {
+  aspect-ratio: 3 / 2 !important;
+  height: auto !important;
 }
-/* Ensure card is full-height and image fills it */
+.collection-list:not(.collection-list--mosaic) .collection-card-wrapper .card__inner.ratio::before {
+  content: none !important;
+  display: none !important;
+}
+/* Cards + images */
 .collection-list:not(.collection-list--mosaic) .collection-card-wrapper .card,
 .collection-list:not(.collection-list--mosaic) .collection-card-wrapper .card__inner {
   border-radius: 20px !important; overflow: hidden;
