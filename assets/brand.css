@@ -871,18 +871,41 @@ details[open] > .header__menu-item {
 
 /* -- Room mosaic: map Dawn's collection-list grid onto the approved .rooms-grid.
    Desktop only; gated in Liquid to exactly 3 rooms (else uniform fallback). The
-   collection cards already carry the Phase-2 room wash + overlaid cream meta. -- */
+   collection cards already carry the Phase-2 room wash + overlaid cream meta.
+
+   IMPORTANT: Dawn's `.grid` is a FLEXBOX (`base.css` .grid{display:flex}) whose
+   columns come from per-item widths (`.grid--N-col-desktop .grid__item{width}`).
+   So CSS-Grid properties (grid-template-*, grid-row span) are inert until we
+   switch the container to `display:grid` AND neutralize those flex item widths.
+   That is the fix: force grid, reset the item sizing, then place the cards. -- */
 @media screen and (min-width: 990px) {
+  /* (1) Override Dawn's flex layout with real CSS Grid */
   .collection-list.collection-list--mosaic {
+    display: grid;
     grid-template-columns: 1.32fr 1fr;
     grid-template-rows: 1fr 1fr;
     gap: clamp(14px, 1.5vw, 22px);
     height: clamp(540px, 56vw, 700px);
+    margin-bottom: 0;
   }
-  .collection-list--mosaic .collection-list__item:first-child { grid-row: 1 / span 2; }
 
-  /* Stretch each card to fill its grid cell instead of using the ratio box */
-  .collection-list--mosaic .collection-list__item { display: flex; }
+  /* (2) Neutralize Dawn's flex item sizing so grid placement controls cells.
+     Specificity (0,3,0) beats Dawn's `.grid--3-col-desktop .grid__item` (0,2,0). */
+  .collection-list.collection-list--mosaic .grid__item {
+    width: auto;
+    max-width: none;
+    margin: 0;
+    padding: 0;
+    display: flex;
+  }
+
+  /* (3) Dominant first room spans both rows in the wide column */
+  .collection-list--mosaic .collection-list__item:first-child {
+    grid-column: 1;
+    grid-row: 1 / span 2;
+  }
+
+  /* (4) Stretch each card to fill its grid cell instead of Dawn's ratio box */
   .collection-list--mosaic .collection-card-wrapper,
   .collection-list--mosaic .collection-card-wrapper .card,
   .collection-list--mosaic .collection-card-wrapper .card__inner { width: 100%; height: 100%; }
@@ -895,7 +918,7 @@ details[open] > .header__menu-item {
     margin: 0;
   }
 
-  /* Dominant first room gets the larger approved title */
+  /* (5) Dominant first room gets the larger approved title */
   .collection-list--mosaic .collection-list__item:first-child .card__heading a {
     font-size: clamp(3.6rem, 3.6vw, 5.8rem);
   }
