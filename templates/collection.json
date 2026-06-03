@@ -14,7 +14,7 @@
         "note-1": {
           "type": "note",
           "settings": {
-            "note_fallback": "<p>Cada pieza que ves aquí la probé primero en mi propio Airbnb. Si no aguantó mis huéspedes, no está aquí.</p>",
+            "note_fallback": "<p>Cada pieza que ves aquí la probé primero en mi propio Airbnb. <em>Si no aguantó mis huéspedes, no está aquí.</em></p>",
             "label_before": "Nota de Mafe",
             "label_after": "Para esta colección",
             "author_name": "Mafe",
