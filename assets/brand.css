@@ -1490,8 +1490,13 @@ details[open] > .header__menu-item {
 }
 
 /* ---- Product grid card overrides ---- */
-#product-grid .card-wrapper { border-radius: 0; }
-#product-grid .card { border: none !important; box-shadow: none !important; background: transparent !important; }
+#product-grid .card-wrapper {
+  border-radius: 0;
+  position: relative; /* positioning context for quick-add pill */
+}
+#product-grid .card {
+  border: none !important; box-shadow: none !important; background: transparent !important;
+}
 #product-grid .card__inner { border: none !important; border-radius: 0 !important; background: transparent !important; }
 #product-grid .card__media,
 #product-grid .card .media {
@@ -1499,15 +1504,83 @@ details[open] > .header__menu-item {
 }
 #product-grid .card__content { padding: 0; }
 #product-grid .card__information { padding: clamp(10px, 1.2vw, 14px) 0 0; }
+
+/* Product title */
 #product-grid .card__heading,
 #product-grid .card__heading a {
   font-family: var(--font-display) !important; font-weight: 400 !important;
   font-size: clamp(15px, 1.4vw, 18px) !important; letter-spacing: -0.01em;
   color: var(--ink) !important; text-decoration: none !important;
 }
-#product-grid .price { font-family: var(--font-display); font-size: clamp(13px, 1.2vw, 16px); color: var(--ink-soft); }
-#product-grid .price__regular .price-item { font-weight: 400; letter-spacing: -0.01em; }
 #product-grid .card-wrapper:hover .card__heading a { color: var(--coral) !important; }
+
+/* Price — stronger hierarchy */
+#product-grid .price {
+  font-family: var(--font-display); font-size: clamp(14px, 1.3vw, 17px);
+  font-weight: 500; letter-spacing: -0.01em; color: var(--ink) !important;
+}
+#product-grid .price__regular .price-item { font-weight: 500; }
+#product-grid .price-item--regular { color: var(--ink) !important; }
+
+/* ---- Hover CTA pill — inside image frame, bottom-right ---- */
+/*
+  .quick-add is a flex sibling of .card__inner (image) and .card__content (info).
+  Pulling it out of flow with absolute lets us anchor it inside the image frame
+  without ever touching the info area. The image height ≈ card height minus info
+  height. Info height (padding 12px + title ~38px + price ~20px) ≈ 70px, so
+  positioning at bottom: calc(70px + 16px) lands comfortably inside the image.
+*/
+#product-grid .quick-add {
+  position: absolute;
+  right: 14px;
+  bottom: calc(70px + 18px);
+  margin: 0;
+  width: auto;
+  z-index: 4;
+  opacity: 0;
+  transform: translateY(5px);
+  transition: opacity 0.18s ease, transform 0.18s ease;
+  pointer-events: none;
+}
+#product-grid .card-wrapper:hover .quick-add,
+#product-grid .card-wrapper:focus-within .quick-add {
+  opacity: 1;
+  transform: none;
+  pointer-events: auto;
+}
+
+/* modal-opener is a custom element — make it not interfere with pill layout */
+#product-grid .quick-add modal-opener { display: block; }
+
+/* Outlined pill button */
+#product-grid .quick-add__submit.button {
+  background: transparent !important;
+  color: rgba(255,255,255,0.95) !important;
+  border: 1.5px solid rgba(255,255,255,0.7) !important;
+  border-radius: 100px !important;
+  padding: 8px 18px !important;
+  font-family: var(--font-label) !important;
+  font-size: 11px !important;
+  text-transform: uppercase !important;
+  letter-spacing: 0.13em !important;
+  font-weight: 600 !important;
+  width: auto !important;
+  min-width: unset !important;
+  min-height: unset !important;
+  line-height: 1 !important;
+  white-space: nowrap;
+  box-shadow: none !important;
+  backdrop-filter: blur(6px);
+  -webkit-backdrop-filter: blur(6px);
+  cursor: pointer;
+}
+#product-grid .quick-add__submit.button:hover {
+  background: rgba(255,255,255,0.15) !important;
+  border-color: rgba(255,255,255,0.95) !important;
+  color: white !important;
+}
+/* Spinner colour inside the pill */
+#product-grid .quick-add__submit .loading__spinner { --color-spinner: white; }
 
 /* ---- CTA footer ---- */
 .cat-cta { padding-block: clamp(28px, 3.5vw, 44px); }
