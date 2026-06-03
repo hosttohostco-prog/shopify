@@ -1405,10 +1405,12 @@ details[open] > .header__menu-item {
   color: var(--green-deep); margin: 0;
 }
 .cat-note-quote p { margin: 0; }
-.cat-note-quote em {
-  font-style: normal;
-  font-family: var(--font-hand); font-weight: 600;
-  color: var(--coral-deep);
+.cat-note-quote em,
+.cat-note-quote .rte em,
+.cat-note-body .rte em {
+  font-style: normal !important;
+  font-family: var(--font-hand) !important; font-weight: 600;
+  color: var(--coral-deep) !important;
 }
 .cat-note-attr {
   margin: 12px 0 0;
