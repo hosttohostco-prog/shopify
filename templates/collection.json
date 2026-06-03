@@ -74,6 +74,23 @@
     },
     "more-categories": {
       "type": "collection-list",
+      "blocks": {
+        "room-bano": {
+          "type": "featured_collection",
+          "settings": {
+            "collection": "bano",
+            "kicker": "Calidad hotel"
+          }
+        },
+        "room-ambiente": {
+          "type": "featured_collection",
+          "settings": {
+            "collection": "ambiente",
+            "kicker": "La atmósfera"
+          }
+        }
+      },
+      "block_order": ["room-bano", "room-ambiente"],
       "settings": {
         "kicker": "Sigue explorando",
         "title": "Las otras habitaciones.",
