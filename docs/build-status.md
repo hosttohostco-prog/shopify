@@ -23,7 +23,7 @@ Do not use this file to revisit architecture decisions. Use it to track implemen
 
 | Item | Status |
 |---|---|
-| Active phase | Phase 3 complete (3A + 3B) → Phase 4 next |
+| Active phase | Phase 5 implementation complete → Phase 6 next |
 | Overall implementation | In progress |
 | Architecture | Complete |
 | Delivery plan | Complete |
@@ -39,7 +39,7 @@ Do not use this file to revisit architecture decisions. Use it to track implemen
 | Phase 2 | Align shared commerce components and global chrome | Complete | Header, announcement bar, footer, cart drawer styling, product cards, collection cards, price treatment, and variant presentation match approved system. |
 | Phase 3 | Deliver approved homepage | Complete (3A + 3B) | Homepage matches approved React design using Shopify-native sections, consolidated editorial modules, product showcases, collection data, and editable newsletter mechanics. **3A** (refactor existing Hero / Featured Collection / Collection List / Newsletter) complete; **3B** (new `home-editorial` + `product-showcase` consolidated sections — why / rules / picks / insights / future; marquee dropped) complete. Pending Shopify-preview smoke test. |
 | Phase 4 | Deliver approved category page | In progress | Category template includes approved editorial hero, compact Mafe note, compact featured product, product grid with header, WhatsApp CTA, and more-category navigation with merchant-editable data. Category strip removed per James 2026-06-03. |
-| Phase 5 | Deliver approved product page | In progress | PDP includes approved gallery/buy panel, product note, trust layer, retained accordion, cross-sell using Shopify-native product data. Hero section complete (2026-06-03). |
+| Phase 5 | Deliver approved product page | Implementation complete (2026-06-03) | PDP hierarchy delivered: hero/buy panel, Mafe Note, Trust Layer (section blocks), accordion, cross-sell rail. Use Cases omitted; Specs Grid replaced by accordion; Sticky Bar deferred. Pending Shopify preview smoke test. |
 | Phase 6 | Integrate, QA, merchant-editability validation | Not started | Theme check, storefront smoke test, Theme Editor pass, responsive fidelity, cart/checkout path, collection filtering, PDP purchase path, and dynamic-source fallbacks are verified. |
 
 ## Phase 1 — Approved Global Foundation
@@ -360,13 +360,13 @@ All 7 collection metafields must be created in Shopify Admin → Content → Met
 
 ### Status
 
-In progress (2026-06-03). Hero section complete; Mafe Note, Trust Layer, cross-sell rail pending.
+Implementation complete (2026-06-03). Pending Shopify preview smoke test.
 
 ### Goal
 
 Deliver the approved PDP hierarchy while preserving Dawn product form, variant, media, price, cart, and related-product behavior.
 
-### Approved Page Hierarchy (2026-06-03)
+### Approved Page Hierarchy (as built)
 
 ```
 1. Hero (main-product section)
@@ -383,27 +383,37 @@ Deliver the approved PDP hierarchy while preserving Dawn product form, variant, 
        ├─ Assurance row (✓ Entrega 24h · ✓ Cambios 30 días)
        └─ WhatsApp link
 
-2. Mafe Note (standalone editorial block — product-editorial section, mafe_note preset)
+2. Mafe Note (product-editorial.liquid)
    └─ Shantell Sans coral-deep quote from custom.curation_note; periwinkle avatar
 
-3. Trust Layer (product-editorial section, trust preset)
-   ├─ Kicker + display H2
-   └─ Criteria rows (custom.criteria → product_criterion metaobject list)
+3. Trust Layer (product-trust.liquid — section blocks)
+   ├─ Hardcoded kicker: "Por qué entraron a la colección"
+   ├─ Hardcoded H2: "No es un producto que encontré. Es uno que ya repongo."
+   └─ Up to 4 criterion blocks (heading + body, pre-seeded with approved copy)
 
-4. Product Information (main-product accordion blocks — retained and restyled)
+4. Product Information (main-product accordion blocks — retained)
    ├─ Materials
    ├─ Shipping & Returns
    ├─ Dimensions
    └─ Care Instructions
 
-5. Cross-sell rail (related-products section — refactored)
+5. Cross-sell rail (related-products.liquid — refactored)
    ├─ Kicker: "Explora el resto de la colección"
    ├─ H2: "Más piezas que ya probé"
    ├─ "Ver toda la tienda →" link
-   └─ Horizontal scroll rail of product cards with host quote overlay
+   └─ Horizontal scroll rail (cs-card snippet, custom.cross_sell_products → recommendation API fallback)
 ```
 
-Sticky add bar: deferred from Phase 5.
+### Approved Implementation Decisions
+
+- **A1 — Mafe Note placement:** moved out of the buy panel into a standalone `product-editorial` section immediately below the hero. Reduces above-the-fold density; note still intercepts the customer before the Trust Layer.
+- **A2 — Accordion retained, Specs Grid omitted:** the four Dawn `collapsible_tab` blocks are kept and restyled in `brand.css`. No specs grid metafield. Content is merchant-editable text in the theme editor.
+- **A3 — Use Cases omitted:** intentionally excluded after PDP hierarchy review. `product_use_case` metaobject not created. `custom.use_cases` metafield not created.
+- **A4 — Trust Layer via section blocks, not metaobjects:** criteria implemented as `criterion` blocks (heading + body) within `product-trust.liquid`. `product_criterion` metaobject and `custom.criteria` metafield not created. All four criteria pre-seeded with approved copy in `product.json`.
+- **A5 — Sticky Bar deferred:** `snippets/product-sticky-add.liquid` not built. Deferred as an optional enhancement for a later phase.
+- **A6 — No `section-main-product.css` edits:** all visual overrides go in `brand.css` (D4 convention).
+- **A7 — Title `<em>` accent not implemented:** plain `product.title` used. The accent word in the approved React design is not reproducible through standard Shopify product data. Accepted constraint.
+- **A8 — Cross-sell data source:** `custom.cross_sell_products` metafield is primary; Shopify recommendations API is the fallback.
 
 ### Completion Criteria
 
@@ -411,95 +421,62 @@ Sticky add bar: deferred from Phase 5.
 |---|---|
 | Breadcrumb renders above the gallery/buy panel grid | Done |
 | Gallery uses thumbnail strip layout; "Selección de Mafe" badge overlaid top-left | Done |
-| Buy panel contains kicker, title, subtitle, price, variants, qty, CTA, assurances, WhatsApp — no Mafe Note | Done |
+| Buy panel contains kicker, title, subtitle, price, variants, qty, CTA, assurances, WhatsApp | Done |
 | Product form, variants, quantity, and add-to-cart remain fully functional | Pending preview smoke test |
-| Dynamic checkout row disabled (show_dynamic_checkout: false) | Done |
-| Mafe Note renders as standalone full-width editorial block immediately below the hero | Pending |
-| Trust Layer renders below Mafe Note with sage background and criteria from custom.criteria | Pending |
-| Product Information accordion (Materials / Shipping & Returns / Dimensions / Care Instructions) is retained, restyled to brand system, and positioned below Trust Layer | Pending |
-| Cross-sell rail matches approved horizontal scroll treatment with host quote per card | Pending |
-| PDP works across all products and variants | Pending |
-| Mobile: gallery stacks above buy panel | Pending |
+| Dynamic checkout row disabled | Done |
+| Mafe Note renders as standalone full-width block below the hero | Done |
+| Trust Layer renders below Mafe Note with sage-soft background and 4 pre-seeded criterion blocks | Done |
+| Product Information accordion (4 blocks) retained and positioned below Trust Layer | Done |
+| Cross-sell rail renders as horizontal scroll with nav arrows and host-quote card overlay | Done |
+| Template order: main → product-editorial → product-trust → related-products | Done |
+| Mobile: gallery stacks above buy panel | Pending preview smoke test |
 
 ### Files Touched
 
 | File | Action |
 |---|---|
-| `hosttohost-theme/sections/main-product.liquid` | Targeted additions — breadcrumb render above grid; gallery badge overlay; `display_category` / `assurance` / `whatsapp_link` block cases + schema definitions; "view full details" self-link removed |
-| `hosttohost-theme/templates/product.json` | Recomposed — `gallery_layout` → thumbnail, `mobile_thumbnails` → show, `show_dynamic_checkout` → false; removed vendor/description/share blocks; added display_category/assurance/whatsapp_link blocks; removed image-with-text + multicolumn filler sections from order |
-| `hosttohost-theme/assets/brand.css` | Phase 5 Hero CSS block — breadcrumb placement, gallery badge, buy panel kicker, qty stepper pill, assurance row, WhatsApp link |
+| `hosttohost-theme/sections/main-product.liquid` | Targeted additions — breadcrumb; gallery badge; `display_category`, `assurance`, `whatsapp_link` block cases + schema |
+| `hosttohost-theme/sections/product-editorial.liquid` | New — Mafe Note section (reads `custom.curation_note`; renders nothing if blank) |
+| `hosttohost-theme/sections/product-trust.liquid` | New — Trust Layer section (up to 4 `criterion` blocks; sage-soft bg; hardcoded heading/eyebrow) |
+| `hosttohost-theme/sections/related-products.liquid` | Refactored — horizontal scroll rail with `cs-card` snippet, nav arrows, `custom.cross_sell_products` → recommendation API fallback |
+| `hosttohost-theme/snippets/cs-card.liquid` | New — cross-sell card with tonal background, host-quote overlay, price |
+| `hosttohost-theme/templates/product.json` | Full recompose — approved block order, 4 criterion blocks pre-seeded, section order updated |
+| `hosttohost-theme/assets/brand.css` | Phase 5 CSS — hero grid, gallery badge, buy panel, Mafe Note, Trust Layer, accordion restyle, cross-sell rail |
 
-Expected files (remaining):
-
-| File | Expected Action |
-|---|---|
-| `hosttohost-theme/templates/product.json` | Full recompose — filler sections removed; approved 5-section order |
-| `hosttohost-theme/sections/main-product.liquid` | Targeted additions: breadcrumb, gallery badge, category kicker block, assurance row block; hero structure preserved |
-| `hosttohost-theme/sections/related-products.liquid` | Refactor to horizontal scroll rail with host quote overlay |
-| `hosttohost-theme/assets/brand.css` | Phase 5 CSS block (gallery, buy panel, Mafe Note, Trust Layer, accordion restyle, cross-sell rail, sticky bar) |
-
-Expected new files:
-
-| File | Type |
-|---|---|
-| `hosttohost-theme/sections/product-editorial.liquid` | New section — two presets: `mafe_note` (standalone quote block) and `trust` (criteria loop) |
-| `hosttohost-theme/snippets/product-sticky-add.liquid` | New snippet — fixed bottom bar + IntersectionObserver JS |
-
-Not expected to change: `assets/section-main-product.css` (overrides go in brand.css per D4). Dawn component CSS files untouched unless a clear technical reason requires it.
+Not changed: `assets/section-main-product.css` (D4), all Dawn component CSS, all commerce JS.
 
 ### Metafields
 
-Expected product metafields:
+| Metafield | Type | Status | Used By |
+|---|---|---|---|
+| `custom.display_category` | Single line text | Pending admin definition + population | Buy panel kicker |
+| `custom.curation_note` | Multi-line text | Pending admin definition + population | Mafe Note section |
+| `custom.curation_badge` | Single line text | Pending admin definition | Gallery badge override (optional; section defaults to "Selección de Mafe") |
+| `custom.cross_sell_products` | List of product references | Pending admin definition + population | Cross-sell rail primary source |
+| `custom.sell_unit` | Single line text | Existing, populated | Pack unit label |
 
-| Metafield | Type | Used By |
-|---|---|---|
-| `custom.display_category` | Single line text | Buy panel kicker |
-| `custom.curation_note` | Multi-line text | Mafe Note section |
-| `custom.curation_badge` | Single line text | "Selección de Mafe" gallery badge (optional override; defaults to badge if blank) |
-| `custom.criteria` | List of metaobject references (`product_criterion`) | Trust Layer criteria rows |
-| `custom.cross_sell_products` | List of product references | Cross-sell rail (metafield-first; recommendation API fallback) |
-| `custom.sell_unit` | Single line text | Pack unit label (existing, populated) |
-
-Metafields from the earlier spec that are now deferred or removed from Phase 5 scope:
+Metafields removed from Phase 5 scope:
 
 | Metafield | Decision |
 |---|---|
-| `custom.short_spec` | Deferred — subtitle comes from `descriptors.subtitle` (standard metafield already in template) |
-| `custom.material` / `finish` / `capacity` / `contents` / `care` / `dimensions` | Deferred — this content lives in the retained accordion blocks (merchant-editable text); separate metafields not required |
-| `custom.use_cases` | Deferred to a future phase; `product_use_case` metaobject also deferred |
+| `custom.short_spec` | Not needed — subtitle comes from `descriptors.subtitle` |
+| `custom.material` / `finish` / `capacity` / `contents` / `care` / `dimensions` | Not needed — content lives in accordion blocks |
+| `custom.criteria` | Not needed — Trust Layer uses section blocks |
+| `custom.use_cases` | Not needed — Use Cases section omitted |
+| `custom.cross_sell_products` | Pending admin setup (see above) |
 
 ### Metaobjects
 
-| Metaobject | Fields | Status |
-|---|---|---|
-| `product_criterion` | `heading` (single_line_text), `body` (multi_line_text) | Pending admin definition |
-
-`product_use_case` deferred (use cases section not in approved Phase 5 hierarchy).
-
-### Approach Decisions
-
-- **A1 — Mafe Note placement:** moved out of the buy panel into a standalone `product-editorial` section immediately below the hero. Reason: reduces above-the-fold density; the note still intercepts the customer before the Trust Layer.
-- **A2 — Accordion retained:** the four Dawn `collapsible_tab` blocks (Materials / Shipping & Returns / Dimensions / Care Instructions) are kept and restyled in `brand.css`. They are not replaced by a specs grid metafield. Their content is merchant-editable text.
-- **A3 — No `section-main-product.css` edits:** all visual overrides for the hero grid, gallery, buy panel, qty stepper, swatch, and CTA go in `brand.css` (D4 convention). Direct edits to Dawn-owned CSS files require explicit approval.
-- **A4 — Sticky bar dispatches to existing form:** the sticky CTA programmatically triggers the main `product-form.js` add-to-cart path rather than submitting a second form. This avoids form state conflicts.
-- **A5 — Title `<em>` accent:** plain `product.title` (no inline HTML accent) is the Shopify implementation. The accent word in the approved React design is not reproducible through standard Shopify product data. Accepted as a known constraint.
-- **A6 — Cross-sell data source:** `custom.cross_sell_products` metafield is primary; Shopify recommendations API is the fallback when the metafield is empty. This gives Mafe editorial control while keeping the section populated for products not yet hand-curated.
-
-### Progress Notes
-
-- Highest-risk phase: `main-product.liquid` is 2269 lines and all commerce behavior lives inside the `<product-info>` custom element. Changes must be surgical.
-- Filler sections (`image-with-text`, `multicolumn`) will be removed from `product.json`.
-- `main-collection-banner` is already unreferenced (Phase 4); no action needed here.
+Neither `product_criterion` nor `product_use_case` was created. Trust Layer uses section blocks; Use Cases was omitted.
 
 ### Outstanding Risks
 
 | Risk | Status |
 |---|---|
-| `main-product` additions could break `product-info.js` DOM expectations | Open — additions will be outside `<product-info>` (breadcrumb) or as new block types inside it (kicker, assurances) |
-| Gallery layout change (stacked → thumbnail) must be verified on preview | Open |
-| Sticky bar JS must not create a second product form or duplicate cart add | Open |
-| `product_criterion` metaobject must be defined in admin before Trust Layer can be tested with real content | Open |
-| Cross-sell rail host quote requires `custom.curation_note` to be populated per product | Open |
+| Product form, variant state, and add-to-cart after `main-product` changes | Open — verify on Shopify preview |
+| Gallery thumbnail layout on mobile | Open — verify on Shopify preview |
+| Cross-sell rail empty state before `custom.cross_sell_products` is populated | Mitigated — recommendation API fallback is active |
+| Accordion content is currently empty — needs merchant population in theme editor | Open (content task) |
 
 ## Phase 6 — Integration And Release Validation
 
@@ -561,6 +538,7 @@ Track actual implementation edits here as phases progress.
 | 2026-06-03 | Phase 4 | `sections/collection-hero-editorial.liquid` (new), `sections/collection-support.liquid` (new), `snippets/breadcrumb.liquid` (new), `sections/main-collection-product-grid.liquid`, `assets/brand.css`, `templates/collection.json` | Delivered approved category page: editorial hero (collection image + scrim + metafield-driven copy), compact Mafe Note, compact Featured Product, product grid with shead header, WhatsApp CTA, more-categories. Category strip removed per James. All CSS in brand.css (D4). `collection.json` recomposed from vanilla 2-section Dawn to 5-section approved order. Grid header added before paginate (zero commerce regression risk). Metafield definitions pending in Shopify admin. Theme check pending next push. |
 | 2026-06-03 | Phase 3B (Categories refinement) | `snippets/card-collection.liquid`, `sections/collection-list.liquid`, `assets/brand.css`, `templates/index.json` | Refined the Categories (rooms) mosaic to the approved reference per James's 8-point audit: widened the section toward the hero (`.section-collection-list` page-width → `min(1640px, 100%)`), tightened heading→cards spacing (section padding 64/72 → 40/56; `.shead` margin reduced), shortened the mosaic (`height` clamp 540–700 → 440–600), enforced large poster radius (clip `.card` to `--radius-lg`), added per-card editorial kickers + a top-right circular outlined arrow, and moved card content up with breathing room. Kickers are a new **section block setting** (`featured_collection.kicker`) — **not** the Phase 4 `custom.hero_kicker` metafield (content model untouched). `card-collection.liquid` got an additive, gated `card_kicker` param (kicker in both content blocks + room caption kept visible on image cards + arrow); empty/omitted elsewhere = no change to other card usages. This is the first edit to `card-collection.liquid` (Phase 2/3A had left it untouched), now justified by James's explicit request. Theme check unchanged (2 errors / 13 warnings; none in touched files). |
 | 2026-06-03 | Phase 3B | `sections/home-editorial.liquid` (new), `sections/product-showcase.liquid` (new), `assets/brand.css`, `templates/index.json` | Built the two consolidated homepage sections and recomposed the homepage to the approved order. `home-editorial` ships story/rules/insights/future presets (variant select + `rule`/`insight`/`future` blocks); `product-showcase` is a display-only dark Picks rail (per-pick product reference, auto rank, no quick-add). Removed `manifesto`/`editorial_split`/`favorite_product`/`featured_collection` instances from `index.json` (files stay on disk). All CSS in `brand.css` (faithful port of approved modules; reused existing utilities; no new files, no section stylesheet blocks, no JS, no metafields/metaobjects). Theme check: 173 files, 2 errors / 13 warnings — unchanged baseline; no offenses in 3B files. |
+| 2026-06-03 | Phase 5 | `sections/main-product.liquid`, `sections/product-editorial.liquid` (new), `sections/product-trust.liquid` (new), `sections/related-products.liquid`, `snippets/cs-card.liquid` (new), `templates/product.json`, `assets/brand.css` | Delivered approved PDP hierarchy. Hero/buy panel: breadcrumb, gallery badge, display_category kicker, assurance row, WhatsApp link. Mafe Note: standalone product-editorial section reading custom.curation_note. Trust Layer: new product-trust section with up to 4 criterion blocks (section blocks, not metaobjects); sage-soft bg; heading/eyebrow hardcoded; all 4 criteria pre-seeded in product.json. Accordion: existing Dawn collapsible_tab blocks retained in place of a specs grid. Cross-sell rail: related-products refactored to horizontal scroll with cs-card snippet, nav arrows, custom.cross_sell_products → recommendation API fallback. Approved decisions: Use Cases omitted; Specs Grid replaced by accordion; Sticky Bar deferred; product_criterion metaobject not created; all CSS in brand.css (D4). |
 | 2026-06-02 | Phase 3A | `sections/hero.liquid`, `sections/newsletter-cartas.liquid`, `sections/featured-collection.liquid`, `sections/collection-list.liquid`, `assets/brand.css`, `templates/index.json` | Refactored the four existing homepage sections to the approved design. Hero → photo-led dark overlay (stat-card/scribble deferred, Q2). Newsletter → approved Signup card + WhatsApp; Dawn form internals untouched. Featured + Collection List → added kicker/header-link/`.shead`; collection-list got a 3-room mosaic layout (Q3, copy from collection.description; kicker deferred to Phase 4). Shared `.shead`/`.tlink`/mosaic CSS added to `brand.css` (D4). index.json: approved copy/settings; legacy editorial sections + order kept as interim (Q1). No metafields/metaobjects, no new sections, no Dawn component CSS/JS. Theme check: 2 errors / 13 warnings, unchanged baseline; no offenses in 3A files. |
 
 ## Progress Notes Log
