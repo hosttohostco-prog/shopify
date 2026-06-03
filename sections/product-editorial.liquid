@@ -1,0 +1,78 @@
+{%- liquid
+  assign note = product.metafields.custom.curation_note.value
+  if note == blank
+    echo ''
+    break
+  endif
+-%}
+{%- if note != blank -%}
+{{ 'brand.css' | asset_url | stylesheet_tag }}
+
+<section class="pe-section section-{{ section.id }}-padding">
+  <div class="page-width">
+    <div class="pe-inner">
+
+      <p class="pe-eyebrow">Nota de Mafe&nbsp;·&nbsp;Superhost&nbsp;·&nbsp;Medellín</p>
+
+      <blockquote class="pe-quote">
+        <span class="pe-oquote" aria-hidden="true">"</span>{{ note }}<span class="pe-cquote" aria-hidden="true">"</span>
+      </blockquote>
+
+      <div class="pe-sig">
+        <span class="pe-avatar" aria-hidden="true">M</span>
+        <div class="pe-sig-text">
+          <span class="pe-sig-name">Mafe</span>
+          <span class="pe-sig-role">Superhost&nbsp;·&nbsp;Medellín</span>
+        </div>
+      </div>
+
+    </div>
+  </div>
+</section>
+
+{%- style -%}
+.section-{{ section.id }}-padding {
+  padding-top: {{ section.settings.padding_top }}px;
+  padding-bottom: {{ section.settings.padding_bottom }}px;
+}
+@media (max-width: 749px) {
+  .section-{{ section.id }}-padding {
+    padding-top: {{ section.settings.padding_top | times: 0.75 | round }}px;
+    padding-bottom: {{ section.settings.padding_bottom | times: 0.75 | round }}px;
+  }
+}
+{%- endstyle -%}
+{%- endif -%}
+
+{% schema %}
+{
+  "name": "Mafe Note",
+  "tag": "div",
+  "class": "section",
+  "settings": [
+    {
+      "type": "range",
+      "id": "padding_top",
+      "label": "Top padding",
+      "min": 0,
+      "max": 120,
+      "step": 4,
+      "default": 80
+    },
+    {
+      "type": "range",
+      "id": "padding_bottom",
+      "label": "Bottom padding",
+      "min": 0,
+      "max": 120,
+      "step": 4,
+      "default": 80
+    }
+  ],
+  "presets": [
+    {
+      "name": "mafe_note"
+    }
+  ]
+}
+{% endschema %}

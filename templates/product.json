@@ -3,12 +3,8 @@
     "main": {
       "type": "main-product",
       "blocks": {
-        "vendor": {
-          "type": "text",
-          "settings": {
-            "text": "{{ product.vendor }}",
-            "text_style": "uppercase"
-          }
+        "display_category": {
+          "type": "display_category"
         },
         "title": {
           "type": "title"
@@ -35,12 +31,22 @@
         "buy_buttons": {
           "type": "buy_buttons",
           "settings": {
-            "show_dynamic_checkout": true,
+            "show_dynamic_checkout": false,
             "show_gift_card_recipient": true
           }
         },
-        "description": {
-          "type": "description"
+        "assurance": {
+          "type": "assurance",
+          "settings": {
+            "assurance_1": "Entrega 24h",
+            "assurance_2": "Cambios 30 días"
+          }
+        },
+        "whatsapp_link": {
+          "type": "whatsapp_link",
+          "settings": {
+            "label": "Pedir por WhatsApp"
+          }
         },
         "collapsible-row-0": {
           "type": "collapsible_tab",
@@ -77,140 +83,98 @@
             "content": "",
             "page": ""
           }
-        },
-        "share": {
-          "type": "share",
-          "settings": {
-            "share_label": "Share"
-          }
         }
       },
       "block_order": [
-        "vendor",
+        "display_category",
         "title",
         "caption",
         "price",
         "variant_picker",
         "quantity_selector",
         "buy_buttons",
-        "description",
+        "assurance",
+        "whatsapp_link",
         "collapsible-row-0",
         "collapsible-row-1",
         "collapsible-row-2",
-        "collapsible-row-3",
-        "share"
+        "collapsible-row-3"
       ],
       "settings": {
         "enable_sticky_info": true,
-        "gallery_layout": "stacked",
+        "gallery_layout": "thumbnail",
         "media_size": "large",
         "constrain_to_viewport": true,
-        "mobile_thumbnails": "hide",
+        "mobile_thumbnails": "show",
         "hide_variants": true,
         "enable_video_looping": false,
         "padding_top": 36,
         "padding_bottom": 12
       }
     },
-    "image-with-text": {
-      "type": "image-with-text",
-      "blocks": {
-        "image-with-text-0": {
-          "type": "heading",
-          "settings": {
-            "heading": "Image with text",
-            "heading_size": "h1"
-          }
-        },
-        "image-with-text-1": {
-          "type": "text",
-          "settings": {
-            "text": "<p>Pair text with an image to focus on your chosen product, collection, or blog post. Add details on availability, style, or even provide a review.<\/p>",
-            "text_style": "body"
-          }
-        }
-      },
-      "block_order": [
-        "image-with-text-0",
-        "image-with-text-1"
-      ],
+    "product-editorial": {
+      "type": "product-editorial",
       "settings": {
-        "height": "small",
-        "desktop_image_width": "medium",
-        "layout": "text_first",
-        "desktop_content_position": "top",
-        "desktop_content_alignment": "left",
-        "content_layout": "no-overlap",
-        "color_scheme": "scheme-2",
-        "mobile_content_alignment": "left",
-        "padding_top": 36,
-        "padding_bottom": 36
+        "padding_top": 80,
+        "padding_bottom": 80
       }
     },
-    "multicolumn": {
-      "type": "multicolumn",
+    "product-trust": {
+      "type": "product-trust",
       "blocks": {
-        "column-0": {
-          "type": "column",
+        "criterion-1": {
+          "type": "criterion",
           "settings": {
-            "title": "Free Shipping",
-            "text": "<p>Pair text with an image to focus on your chosen product, collection, or blog post. Add details on availability, style, or even provide a review.<\/p>",
-            "link_label": "",
-            "link": ""
+            "heading": "Probadas en mis propios Airbnb",
+            "body": "Vivieron cientos de rotaciones en mis cuatro propiedades antes de entrar al catálogo. Nada se vende sin esa prueba."
           }
         },
-        "column-1": {
-          "type": "column",
+        "criterion-2": {
+          "type": "criterion",
           "settings": {
-            "title": "Hassle-Free Exchanges",
-            "text": "<p>Pair text with an image to focus on your chosen product, collection, or blog post. Add details on availability, style, or even provide a review.<\/p>",
-            "link_label": "",
-            "link": ""
+            "heading": "Durabilidad calidad hotelera",
+            "body": "Vidrio reforzado que aguanta el lavavajillas a diario sin opacarse, astillarse ni perder el filo del borde."
+          }
+        },
+        "criterion-3": {
+          "type": "criterion",
+          "settings": {
+            "heading": "Disponibles localmente en Colombia",
+            "body": "En stock en Medellín. Las ves, las pides y llegan — sin catálogos importados que nunca aterrizan."
+          }
+        },
+        "criterion-4": {
+          "type": "criterion",
+          "settings": {
+            "heading": "Sin demoras de importación",
+            "body": "Nada de aduanas ni esperas de semanas. Repones una copa rota el mismo día que la necesitas."
           }
         }
       },
       "block_order": [
-        "column-0",
-        "column-1"
+        "criterion-1",
+        "criterion-2",
+        "criterion-3",
+        "criterion-4"
       ],
       "settings": {
-        "title": "",
-        "heading_size": "h1",
-        "image_width": "full",
-        "image_ratio": "adapt",
-        "columns_desktop": 2,
-        "column_alignment": "left",
-        "background_style": "none",
-        "button_label": "",
-        "button_link": "",
-        "swipe_on_mobile": false,
-        "color_scheme": "scheme-1",
-        "columns_mobile": "1",
-        "padding_top": 36,
-        "padding_bottom": 36
+        "padding_top": 80,
+        "padding_bottom": 80
       }
     },
     "related-products": {
       "type": "related-products",
       "settings": {
-        "heading": "You may also like",
-        "heading_size": "h2",
-        "columns_desktop": 4,
-        "color_scheme": "scheme-1",
-        "image_ratio": "square",
-        "show_secondary_image": true,
-        "show_vendor": false,
-        "show_rating": false,
-        "columns_mobile": "2",
-        "padding_top": 36,
-        "padding_bottom": 28
+        "products_to_show": 6,
+        "padding_top": 60,
+        "padding_bottom": 60
       }
     }
   },
   "order": [
     "main",
-    "image-with-text",
-    "multicolumn",
+    "product-editorial",
+    "product-trust",
     "related-products"
   ]
 }

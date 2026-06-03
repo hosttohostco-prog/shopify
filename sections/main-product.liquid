@@ -74,9 +74,12 @@
 
   {% assign variant_images = product.images | where: 'attached_to_variant?', true | map: 'src' %}
   <div class="page-width">
+    {%- render 'breadcrumb' -%}
     <div class="product product--{{ section.settings.media_size }} product--{{ section.settings.media_position }} product--{{ section.settings.gallery_layout }} product--mobile-{{ section.settings.mobile_thumbnails }} grid grid--1-col {% if product.media.size > 0 %}grid--2-col-tablet{% else %}product--no-media{% endif %}">
       <div class="grid__item product__media-wrapper">
         {% render 'product-media-gallery', variant_images: variant_images %}
+        {%- assign pdp_badge = product.metafields.custom.curation_badge.value | default: 'Selección de Mafe' -%}
+        <div class="pdp-badge">{{ pdp_badge }}</div>
       </div>
       <div class="product__info-wrapper grid__item{% if settings.page_width > 1400 and section.settings.media_size == "small" %} product__info-wrapper--extra-padding{% endif %}{% if settings.animations_reveal_on_scroll %} scroll-trigger animate--slide-in{% endif %}">
         <section
@@ -674,12 +677,30 @@
                 </product-recommendations>
               {%- when 'icon-with-text' -%}
                 {% render 'icon-with-text', block: block %}
+              {%- when 'display_category' -%}
+                {%- assign pdp_cat = product.metafields.custom.display_category.value | default: product.vendor -%}
+                {%- if pdp_cat != blank -%}
+                  <p class="kicker pdp-kicker" {{ block.shopify_attributes }}>{{ pdp_cat }}</p>
+                {%- endif -%}
+              {%- when 'assurance' -%}
+                <div class="pdp-assurances" {{ block.shopify_attributes }}>
+                  {%- if block.settings.assurance_1 != blank -%}
+                    <span>✓ {{ block.settings.assurance_1 }}</span>
+                  {%- endif -%}
+                  {%- if block.settings.assurance_2 != blank -%}
+                    <span>✓ {{ block.settings.assurance_2 }}</span>
+                  {%- endif -%}
+                </div>
+              {%- when 'whatsapp_link' -%}
+                {%- if settings.whatsapp_link != blank -%}
+                  <a href="{{ settings.whatsapp_link }}" class="pdp-wa-link" target="_blank" rel="noopener noreferrer"
+                     {{ block.shopify_attributes }}>
+                    <svg viewBox="0 0 24 24" fill="currentColor" width="18" height="18" aria-hidden="true"><path d="M17.472 14.382c-.297-.149-1.758-.867-2.03-.967-.273-.099-.471-.148-.67.15-.197.297-.767.966-.94 1.164-.173.199-.347.223-.644.075-.297-.15-1.255-.463-2.39-1.475-.883-.788-1.48-1.761-1.653-2.059-.173-.297-.018-.458.13-.606.134-.133.298-.347.446-.52.149-.174.198-.298.298-.497.099-.198.05-.371-.025-.52-.075-.149-.669-1.612-.916-2.207-.242-.579-.487-.5-.669-.51-.173-.008-.371-.01-.57-.01-.198 0-.52.074-.792.372-.272.297-1.04 1.016-1.04 2.479 0 1.462 1.065 2.875 1.213 3.074.149.198 2.096 3.2 5.077 4.487.709.306 1.262.489 1.694.625.712.227 1.36.195 1.871.118.571-.085 1.758-.719 2.006-1.413.248-.694.248-1.289.173-1.413-.074-.124-.272-.198-.57-.347m-5.421 7.403h-.004a9.87 9.87 0 01-5.031-1.378l-.361-.214-3.741.982.998-3.648-.235-.374a9.86 9.86 0 01-1.51-5.26c.001-5.45 4.436-9.884 9.888-9.884 2.64 0 5.122 1.03 6.988 2.898a9.825 9.825 0 012.893 6.994c-.003 5.45-4.437 9.884-9.885 9.884m8.413-18.297A11.815 11.815 0 0012.05 0C5.495 0 .16 5.335.157 11.892c0 2.096.547 4.142 1.588 5.945L.057 24l6.305-1.654a11.882 11.882 0 005.683 1.448h.005c6.554 0 11.89-5.335 11.893-11.893a11.821 11.821 0 00-3.48-8.413z"/></svg>
+                    <span>{{ block.settings.label | default: 'Pedir por WhatsApp' }}</span>
+                  </a>
+                {%- endif -%}
             {%- endcase -%}
           {%- endfor -%}
-          <a href="{{ product.url }}" class="link product__view-details animate-arrow">
-            {{ 'products.product.view_full_details' | t }}
-            {{- 'icon-arrow.svg' | inline_asset_content -}}
-          </a>
         </section>
       </div>
     </div>
@@ -1461,6 +1482,44 @@
           "id": "enable_quick_add",
           "label": "t:sections.main-product.blocks.complementary_products.settings.enable_quick_add.label",
           "default": false
+        }
+      ]
+    },
+    {
+      "type": "display_category",
+      "name": "Category kicker",
+      "limit": 1,
+      "settings": []
+    },
+    {
+      "type": "assurance",
+      "name": "Assurance row",
+      "limit": 1,
+      "settings": [
+        {
+          "type": "text",
+          "id": "assurance_1",
+          "label": "First assurance",
+          "default": "Entrega 24h"
+        },
+        {
+          "type": "text",
+          "id": "assurance_2",
+          "label": "Second assurance",
+          "default": "Cambios 30 días"
+        }
+      ]
+    },
+    {
+      "type": "whatsapp_link",
+      "name": "WhatsApp link",
+      "limit": 1,
+      "settings": [
+        {
+          "type": "text",
+          "id": "label",
+          "label": "Link label",
+          "default": "Pedir por WhatsApp"
         }
       ]
     },

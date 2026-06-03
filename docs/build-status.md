@@ -39,7 +39,7 @@ Do not use this file to revisit architecture decisions. Use it to track implemen
 | Phase 2 | Align shared commerce components and global chrome | Complete | Header, announcement bar, footer, cart drawer styling, product cards, collection cards, price treatment, and variant presentation match approved system. |
 | Phase 3 | Deliver approved homepage | Complete (3A + 3B) | Homepage matches approved React design using Shopify-native sections, consolidated editorial modules, product showcases, collection data, and editable newsletter mechanics. **3A** (refactor existing Hero / Featured Collection / Collection List / Newsletter) complete; **3B** (new `home-editorial` + `product-showcase` consolidated sections — why / rules / picks / insights / future; marquee dropped) complete. Pending Shopify-preview smoke test. |
 | Phase 4 | Deliver approved category page | In progress | Category template includes approved editorial hero, compact Mafe note, compact featured product, product grid with header, WhatsApp CTA, and more-category navigation with merchant-editable data. Category strip removed per James 2026-06-03. |
-| Phase 5 | Deliver approved product page | Not started | PDP includes approved gallery/buy panel, product note, trust layer, use cases, specs grid, retained accordion, cross-sell, and optional sticky add using Shopify-native product data. |
+| Phase 5 | Deliver approved product page | In progress | PDP includes approved gallery/buy panel, product note, trust layer, retained accordion, cross-sell using Shopify-native product data. Hero section complete (2026-06-03). |
 | Phase 6 | Integrate, QA, merchant-editability validation | Not started | Theme check, storefront smoke test, Theme Editor pass, responsive fidelity, cart/checkout path, collection filtering, PDP purchase path, and dynamic-source fallbacks are verified. |
 
 ## Phase 1 — Approved Global Foundation
@@ -360,7 +360,7 @@ All 7 collection metafields must be created in Shopify Admin → Content → Met
 
 ### Status
 
-Not started.
+In progress (2026-06-03). Hero section complete; Mafe Note, Trust Layer, cross-sell rail pending.
 
 ### Goal
 
@@ -368,14 +368,12 @@ Deliver the approved PDP hierarchy while preserving Dawn product form, variant, 
 
 ### Approved Page Hierarchy (2026-06-03)
 
-The following is the approved section order, superseding the React reference which placed the Mafe Note inside the buy panel. Mafe Note is moved out of the hero to reduce above-the-fold density.
-
 ```
 1. Hero (main-product section)
    ├─ Breadcrumb
-   ├─ Gallery (main image + 4 thumbnails, "Selección de Mafe" badge)
+   ├─ Gallery (thumbnail layout, "Selección de Mafe" badge top-left)
    └─ Buy panel
-       ├─ Category kicker (custom.display_category)
+       ├─ Category kicker (custom.display_category → vendor fallback)
        ├─ Product title (h1)
        ├─ Subtitle / spec line (descriptors.subtitle)
        ├─ Price
@@ -397,7 +395,6 @@ The following is the approved section order, superseding the React reference whi
    ├─ Shipping & Returns
    ├─ Dimensions
    └─ Care Instructions
-   (Existing Dawn collapsible_tab blocks; integrated into brand.css design system)
 
 5. Cross-sell rail (related-products section — refactored)
    ├─ Kicker: "Explora el resto de la colección"
@@ -406,30 +403,33 @@ The following is the approved section order, superseding the React reference whi
    └─ Horizontal scroll rail of product cards with host quote overlay
 ```
 
-Sticky bar (fixed, scroll-triggered): appears when the add-to-bag CTA scrolls out of view; shows product thumbnail + title + unit + price + CTA.
+Sticky add bar: deferred from Phase 5.
 
 ### Completion Criteria
 
 | Criteria | Status |
 |---|---|
-| Breadcrumb renders above the gallery/buy panel grid | Pending |
-| Gallery uses thumbnail strip layout; "Selección de Mafe" badge overlaid top-left | Pending |
-| Buy panel contains kicker, title, subtitle, price, variants, qty, CTA, assurances, WhatsApp — no Mafe Note | Pending |
-| Product form, variants, quantity, and add-to-cart remain fully functional | Pending |
-| Dynamic checkout row disabled (show_dynamic_checkout: false) | Pending |
+| Breadcrumb renders above the gallery/buy panel grid | Done |
+| Gallery uses thumbnail strip layout; "Selección de Mafe" badge overlaid top-left | Done |
+| Buy panel contains kicker, title, subtitle, price, variants, qty, CTA, assurances, WhatsApp — no Mafe Note | Done |
+| Product form, variants, quantity, and add-to-cart remain fully functional | Pending preview smoke test |
+| Dynamic checkout row disabled (show_dynamic_checkout: false) | Done |
 | Mafe Note renders as standalone full-width editorial block immediately below the hero | Pending |
 | Trust Layer renders below Mafe Note with sage background and criteria from custom.criteria | Pending |
 | Product Information accordion (Materials / Shipping & Returns / Dimensions / Care Instructions) is retained, restyled to brand system, and positioned below Trust Layer | Pending |
 | Cross-sell rail matches approved horizontal scroll treatment with host quote per card | Pending |
-| Sticky add bar appears on scroll, reads live qty, dispatches to main product form | Pending |
 | PDP works across all products and variants | Pending |
-| Mobile: gallery stacks above buy panel; sticky bar accounts for iOS safe area | Pending |
+| Mobile: gallery stacks above buy panel | Pending |
 
 ### Files Touched
 
-None yet.
+| File | Action |
+|---|---|
+| `hosttohost-theme/sections/main-product.liquid` | Targeted additions — breadcrumb render above grid; gallery badge overlay; `display_category` / `assurance` / `whatsapp_link` block cases + schema definitions; "view full details" self-link removed |
+| `hosttohost-theme/templates/product.json` | Recomposed — `gallery_layout` → thumbnail, `mobile_thumbnails` → show, `show_dynamic_checkout` → false; removed vendor/description/share blocks; added display_category/assurance/whatsapp_link blocks; removed image-with-text + multicolumn filler sections from order |
+| `hosttohost-theme/assets/brand.css` | Phase 5 Hero CSS block — breadcrumb placement, gallery badge, buy panel kicker, qty stepper pill, assurance row, WhatsApp link |
 
-Expected files:
+Expected files (remaining):
 
 | File | Expected Action |
 |---|---|

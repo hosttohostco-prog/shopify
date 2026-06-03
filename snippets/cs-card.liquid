@@ -1,0 +1,51 @@
+{% comment %}
+  Cross-sell card for the PDP rail.
+  Accepts:
+  - card_product: {Object} Shopify product object
+  - tone: {String} CSS class for image background tone (cs-tone-1 … cs-tone-5)
+{% endcomment %}
+{%- liquid
+  assign display_cat = card_product.metafields.custom.display_category.value | default: card_product.type | default: card_product.vendor
+  assign host_note   = card_product.metafields.custom.curation_note.value
+  assign unit        = card_product.metafields.descriptors.subtitle.value
+  assign price       = card_product.price_min
+-%}
+<a class="cs-card" href="{{ card_product.url }}">
+  <div class="cs-card-media {{ tone }}">
+    {%- if display_cat != blank -%}
+      <span class="cs-card-badge">{{ display_cat }}</span>
+    {%- endif -%}
+    {%- if card_product.featured_media -%}
+      <img
+        srcset="
+          {%- if card_product.featured_media.width >= 360 -%}{{ card_product.featured_media | image_url: width: 360 }} 360w,{%- endif -%}
+          {%- if card_product.featured_media.width >= 540 -%}{{ card_product.featured_media | image_url: width: 540 }} 540w,{%- endif -%}
+          {{ card_product.featured_media | image_url }} {{ card_product.featured_media.width }}w
+        "
+        src="{{ card_product.featured_media | image_url: width: 360 }}"
+        alt="{{ card_product.featured_media.alt | escape }}"
+        class="cs-card-img"
+        loading="lazy"
+        width="{{ card_product.featured_media.width }}"
+        height="{{ card_product.featured_media.height }}"
+      >
+    {%- else -%}
+      <span class="cs-card-ph">{{ card_product.title | upcase | truncate: 16 }}</span>
+    {%- endif -%}
+  </div>
+  <div class="cs-card-body">
+    {%- if display_cat != blank -%}
+      <p class="cs-card-cat">{{ display_cat }}</p>
+    {%- endif -%}
+    <p class="cs-card-title">{{ card_product.title }}</p>
+    {%- if host_note != blank -%}
+      <p class="cs-card-note">"{{ host_note | truncate: 60 }}"</p>
+    {%- endif -%}
+    <div class="cs-card-price-row">
+      <span class="cs-card-price">{{ price | money_without_trailing_zeros }}</span>
+      {%- if unit != blank -%}
+        <span class="cs-card-unit">{{ unit }}</span>
+      {%- endif -%}
+    </div>
+  </div>
+</a>
