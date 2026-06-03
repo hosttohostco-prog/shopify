@@ -111,7 +111,8 @@
               card_collection: block.settings.collection,
               media_aspect_ratio: section.settings.image_ratio,
               columns: columns,
-              placeholder_image: placeholder_image
+              placeholder_image: placeholder_image,
+              card_kicker: block.settings.kicker
             %}
           </li>
         {%- endfor -%}
@@ -350,6 +351,12 @@
           "type": "collection",
           "id": "collection",
           "label": "t:sections.collection-list.blocks.featured_collection.settings.collection.label"
+        },
+        {
+          "type": "text",
+          "id": "kicker",
+          "label": "Antetítulo de la tarjeta",
+          "info": "Etiqueta corta en mayúsculas sobre el título (p. ej. «Lo esencial»)."
         }
       ]
     }

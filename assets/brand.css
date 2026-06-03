@@ -758,12 +758,30 @@ details[open] > .header__menu-item {
   border-radius: var(--radius-lg);
   background: linear-gradient(to top, rgba(38, 33, 56, 0.82) 0%, rgba(38, 33, 56, 0.34) 30%, rgba(38, 33, 56, 0) 56%);
 }
-/* Title + caption overlaid bottom-left, cream (approved .room-meta) */
+/* Kicker + title + copy overlaid bottom-left, cream (approved .room-meta).
+   Content sits with breathing room above the bottom edge; the bottom-weighted
+   wash above keeps it legible. Display reset from Dawn's grid to a simple flow. */
 .collection-card-wrapper .card__content {
   position: absolute;
   inset: auto 0 0 0;
   z-index: 2;
-  padding: clamp(2rem, 2.2vw, 3.4rem);
+  display: block;
+  padding: clamp(22px, 2vw, 34px);
+}
+.collection-card-wrapper .card__information {
+  padding: 0;
+  grid-row-start: auto;
+}
+/* Editorial kicker above the title (approved .room-kicker) */
+.collection-card-wrapper .card__kicker {
+  margin: 0 0 11px;
+  font-family: var(--font-label);
+  text-transform: uppercase;
+  letter-spacing: 0.22em;
+  font-size: 11px;
+  font-weight: 600;
+  color: var(--cream);
+  opacity: 0.82;
 }
 .collection-card-wrapper .card__heading {
   margin: 0;
@@ -772,7 +790,7 @@ details[open] > .header__menu-item {
   font-family: var(--font-display);
   font-weight: 400;
   letter-spacing: -0.02em;
-  line-height: 0.98;
+  line-height: 0.96;
   font-size: clamp(2.8rem, 2.7vw, 4.2rem);
   color: var(--cream);
 }
@@ -783,8 +801,41 @@ details[open] > .header__menu-item {
   line-height: 1.4;
   color: rgba(252, 243, 233, 0.9);
 }
+/* Keep the room copy visible on image cards too (Dawn hides .card__caption on
+   standard media cards; the rooms want the supporting line, like the design). */
+.collection-card-wrapper .card--standard > .card__content .card__caption--room { display: block; }
+/* On text cards (no photo yet) the visible content is the INNER block, so hide the
+   outer kicker to avoid a duplicate — mirrors how Dawn hides the outer heading. */
+.collection-card-wrapper .card--standard.card--text > .card__content .card__kicker { display: none; }
 .collection-card-wrapper .icon-wrap {
   color: var(--cream);
+}
+
+/* Circular outlined arrow, top-right — the only chrome (approved .room-go).
+   pointer-events:none so a click anywhere on the card still navigates. */
+.collection-card-wrapper .card__go {
+  position: absolute;
+  top: clamp(20px, 1.8vw, 28px);
+  right: clamp(20px, 1.8vw, 28px);
+  z-index: 3;
+  width: clamp(44px, 3.6vw, 54px);
+  height: clamp(44px, 3.6vw, 54px);
+  border-radius: 50%;
+  display: grid;
+  place-items: center;
+  color: var(--cream);
+  border: 1.5px solid rgba(252, 243, 233, 0.55);
+  background: rgba(38, 33, 56, 0.12);
+  backdrop-filter: blur(2px);
+  -webkit-backdrop-filter: blur(2px);
+  pointer-events: none;
+  transition: background 0.45s var(--ease), color 0.45s var(--ease), border-color 0.45s var(--ease), transform 0.45s var(--ease);
+}
+.collection-card-wrapper:hover .card__go {
+  background: var(--cream);
+  color: var(--ink);
+  border-color: var(--cream);
+  transform: rotate(-8deg) scale(1.04);
 }
 
 /* ============================================================
@@ -869,6 +920,10 @@ details[open] > .header__menu-item {
 .tlink .arr { display: inline-flex; transition: transform 0.35s var(--ease); }
 .tlink:hover .arr { transform: translateX(4px); }
 
+/* Categories section: tighten the heading→cards rhythm (#1). Width reverted to
+   Dawn's default page-width per James (the previous narrower width looked better). */
+.section-collection-list .shead { margin-bottom: clamp(22px, 2.6vw, 40px); }
+
 /* -- Room mosaic: map Dawn's collection-list grid onto the approved .rooms-grid.
    Desktop only; gated in Liquid to exactly 3 rooms (else uniform fallback). The
    collection cards already carry the Phase-2 room wash + overlaid cream meta.
@@ -885,9 +940,13 @@ details[open] > .header__menu-item {
     grid-template-columns: 1.32fr 1fr;
     grid-template-rows: 1fr 1fr;
     gap: clamp(14px, 1.5vw, 22px);
-    height: clamp(540px, 56vw, 700px);
+    /* Shorter, editorial proportion so heading + mosaic fit one viewport even at
+       the wider section width (#8). Was clamp(540px, 56vw, 700px). */
+    height: clamp(440px, 42vw, 600px);
     margin-bottom: 0;
   }
+  /* Clip every room card to the large radius so corners read as poster-round */
+  .collection-list--mosaic .collection-card-wrapper .card { overflow: hidden; border-radius: var(--radius-lg); }
 
   /* (2) Neutralize Dawn's flex item sizing so grid placement controls cells.
      Specificity (0,3,0) beats Dawn's `.grid--3-col-desktop .grid__item` (0,2,0). */
@@ -956,3 +1015,229 @@ details[open] > .header__menu-item {
   .card-wrapper:hover .card__media .media img,
   .collection-card-wrapper:hover .card__media .media img { transform: none; }
 }
+
+/* ============================================================
+   PHASE 3B — Consolidated homepage editorial + product showcase
+   Faithful port of the approved React modules (visual lock:
+   ../Home Page/styles.css .why / .selection / .picks / .ins-grid / .fut-grid).
+   Sections: home-editorial.liquid (.he / .he--story|rules|insights|future) and
+   product-showcase.liquid (.picks). Per the D4 convention all styling lives here,
+   not in section {% stylesheet %} blocks. Reuses the existing approved utilities
+   (.kicker / .display / .lead / .shead / .tlink / .tag); section vertical padding
+   comes from each section's .section-{id}-padding (merchant range settings). The
+   inner wrapper is the shared .hth-wrap (= approved .wrap: maxw + gutter). px
+   clamps are rem-base-independent on Dawn's 62.5% base.
+   ============================================================ */
+
+/* ---- Shared bits this phase needs that weren't ported yet ---- */
+.tag .dot { width: 6px; height: 6px; border-radius: 50%; background: currentColor; flex: none; }
+
+/* Approved pill button (.btn) — coral variant is the only one 3B uses */
+.btn {
+  display: inline-flex; align-items: center; gap: 10px;
+  font-family: var(--font-label); font-weight: 600;
+  text-transform: uppercase; letter-spacing: 0.13em; font-size: 12.5px;
+  padding: 16px 26px; border-radius: var(--radius-pill); white-space: nowrap;
+  transition: transform .35s var(--ease), background .35s var(--ease), color .35s var(--ease), box-shadow .35s var(--ease);
+}
+.btn .arr { display: inline-flex; transition: transform .35s var(--ease); }
+.btn:hover .arr { transform: translateX(4px); }
+.btn--coral { background: var(--coral); color: var(--white); }
+.btn--coral:hover { background: var(--coral-deep); transform: translateY(-2px); box-shadow: 0 16px 30px -16px rgba(232, 130, 95, .9); }
+
+/* Faded placeholder watermark + label for picks without a product photo */
+.card-watermark {
+  position: absolute; z-index: 1; left: 0; right: 0; top: 50%; transform: translateY(-54%);
+  text-align: center; font-family: var(--font-display); font-weight: 600;
+  font-size: clamp(30px, 3vw, 42px); letter-spacing: -0.03em; color: rgba(64, 62, 63, .07);
+  padding: 0 12px; line-height: 1; pointer-events: none;
+}
+
+/* ---- Section roots / backgrounds (vertical padding via .section-{id}-padding) ---- */
+.he { position: relative; }
+.he--story { background: var(--sage-soft); overflow: hidden; }
+.he--rules { background: var(--cream); }
+.he--insights { background: var(--cream); }
+.he--future { background: var(--periwinkle); color: var(--cream); overflow: hidden; }
+
+/* ============================ STORY (Por qué existe) ============================ */
+.he-story {
+  display: grid; grid-template-columns: 0.9fr 1.08fr;
+  gap: clamp(40px, 6vw, 100px); align-items: center;
+}
+.he--story .kicker { color: var(--coral-deep); }
+.why-stmt {
+  font-family: var(--font-display); font-weight: 300;
+  font-size: clamp(40px, 5.6vw, 78px); line-height: 1.0; letter-spacing: -0.038em;
+  color: var(--green-deep); margin: 26px 0 0; text-wrap: balance;
+}
+.why-stmt .he-em { font-weight: 500; position: relative; display: inline-block; }
+.he-scribble { position: absolute; left: 0; right: 0; bottom: -0.16em; width: 100%; height: auto; color: var(--coral); }
+.why-sub {
+  font-size: clamp(17px, 1.45vw, 20px); line-height: 1.55; color: #5a6147;
+  max-width: 42ch; margin: 32px 0 0;
+}
+.why-sub > :first-child { margin-top: 0; }
+.why-sub > :last-child { margin-bottom: 0; }
+.why-byline { display: flex; align-items: center; gap: 14px; margin-top: 38px; }
+.why-av {
+  width: 46px; height: 46px; border-radius: 50%; background: var(--cream);
+  display: grid; place-items: center; flex: none; overflow: hidden;
+  box-shadow: 0 12px 24px -14px rgba(86, 96, 65, .6);
+}
+.why-av img { width: 100%; height: 100%; object-fit: cover; }
+.why-byline-t b { display: block; font-family: var(--font-hand); font-weight: 700; font-size: 21px; color: var(--green-deep); line-height: 1; }
+.why-byline-t i {
+  display: block; font-family: var(--font-label); font-style: normal; text-transform: uppercase;
+  letter-spacing: 0.14em; font-size: 10.5px; font-weight: 600; color: var(--olive); margin-top: 7px;
+}
+.why-figure { position: relative; margin: 0; }
+.why-frame {
+  border-radius: var(--radius-lg); overflow: hidden; aspect-ratio: 5 / 6;
+  background: linear-gradient(150deg, #d4dbb4, #aab084);
+  box-shadow: 0 60px 90px -56px rgba(86, 96, 65, .65);
+  display: grid; place-items: center;
+}
+.why-frame img { width: 100%; height: 100%; object-fit: cover; display: block; }
+.why-frame__ph {
+  font-family: var(--font-label); text-transform: uppercase; letter-spacing: 0.18em;
+  font-size: 11px; font-weight: 600; color: rgba(86, 96, 65, .5); text-align: center; padding: 0 16px;
+}
+.why-cap {
+  position: absolute; left: 18px; bottom: 18px; display: inline-flex; align-items: center; gap: 9px;
+  background: rgba(252, 243, 233, .92); backdrop-filter: blur(8px); -webkit-backdrop-filter: blur(8px);
+  padding: 11px 16px; border-radius: var(--radius-pill);
+  font-family: var(--font-label); text-transform: uppercase; letter-spacing: 0.1em;
+  font-size: 10.5px; font-weight: 600; color: var(--green-deep);
+  box-shadow: 0 18px 34px -20px rgba(86, 96, 65, .6);
+}
+.why-cap-dot { width: 7px; height: 7px; border-radius: 50%; background: var(--coral); flex: none; }
+@media screen and (max-width: 860px) {
+  .he-story { grid-template-columns: 1fr; gap: 42px; }
+  .why-figure { order: -1; }
+  .why-frame { aspect-ratio: 4 / 3; }
+}
+
+/* ============================ RULES (Cómo entra un producto) ============================ */
+.sel-head {
+  text-align: center; max-width: 760px; margin: 0 auto clamp(40px, 5vw, 68px);
+  display: flex; flex-direction: column; align-items: center; gap: 18px;
+}
+.sel-title { font-size: clamp(34px, 4.6vw, 60px); }
+.sel-title em { font-style: normal; font-weight: 500; color: var(--coral-deep); }
+.sel-list { border-top: 1.6px solid rgba(86, 96, 65, .22); }
+.principle {
+  display: grid; grid-template-columns: clamp(60px, 7vw, 104px) 1fr minmax(0, 0.9fr) 34px;
+  gap: clamp(20px, 3.6vw, 56px); align-items: center;
+  padding: clamp(28px, 3.6vw, 48px) 0;
+  border-bottom: 1.6px solid rgba(86, 96, 65, .22);
+}
+.principle > * { transition: transform .45s var(--ease), color .4s var(--ease), opacity .4s var(--ease); }
+.pr-n {
+  font-family: var(--font-display); font-weight: 300; font-size: clamp(28px, 3vw, 40px);
+  letter-spacing: -0.03em; color: var(--periwinkle-deep); line-height: 1;
+}
+.pr-h {
+  font-family: var(--font-display); font-weight: 400; letter-spacing: -0.03em; line-height: 1.02;
+  font-size: clamp(26px, 3.4vw, 44px); color: var(--ink); margin: 0; text-wrap: balance;
+}
+.pr-b { font-size: clamp(14.5px, 1.1vw, 16px); line-height: 1.5; color: var(--ink-soft); margin: 0; max-width: 34ch; }
+.pr-arr { color: var(--coral-deep); opacity: 0; transform: translate(-8px, 8px); justify-self: end; font-size: 22px; line-height: 1; }
+.principle:hover .pr-n, .principle:hover .pr-h { transform: translateX(10px); }
+.principle:hover .pr-h { color: var(--periwinkle-deep); }
+.principle:hover .pr-arr { opacity: 1; transform: translate(0, 0); }
+@media screen and (max-width: 760px) {
+  .sel-head { text-align: left; align-items: flex-start; }
+  .principle { grid-template-columns: auto 1fr; gap: 6px 20px; align-items: baseline; }
+  .pr-b { grid-column: 1 / -1; margin-top: 6px; }
+  .pr-arr { display: none; }
+  .principle:hover .pr-n, .principle:hover .pr-h { transform: none; }
+}
+
+/* ============================ INSIGHTS (Notas de anfitriona) ============================ */
+.he--insights .shead .display em { font-style: normal; font-weight: 500; color: var(--periwinkle-deep); }
+.ins-grid { display: grid; grid-template-columns: repeat(3, 1fr); gap: clamp(18px, 2vw, 28px); }
+.insight {
+  background: var(--white); border-radius: var(--radius-lg); overflow: hidden;
+  display: flex; flex-direction: column;
+  transition: transform .5s var(--ease), box-shadow .5s var(--ease);
+}
+.insight:hover { transform: translateY(-6px); box-shadow: 0 44px 60px -42px rgba(64, 62, 63, .4); }
+.insight-media { aspect-ratio: 16 / 10; position: relative; overflow: hidden; display: grid; place-items: center; background: var(--warm-gray); }
+.insight-media--peri { background: linear-gradient(150deg, #aab4e0, #7e8cc6); }
+.insight-media--taupe { background: linear-gradient(150deg, #e0cabd, #c2a795); }
+.insight-media--olive { background: linear-gradient(150deg, #bfc78e, #97a067); }
+.insight-media .num { font-family: var(--font-display); font-weight: 600; font-size: 64px; color: rgba(255, 255, 255, .62); letter-spacing: -0.04em; }
+.insight-tag { position: absolute; top: 14px; left: 14px; }
+.insight-body { padding: 24px 26px 28px; display: flex; flex-direction: column; gap: 11px; flex: 1; }
+.insight-title { font-size: 21px; font-weight: 500; letter-spacing: -0.02em; line-height: 1.14; color: var(--ink); margin: 0; }
+.insight-ex { font-size: 14.5px; line-height: 1.5; color: var(--ink-soft); flex: 1; margin: 0; }
+.insight-link {
+  margin-top: 6px; font-family: var(--font-label); text-transform: uppercase; letter-spacing: 0.13em;
+  font-size: 11px; font-weight: 600; color: var(--periwinkle-deep); display: inline-flex; align-items: center; gap: 8px;
+}
+.insight-link .arr { transition: transform .35s var(--ease); }
+.insight:hover .insight-link .arr { transform: translateX(4px); }
+@media screen and (max-width: 880px) { .ins-grid { grid-template-columns: 1fr; } }
+
+/* ============================ FUTURE (Lo que viene) ============================ */
+.he--future .shead .kicker { color: var(--cream); opacity: 0.9; }
+.he--future .shead .display { color: var(--cream); }
+.he--future .shead .shead-sub { color: rgba(252, 243, 233, .82); }
+.fut-grid { display: grid; grid-template-columns: repeat(5, 1fr); gap: 14px; margin-top: clamp(36px, 4vw, 52px); }
+.fut {
+  border: 1px solid rgba(252, 243, 233, .32); border-radius: var(--radius); padding: 24px 22px 26px;
+  min-height: 230px; display: flex; flex-direction: column; justify-content: space-between;
+  background: rgba(252, 243, 233, .06);
+  transition: background .45s var(--ease), transform .45s var(--ease), border-color .45s var(--ease);
+}
+.fut:hover { background: rgba(252, 243, 233, .16); transform: translateY(-5px); border-color: rgba(252, 243, 233, .5); }
+.fut-top { display: flex; align-items: center; justify-content: space-between; }
+.fut-soon {
+  font-family: var(--font-label); text-transform: uppercase; letter-spacing: 0.14em; font-size: 10px; font-weight: 600;
+  color: var(--cream); opacity: 0.7; display: inline-flex; align-items: center; gap: 7px;
+}
+.fut-soon .dot { width: 6px; height: 6px; border-radius: 50%; background: var(--coral); flex: none; }
+.fut-num { font-family: var(--font-display); font-weight: 300; font-size: 30px; opacity: 0.4; letter-spacing: -0.03em; }
+.fut-name { font-size: 22px; font-weight: 500; letter-spacing: -0.02em; line-height: 1.1; color: var(--cream); margin: 0; }
+.fut-desc { font-size: 13px; line-height: 1.45; color: rgba(252, 243, 233, .78); margin-top: 10px; }
+@media screen and (max-width: 1080px) { .fut-grid { grid-template-columns: repeat(3, 1fr); } }
+@media screen and (max-width: 680px) { .fut-grid { grid-template-columns: 1fr 1fr; } }
+@media screen and (max-width: 460px) { .fut-grid { grid-template-columns: 1fr; } }
+
+/* ============================ PICKS (La selección de Mafe — product showcase) ============================ */
+.picks { background: var(--ink); color: var(--cream); }
+.picks .kicker { color: var(--coral); }
+.picks .display { color: var(--cream); }
+.picks .display em { font-style: normal; font-weight: 500; color: var(--coral-deep); }
+.picks .shead-sub { color: rgba(252, 243, 233, .62); }
+.picks-rail { display: grid; grid-template-columns: repeat(4, 1fr); gap: clamp(16px, 1.8vw, 24px); }
+.pick { position: relative; }
+.pick-media {
+  aspect-ratio: 4 / 5; border-radius: var(--radius); overflow: hidden; position: relative;
+  display: grid; place-items: center; transition: transform .5s var(--ease);
+}
+.pick:hover .pick-media { transform: translateY(-5px); }
+.pick-media::after {
+  content: ""; position: absolute; left: 50%; bottom: 11%; width: 52%; height: 6%; transform: translateX(-50%);
+  border-radius: 50%; background: radial-gradient(closest-side, rgba(0, 0, 0, .28), transparent 75%); filter: blur(2px);
+}
+.pick-img { position: absolute; inset: 0; width: 100%; height: 100%; object-fit: cover; z-index: 2; }
+.pick-rank {
+  position: absolute; top: 12px; left: 12px; z-index: 3; width: 30px; height: 30px; border-radius: 50%;
+  background: var(--coral); color: var(--white); display: grid; place-items: center;
+  font-family: var(--font-label); font-weight: 700; font-size: 13px;
+}
+.pick-ph {
+  position: relative; z-index: 2; font-family: var(--font-label); text-transform: uppercase;
+  letter-spacing: 0.18em; font-size: 10.5px; font-weight: 600; color: rgba(64, 62, 63, .34); text-align: center;
+}
+.pick-body { padding-top: 16px; }
+.pick-cat { font-family: var(--font-label); text-transform: uppercase; letter-spacing: 0.16em; font-size: 10px; font-weight: 600; color: rgba(252, 243, 233, .5); }
+.pick-title { font-size: 18px; font-weight: 500; letter-spacing: -0.015em; margin: 6px 0 6px; color: var(--cream); }
+.pick-title a { color: inherit; }
+.pick-host { font-family: var(--font-hand); font-weight: 600; font-size: 14px; color: var(--coral); line-height: 1.3; margin: 0; }
+.pick-price { font-size: 15px; color: rgba(252, 243, 233, .85); margin-top: 10px; }
+.picks-cta { margin-top: clamp(40px, 5vw, 60px); display: flex; justify-content: center; }
+@media screen and (max-width: 980px) { .picks-rail { grid-template-columns: repeat(2, 1fr); } }
+@media screen and (max-width: 520px) { .picks-rail { grid-template-columns: 1fr; } }

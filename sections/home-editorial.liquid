@@ -1,0 +1,381 @@
+{%- comment -%}
+  HostToHost — Home Editorial (Phase 3B · consolidated homepage section)
+  One section shipping four approved presets selected via `variant`:
+    · story    → "Por qué existe Host-to-Host"  (replaces legacy `manifesto`)
+    · rules    → "Cómo entra un producto"        (replaces legacy `editorial_split`)
+    · insights → "Notas de anfitriona"           (new)
+    · future   → "Lo que viene"                  (new)
+  Visual lock: ../Home Page/sections.jsx (WhyExists / Selection / Insights /
+  Future) + styles.css. All content is merchant-editable via section settings +
+  blocks — NO metafields, NO metaobjects (Phase 3B locked decision). Per the D4
+  convention all styling lives in assets/brand.css (.he / .he--* + reused
+  .kicker/.display/.lead/.shead/.tlink/.tag utilities); this file carries only the
+  Dawn per-section padding idiom. Reveal uses Dawn's native scroll-trigger.
+{%- endcomment -%}
+
+{%- style -%}
+  .section-{{ section.id }}-padding {
+    padding-top: {{ section.settings.padding_top | times: 0.7 | round: 0 }}px;
+    padding-bottom: {{ section.settings.padding_bottom | times: 0.7 | round: 0 }}px;
+  }
+  @media screen and (min-width: 750px) {
+    .section-{{ section.id }}-padding {
+      padding-top: {{ section.settings.padding_top }}px;
+      padding-bottom: {{ section.settings.padding_bottom }}px;
+    }
+  }
+{%- endstyle -%}
+
+{%- liquid
+  assign variant = section.settings.variant
+  assign reveal = ''
+  if settings.animations_reveal_on_scroll
+    assign reveal = ' scroll-trigger animate--slide-in'
+  endif
+-%}
+
+<div class="he he--{{ variant }} section-{{ section.id }}-padding">
+  <div class="hth-wrap">
+
+    {%- case variant -%}
+
+    {%- comment -%} ===================== STORY ===================== {%- endcomment -%}
+    {%- when 'story' -%}
+      <div class="he-story">
+        <div class="he-story__copy{{ reveal }}">
+          {%- if section.settings.kicker != blank -%}
+            <p class="kicker">{{ section.settings.kicker }}</p>
+          {%- endif -%}
+          {%- if section.settings.heading != blank or section.settings.heading_accent != blank -%}
+            <h2 class="why-stmt">
+              {{ section.settings.heading }}
+              {%- if section.settings.heading_accent != blank -%}
+                <span class="he-em">{{ section.settings.heading_accent }}<svg class="he-scribble" width="200" height="9" viewBox="0 0 120 9" fill="none" aria-hidden="true" preserveAspectRatio="none"><path d="M2 6.5C20 3 42 2.2 62 4c18 1.6 38 2.5 56-1.5" stroke="currentColor" stroke-width="2.4" stroke-linecap="round"/></svg></span>
+              {%- endif -%}
+            </h2>
+          {%- endif -%}
+          {%- if section.settings.subtext != blank -%}
+            <div class="why-sub rte">{{ section.settings.subtext }}</div>
+          {%- endif -%}
+          {%- if section.settings.byline_name != blank -%}
+            <div class="why-byline">
+              <span class="why-av">
+                {%- if section.settings.byline_avatar -%}
+                  {{ section.settings.byline_avatar | image_url: width: 92 | image_tag: loading: 'lazy', alt: section.settings.byline_name | escape }}
+                {%- endif -%}
+              </span>
+              <span class="why-byline-t">
+                <b>{{ section.settings.byline_name }}</b>
+                {%- if section.settings.byline_role != blank -%}<i>{{ section.settings.byline_role }}</i>{%- endif -%}
+              </span>
+            </div>
+          {%- endif -%}
+        </div>
+
+        <figure class="why-figure{{ reveal }}">
+          <div class="why-frame{% unless section.settings.image %} why-frame--placeholder{% endunless %}">
+            {%- if section.settings.image -%}
+              {{ section.settings.image | image_url: width: 1200 | image_tag: loading: 'lazy', sizes: '(min-width: 990px) 50vw, 100vw', widths: '480, 720, 980, 1200', alt: section.settings.image.alt | default: section.settings.byline_name | escape }}
+            {%- else -%}
+              <span class="why-frame__ph">Retrato de Mafe</span>
+            {%- endif -%}
+          </div>
+          {%- if section.settings.image_caption != blank -%}
+            <figcaption class="why-cap"><span class="why-cap-dot"></span>{{ section.settings.image_caption }}</figcaption>
+          {%- endif -%}
+        </figure>
+      </div>
+
+    {%- comment -%} ===================== RULES ===================== {%- endcomment -%}
+    {%- when 'rules' -%}
+      <div class="sel-head{{ reveal }}">
+        {%- if section.settings.kicker != blank -%}
+          <p class="kicker">{{ section.settings.kicker }}</p>
+        {%- endif -%}
+        {%- if section.settings.heading != blank -%}
+          <h2 class="display sel-title">{{ section.settings.heading }}</h2>
+        {%- endif -%}
+      </div>
+      {%- if section.blocks.size > 0 -%}
+        <div class="sel-list">
+          {%- for block in section.blocks -%}
+            {%- if block.type == 'rule' -%}
+              <div class="principle{{ reveal }}" {{ block.shopify_attributes }}>
+                <span class="pr-n">{%- assign n = forloop.index -%}{% if n < 10 %}0{% endif %}{{ n }}</span>
+                {%- if block.settings.title != blank -%}<h3 class="pr-h">{{ block.settings.title }}</h3>{%- endif -%}
+                {%- if block.settings.body != blank -%}<p class="pr-b">{{ block.settings.body }}</p>{%- endif -%}
+                <span class="pr-arr" aria-hidden="true">&#8599;</span>
+              </div>
+            {%- endif -%}
+          {%- endfor -%}
+        </div>
+      {%- endif -%}
+
+    {%- comment -%} ===================== INSIGHTS ===================== {%- endcomment -%}
+    {%- when 'insights' -%}
+      <div class="shead{{ reveal }}">
+        <div class="shead-l">
+          {%- if section.settings.kicker != blank -%}<p class="kicker">{{ section.settings.kicker }}</p>{%- endif -%}
+          {%- if section.settings.heading != blank -%}<h2 class="display h-1">{{ section.settings.heading }}</h2>{%- endif -%}
+          {%- if section.settings.subtext != blank -%}<div class="lead shead-sub rte">{{ section.settings.subtext }}</div>{%- endif -%}
+        </div>
+        {%- if section.settings.link_label != blank -%}
+          <a class="tlink" href="{{ section.settings.link_url | default: '#' }}">{{ section.settings.link_label }}<span class="arr" aria-hidden="true">&rarr;</span></a>
+        {%- endif -%}
+      </div>
+      {%- if section.blocks.size > 0 -%}
+        <div class="ins-grid">
+          {%- for block in section.blocks -%}
+            {%- if block.type == 'insight' -%}
+              <article class="insight{{ reveal }}" {{ block.shopify_attributes }}>
+                <div class="insight-media insight-media--{{ block.settings.tint }}">
+                  {%- if block.settings.tag_label != blank -%}
+                    <div class="insight-tag"><span class="tag tag--cream"><span class="dot"></span>{{ block.settings.tag_label }}</span></div>
+                  {%- endif -%}
+                  <span class="num">{%- assign n = forloop.index -%}{% if n < 10 %}0{% endif %}{{ n }}</span>
+                </div>
+                <div class="insight-body">
+                  {%- if block.settings.title != blank -%}<h3 class="insight-title">{{ block.settings.title }}</h3>{%- endif -%}
+                  {%- if block.settings.body != blank -%}<p class="insight-ex">{{ block.settings.body }}</p>{%- endif -%}
+                  {%- if block.settings.link_label != blank -%}
+                    <a class="insight-link" href="{{ block.settings.link_url | default: '#' }}">{{ block.settings.link_label }}<span class="arr" aria-hidden="true">&rarr;</span></a>
+                  {%- endif -%}
+                </div>
+              </article>
+            {%- endif -%}
+          {%- endfor -%}
+        </div>
+      {%- endif -%}
+
+    {%- comment -%} ===================== FUTURE ===================== {%- endcomment -%}
+    {%- when 'future' -%}
+      <div class="shead{{ reveal }}">
+        <div class="shead-l">
+          {%- if section.settings.kicker != blank -%}<p class="kicker kicker--plain">{{ section.settings.kicker }}</p>{%- endif -%}
+          {%- if section.settings.heading != blank -%}<h2 class="display h-1">{{ section.settings.heading }}</h2>{%- endif -%}
+          {%- if section.settings.subtext != blank -%}<div class="lead shead-sub rte">{{ section.settings.subtext }}</div>{%- endif -%}
+        </div>
+      </div>
+      {%- if section.blocks.size > 0 -%}
+        <div class="fut-grid">
+          {%- for block in section.blocks -%}
+            {%- if block.type == 'future' -%}
+              <article class="fut{{ reveal }}" {{ block.shopify_attributes }}>
+                <div class="fut-top">
+                  <span class="fut-soon"><span class="dot"></span>{{ block.settings.badge_label | default: 'Pronto' }}</span>
+                  <span class="fut-num">{%- assign n = forloop.index -%}{% if n < 10 %}0{% endif %}{{ n }}</span>
+                </div>
+                <div class="fut-text">
+                  {%- if block.settings.title != blank -%}<h3 class="fut-name">{{ block.settings.title }}</h3>{%- endif -%}
+                  {%- if block.settings.description != blank -%}<p class="fut-desc">{{ block.settings.description }}</p>{%- endif -%}
+                </div>
+              </article>
+            {%- endif -%}
+          {%- endfor -%}
+        </div>
+      {%- endif -%}
+
+    {%- endcase -%}
+
+  </div>
+</div>
+
+{% schema %}
+{
+  "name": "Editorial de inicio",
+  "tag": "section",
+  "class": "section",
+  "settings": [
+    {
+      "type": "select",
+      "id": "variant",
+      "label": "Estilo de sección",
+      "info": "Elige el módulo aprobado. Cada estilo usa los ajustes y bloques que correspondan.",
+      "options": [
+        { "value": "story", "label": "Historia (Por qué existe)" },
+        { "value": "rules", "label": "Reglas (Cómo entra un producto)" },
+        { "value": "insights", "label": "Notas (Notas de anfitriona)" },
+        { "value": "future", "label": "Próximamente (Lo que viene)" }
+      ],
+      "default": "story"
+    },
+    { "type": "header", "content": "Encabezado" },
+    {
+      "type": "text",
+      "id": "kicker",
+      "label": "Etiqueta superior",
+      "default": "Por qué existe Host-to-Host"
+    },
+    {
+      "type": "inline_richtext",
+      "id": "heading",
+      "label": "Título",
+      "info": "En Reglas / Notas, usa cursiva (<em>) para resaltar una palabra. En Historia, escribe la primera frase aquí.",
+      "default": "Lo bueno no se busca."
+    },
+    {
+      "type": "text",
+      "id": "heading_accent",
+      "label": "Palabra destacada (solo Historia)",
+      "info": "Frase final subrayada a mano. Déjala vacía en los demás estilos.",
+      "default": "Se reconoce."
+    },
+    {
+      "type": "richtext",
+      "id": "subtext",
+      "label": "Texto de apoyo",
+      "default": "<p>Nueve años recibiendo huéspedes me enseñaron a distinguirlo de un vistazo. Esta tienda es, simplemente, lo que pasó la prueba.</p>"
+    },
+    { "type": "header", "content": "Enlace (Notas / Próximamente)" },
+    {
+      "type": "text",
+      "id": "link_label",
+      "label": "Enlace — texto",
+      "info": "Aparece arriba a la derecha en el estilo Notas."
+    },
+    { "type": "url", "id": "link_url", "label": "Enlace — destino" },
+    { "type": "header", "content": "Historia — imagen y firma" },
+    {
+      "type": "image_picker",
+      "id": "image",
+      "label": "Imagen (retrato de Mafe)",
+      "info": "Sin imagen se muestra un marcador en verde salvia."
+    },
+    {
+      "type": "text",
+      "id": "image_caption",
+      "label": "Pie de imagen",
+      "default": "Preparando una propiedad antes del check-in"
+    },
+    { "type": "text", "id": "byline_name", "label": "Firma — nombre", "default": "Mafe" },
+    {
+      "type": "text",
+      "id": "byline_role",
+      "label": "Firma — rol",
+      "default": "Superhost · 4 Airbnb · Medellín"
+    },
+    { "type": "image_picker", "id": "byline_avatar", "label": "Firma — avatar" },
+    { "type": "header", "content": "Espaciado" },
+    {
+      "type": "range",
+      "id": "padding_top",
+      "min": 0,
+      "max": 180,
+      "step": 4,
+      "unit": "px",
+      "label": "Espacio superior",
+      "default": 120
+    },
+    {
+      "type": "range",
+      "id": "padding_bottom",
+      "min": 0,
+      "max": 180,
+      "step": 4,
+      "unit": "px",
+      "label": "Espacio inferior",
+      "default": 120
+    }
+  ],
+  "blocks": [
+    {
+      "type": "rule",
+      "name": "Regla",
+      "settings": [
+        { "type": "text", "id": "title", "label": "Título", "default": "Probado en mis Airbnb" },
+        { "type": "textarea", "id": "body", "label": "Texto", "default": "Nada entra al catálogo sin vivir antes en una de mis propiedades." }
+      ]
+    },
+    {
+      "type": "insight",
+      "name": "Nota",
+      "settings": [
+        { "type": "text", "id": "tag_label", "label": "Etiqueta", "default": "Nota de anfitriona" },
+        {
+          "type": "select",
+          "id": "tint",
+          "label": "Color",
+          "options": [
+            { "value": "peri", "label": "Periwinkle" },
+            { "value": "olive", "label": "Verde oliva" },
+            { "value": "taupe", "label": "Taupe" }
+          ],
+          "default": "peri"
+        },
+        { "type": "text", "id": "title", "label": "Título", "default": "Por qué dejé de comprar vidrio frágil" },
+        { "type": "textarea", "id": "body", "label": "Resumen", "default": "Cada copa rota es un mensaje a medianoche y una reseña en riesgo. Cambié a piezas que resisten la rotación constante." },
+        { "type": "text", "id": "link_label", "label": "Enlace — texto", "default": "Leer y comprar" },
+        { "type": "url", "id": "link_url", "label": "Enlace — destino" }
+      ]
+    },
+    {
+      "type": "future",
+      "name": "Colección futura",
+      "settings": [
+        { "type": "text", "id": "badge_label", "label": "Insignia", "default": "Pronto" },
+        { "type": "text", "id": "title", "label": "Nombre", "default": "Estación de café" },
+        { "type": "textarea", "id": "description", "label": "Descripción", "default": "El ritual que arranca la mañana del huésped." }
+      ]
+    }
+  ],
+  "presets": [
+    {
+      "name": "Editorial · Historia",
+      "settings": {
+        "variant": "story",
+        "kicker": "Por qué existe Host-to-Host",
+        "heading": "Lo bueno no se busca.",
+        "heading_accent": "Se reconoce.",
+        "subtext": "<p>Nueve años recibiendo huéspedes me enseñaron a distinguirlo de un vistazo. Esta tienda es, simplemente, lo que pasó la prueba.</p>",
+        "byline_name": "Mafe",
+        "byline_role": "Superhost · 4 Airbnb · Medellín",
+        "image_caption": "Preparando una propiedad antes del check-in"
+      }
+    },
+    {
+      "name": "Editorial · Reglas",
+      "settings": {
+        "variant": "rules",
+        "kicker": "Cómo entra un producto",
+        "heading": "Tres reglas. <em>Cero excepciones.</em>"
+      },
+      "blocks": [
+        { "type": "rule", "settings": { "title": "Probado en mis Airbnb", "body": "Nada entra al catálogo sin vivir antes en una de mis propiedades." } },
+        { "type": "rule", "settings": { "title": "Calidad hotelera", "body": "Materiales que resisten la rotación sin verse gastados." } },
+        { "type": "rule", "settings": { "title": "Disponible en Medellín", "body": "Sin importaciones, sin impuestos, sin esperas." } }
+      ]
+    },
+    {
+      "name": "Editorial · Notas",
+      "settings": {
+        "variant": "insights",
+        "kicker": "Notas de anfitriona",
+        "heading": "Ya hice la <em>investigación</em> por ti.",
+        "subtext": "<p>Lo que aprendí tras cientos de estadías — para que compres mejor desde la primera vez.</p>",
+        "link_label": "Todas las notas"
+      },
+      "blocks": [
+        { "type": "insight", "settings": { "tag_label": "Nota de anfitriona", "tint": "peri", "title": "Por qué dejé de comprar vidrio frágil", "body": "Cada copa rota es un mensaje a medianoche y una reseña en riesgo. Cambié a piezas que resisten la rotación constante.", "link_label": "Leer y comprar" } },
+        { "type": "insight", "settings": { "tag_label": "Lo que los huéspedes notan", "tint": "olive", "title": "El único detalle que todos comentan", "body": "No es el sofá ni el televisor. Es el aroma al entrar y una mesa puesta con intención. Cuesta poco, vale mucho.", "link_label": "Leer y comprar" } },
+        { "type": "insight", "settings": { "tag_label": "Comprar bien", "tint": "taupe", "title": "Barato sale caro: la prueba de los cubiertos", "body": "Los cubiertos económicos se oxidan en semanas de lavavajillas. Te muestro cuáles sobreviven y por qué.", "link_label": "Leer y comprar" } }
+      ]
+    },
+    {
+      "name": "Editorial · Próximamente",
+      "settings": {
+        "variant": "future",
+        "kicker": "Lo que viene",
+        "heading": "La curaduría apenas empieza.",
+        "subtext": "<p>Nuevas colecciones, pensadas alrededor de cada momento del huésped.</p>"
+      },
+      "blocks": [
+        { "type": "future", "settings": { "badge_label": "Pronto", "title": "Estación de café", "description": "El ritual que arranca la mañana del huésped." } },
+        { "type": "future", "settings": { "badge_label": "Pronto", "title": "Kit de bienvenida", "description": "El primer “wow” apenas cruzan la puerta." } },
+        { "type": "future", "settings": { "badge_label": "Pronto", "title": "Dormitorios", "description": "Ropa de cama que se siente de hotel." } },
+        { "type": "future", "settings": { "badge_label": "Pronto", "title": "Baño premium", "description": "Amenidades que elevan la reseña." } },
+        { "type": "future", "settings": { "badge_label": "Pronto", "title": "Experiencia huésped", "description": "Bundles listos para una estadía 5 estrellas." } }
+      ]
+    }
+  ]
+}
+{% endschema %}

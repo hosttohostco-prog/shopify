@@ -1,0 +1,210 @@
+{%- comment -%}
+  HostToHost — Product Showcase (Phase 3B · "La selección de Mafe")
+  Bespoke dark editorial rail of curated picks (replaces legacy `favorite_product`).
+  Each pick is a block holding a Shopify PRODUCT REFERENCE — real product data
+  (image, title, price, PDP link) is pulled live; rank is auto from block order.
+  DISPLAY-ONLY: links to the PDP, NO quick-add / cart / commerce logic (Phase 3B
+  locked decision). An optional per-pick category override and host note are the
+  only editorial fields. NO metafields, NO metaobjects. Visual lock:
+  ../Home Page/sections.jsx Picks + styles.css .picks. Styling lives in
+  assets/brand.css (.picks / .pick* + reused .shead/.kicker/.display/.lead/.btn);
+  this file carries only the Dawn per-section padding idiom.
+{%- endcomment -%}
+
+{%- style -%}
+  .section-{{ section.id }}-padding {
+    padding-top: {{ section.settings.padding_top | times: 0.7 | round: 0 }}px;
+    padding-bottom: {{ section.settings.padding_bottom | times: 0.7 | round: 0 }}px;
+  }
+  @media screen and (min-width: 750px) {
+    .section-{{ section.id }}-padding {
+      padding-top: {{ section.settings.padding_top }}px;
+      padding-bottom: {{ section.settings.padding_bottom }}px;
+    }
+  }
+{%- endstyle -%}
+
+{%- liquid
+  assign reveal = ''
+  if settings.animations_reveal_on_scroll
+    assign reveal = ' scroll-trigger animate--slide-in'
+  endif
+-%}
+
+<div class="picks section-{{ section.id }}-padding">
+  <div class="hth-wrap">
+    <div class="shead{{ reveal }}">
+      <div class="shead-l">
+        {%- if section.settings.kicker != blank -%}<p class="kicker">{{ section.settings.kicker }}</p>{%- endif -%}
+        {%- if section.settings.heading != blank -%}<h2 class="display h-1">{{ section.settings.heading }}</h2>{%- endif -%}
+        {%- if section.settings.subtext != blank -%}<div class="lead shead-sub rte">{{ section.settings.subtext }}</div>{%- endif -%}
+      </div>
+    </div>
+
+    {%- if section.blocks.size > 0 -%}
+      <div class="picks-rail">
+        {%- for block in section.blocks -%}
+          {%- liquid
+            assign p = block.settings.product
+
+            # Title / category / price resolve to the real product when assigned,
+            # otherwise to the block's placeholder fields so the curated text layer
+            # always renders (placeholder media backgrounds aside).
+            assign pick_title = block.settings.title
+            if p != blank and p.title != blank
+              assign pick_title = p.title
+            endif
+
+            assign pick_cat = block.settings.category
+            if pick_cat == blank and p != blank
+              assign pick_cat = p.type
+            endif
+
+            assign pick_url = ''
+            if p != blank
+              assign pick_url = p.url
+            endif
+          -%}
+          {%- capture pick_media_inner -%}
+            <span class="pick-rank">{{ forloop.index }}</span>
+            {%- if p != blank and p.featured_image -%}
+              {{ p.featured_image | image_url: width: 720 | image_tag: loading: 'lazy', sizes: '(min-width: 980px) 22vw, (min-width: 520px) 45vw, 90vw', widths: '320, 480, 720', class: 'pick-img', alt: p.featured_image.alt | default: pick_title | escape }}
+            {%- else -%}
+              {%- if pick_title != blank -%}<span class="card-watermark">{{ pick_title | truncatewords: 2, '' }}</span>{%- endif -%}
+              <span class="pick-ph">Foto</span>
+            {%- endif -%}
+          {%- endcapture -%}
+          <article class="pick{{ reveal }}" {{ block.shopify_attributes }}>
+            {%- if pick_url != blank -%}
+              <a class="pick-media t-{{ block.settings.tint }}" href="{{ pick_url }}" aria-label="{{ pick_title | escape }}">{{ pick_media_inner }}</a>
+            {%- else -%}
+              <div class="pick-media t-{{ block.settings.tint }}">{{ pick_media_inner }}</div>
+            {%- endif -%}
+            <div class="pick-body">
+              {%- if pick_cat != blank -%}<span class="pick-cat">{{ pick_cat }}</span>{%- endif -%}
+              {%- if pick_title != blank -%}
+                <h3 class="pick-title">
+                  {%- if pick_url != blank -%}<a href="{{ pick_url }}">{{ pick_title }}</a>{%- else -%}{{ pick_title }}{%- endif -%}
+                </h3>
+              {%- endif -%}
+              {%- if block.settings.host_note != blank -%}<p class="pick-host">&ldquo;{{ block.settings.host_note }}&rdquo;</p>{%- endif -%}
+              {%- if p != blank -%}
+                <div class="pick-price">{{ p.price | money }}</div>
+              {%- elsif block.settings.price != blank -%}
+                <div class="pick-price">{{ block.settings.price }}</div>
+              {%- endif -%}
+            </div>
+          </article>
+        {%- endfor -%}
+      </div>
+    {%- endif -%}
+
+    {%- if section.settings.cta_label != blank -%}
+      <div class="picks-cta{{ reveal }}">
+        <a class="btn btn--coral" href="{{ section.settings.cta_link | default: '#' }}">{{ section.settings.cta_label }}<span class="arr" aria-hidden="true">&rarr;</span></a>
+      </div>
+    {%- endif -%}
+  </div>
+</div>
+
+{% schema %}
+{
+  "name": "Selección de productos",
+  "tag": "section",
+  "class": "section",
+  "max_blocks": 8,
+  "settings": [
+    { "type": "header", "content": "Encabezado" },
+    { "type": "text", "id": "kicker", "label": "Etiqueta superior", "default": "La selección de Mafe" },
+    {
+      "type": "inline_richtext",
+      "id": "heading",
+      "label": "Título",
+      "info": "Usa cursiva (<em>) para resaltar una frase en coral.",
+      "default": "Si amoblara un Airbnb mañana, <em>empezaría por aquí.</em>"
+    },
+    {
+      "type": "richtext",
+      "id": "subtext",
+      "label": "Texto de apoyo",
+      "default": "<p>Mis favoritos del momento — los que de verdad volvería a comprar.</p>"
+    },
+    { "type": "header", "content": "Llamada a la acción" },
+    { "type": "text", "id": "cta_label", "label": "Botón — texto", "default": "Ver la selección completa" },
+    { "type": "url", "id": "cta_link", "label": "Botón — destino" },
+    { "type": "header", "content": "Espaciado" },
+    {
+      "type": "range",
+      "id": "padding_top",
+      "min": 0,
+      "max": 180,
+      "step": 4,
+      "unit": "px",
+      "label": "Espacio superior",
+      "default": 120
+    },
+    {
+      "type": "range",
+      "id": "padding_bottom",
+      "min": 0,
+      "max": 180,
+      "step": 4,
+      "unit": "px",
+      "label": "Espacio inferior",
+      "default": 120
+    }
+  ],
+  "blocks": [
+    {
+      "type": "pick",
+      "name": "Pieza",
+      "settings": [
+        { "type": "product", "id": "product", "label": "Producto" },
+        {
+          "type": "text",
+          "id": "category",
+          "label": "Categoría",
+          "info": "Etiqueta sobre el título. Con un producto asignado y este campo vacío, usa el tipo del producto."
+        },
+        {
+          "type": "text",
+          "id": "title",
+          "label": "Título (marcador)",
+          "info": "Se muestra hasta que asignes un producto."
+        },
+        { "type": "text", "id": "host_note", "label": "Nota de Mafe", "default": "Aguantan cientos de estadías." },
+        {
+          "type": "text",
+          "id": "price",
+          "label": "Precio (marcador)",
+          "info": "P. ej. «120.000 COP». Se muestra hasta que asignes un producto."
+        },
+        {
+          "type": "select",
+          "id": "tint",
+          "label": "Color de respaldo",
+          "info": "Se ve solo si el producto no tiene foto.",
+          "options": [
+            { "value": "peri", "label": "Periwinkle" },
+            { "value": "gray", "label": "Gris cálido" },
+            { "value": "cream", "label": "Crema" },
+            { "value": "coral", "label": "Coral" }
+          ],
+          "default": "peri"
+        }
+      ]
+    }
+  ],
+  "presets": [
+    {
+      "name": "Selección de productos",
+      "blocks": [
+        { "type": "pick", "settings": { "category": "Cristalería", "title": "Copas de vino", "host_note": "Aguantan cientos de estadías.", "price": "120.000 COP", "tint": "peri" } },
+        { "type": "pick", "settings": { "category": "Parrilla", "title": "Utensilios BBQ", "host_note": "Para el balcón que vende la reserva.", "price": "145.000 COP", "tint": "gray" } },
+        { "type": "pick", "settings": { "category": "Ambiente", "title": "Velas aromáticas", "host_note": "El primer gesto del check-in.", "price": "65.000 COP", "tint": "cream" } },
+        { "type": "pick", "settings": { "category": "Baño", "title": "Toallas desmaquillantes", "host_note": "Cero manchas, cero quejas.", "price": "48.000 COP", "tint": "coral" } }
+      ]
+    }
+  ]
+}
+{% endschema %}
