@@ -27,6 +27,13 @@
               <div class="cat-note-avatar">
                 {%- if block.settings.avatar != blank -%}
                   {{ block.settings.avatar | image_url: width: 200 | image_tag: loading: 'lazy', alt: '' }}
+                {%- else -%}
+                  <svg class="cat-note-avatar-icon" viewBox="0 0 36 36" fill="none" xmlns="http://www.w3.org/2000/svg" aria-hidden="true">
+                    <circle cx="13" cy="11" r="4.5" fill="white" fill-opacity="0.92"/>
+                    <path d="M4 27c0-4.418 4.03-8 9-8s9 3.582 9 8" stroke="white" stroke-opacity="0.92" stroke-width="2.2" stroke-linecap="round"/>
+                    <circle cx="25" cy="12" r="3.5" fill="white" fill-opacity="0.72"/>
+                    <path d="M22 27c0-3.314 2.686-6 6-6" stroke="white" stroke-opacity="0.72" stroke-width="2.2" stroke-linecap="round"/>
+                  </svg>
                 {%- endif -%}
               </div>
             </div>
