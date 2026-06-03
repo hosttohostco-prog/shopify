@@ -3,18 +3,18 @@
     "hero": {
       "type": "hero",
       "settings": {
-        "scrim": "light",
-        "text_color": "dark",
-        "eyebrow": "Curado por una Superhost en Medellín",
-        "heading": "Productos para tu <em>Airbnb</em>, curados por una Superhost.",
-        "lead": "<p>Copas, cubiertos, utensilios y detalles que probé en mis propias propiedades. Calidad hotelera, criterio de anfitriona.</p>",
-        "button_label": "Ver la tienda",
+        "scrim": "dark",
+        "text_color": "light",
+        "eyebrow": "Curado por una Superhost · Medellín",
+        "heading": "Todo para tu <em>Airbnb</em>.",
+        "lead": "<p>Las piezas que ya probé en mis propias propiedades.</p>",
+        "button_label": "Ver la colección",
         "button_link": "shopify://collections/all",
-        "button_secondary_label": "Hablar por WhatsApp",
+        "button_secondary_label": "Conoce la selección",
         "button_secondary_link": "",
-        "photo_tag": "Foto: el kit en una cocina real",
-        "padding_top": 96,
-        "padding_bottom": 96
+        "photo_tag": "",
+        "padding_top": 0,
+        "padding_bottom": 80
       }
     },
     "manifesto": {
@@ -30,16 +30,19 @@
     "featured_collection": {
       "type": "featured-collection",
       "settings": {
-        "title": "Piezas para <em>empezar</em>.",
+        "kicker": "Piezas para empezar",
+        "title": "Las que compro <em>una y otra vez</em>.",
+        "header_link_label": "Ver toda la tienda",
+        "header_link_url": "",
         "heading_size": "h1",
-        "description": "<p>El kit base — lo que uso en cada cocina.</p>",
-        "show_description": false,
+        "description": "<p>El kit base — lo que termina en cada una de mis cocinas. Probadas, no surtidas.</p>",
+        "show_description": true,
         "collection": "kit-base",
         "products_to_show": 3,
         "columns_desktop": 3,
         "enable_desktop_slider": false,
         "color_scheme": "scheme-1",
-        "show_view_all": true,
+        "show_view_all": false,
         "view_all_style": "outline",
         "swipe_on_mobile": false,
         "image_ratio": "square",
@@ -117,13 +120,16 @@
     "newsletter": {
       "type": "newsletter-cartas",
       "settings": {
-        "background": "sage",
-        "eyebrow": "Cartas de anfitriona",
-        "heading": "Una idea útil para anfitriones, <em>cada semana</em>.",
-        "placeholder": "tu@correo.com",
-        "button_label": "Suscribirme",
-        "note": "Sin spam, prometido.",
-        "success_text": "¡Listo! Te escribiré pronto.",
+        "background": "cream",
+        "eyebrow": "Antes de amoblar",
+        "heading": "La lista que me hubiera <em>ahorrado meses</em>.",
+        "body": "<p>Recibe mi checklist de anfitriona y entérate primero de cada colección nueva. Nada de spam — solo lo que de verdad uso.</p>",
+        "placeholder": "tucorreo@ejemplo.com",
+        "button_label": "Recibir",
+        "note": "Checklist gratis · cancela cuando quieras",
+        "success_text": "Gracias — revisa tu correo.",
+        "show_whatsapp": true,
+        "whatsapp_label": "Hablar por WhatsApp",
         "padding_top": 88,
         "padding_bottom": 88
       }
@@ -156,7 +162,11 @@
         "ambiente"
       ],
       "settings": {
-        "title": "Cada rincón de tu <em>Airbnb</em>.",
+        "kicker": "Por habitación",
+        "title": "Tres espacios, <em>una sola intención</em>.",
+        "header_link_label": "Ver todo",
+        "header_link_url": "",
+        "layout": "mosaic",
         "heading_size": "h1",
         "image_ratio": "square",
         "columns_desktop": 3,

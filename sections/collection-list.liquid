@@ -22,18 +22,53 @@
   if section.settings.swipe_on_mobile and section.blocks.size > columns_mobile_int
     assign show_mobile_slider = true
   endif
+
+  comment
+    Approved room mosaic (visual lock: styles.css .rooms-grid) — the asymmetric
+    layout is tuned for exactly 3 rooms (first room large, spans 2 rows). With
+    any other block count it falls back to Dawn's uniform grid, so the section
+    stays merchant-safe and scalable.
+  endcomment
+  assign use_mosaic = false
+  if section.settings.layout == 'mosaic' and section.blocks.size == 3
+    assign use_mosaic = true
+  endif
+
+  assign has_heading = false
+  if section.settings.title != blank or section.settings.kicker != blank or section.settings.header_link_label != blank
+    assign has_heading = true
+  endif
 -%}
 
 <div class="color-{{ section.settings.color_scheme }} gradient">
-  <div class="collection-list-wrapper page-width isolate{% if show_mobile_slider %} page-width-desktop{% endif %}{% if section.settings.title == blank %} no-heading{% endif %}{% if section.settings.show_view_all == false or section.blocks.size > collections.size %} no-mobile-link{% endif %} section-{{ section.id }}-padding">
-    {%- unless section.settings.title == blank -%}
+  <div class="collection-list-wrapper page-width isolate{% if show_mobile_slider %} page-width-desktop{% endif %}{% unless has_heading %} no-heading{% endunless %}{% if section.settings.show_view_all == false or section.blocks.size > collections.size %} no-mobile-link{% endif %} section-{{ section.id }}-padding">
+    {%- if has_heading -%}
       <div class="title-wrapper-with-link{% if show_mobile_slider %} title-wrapper--self-padded-tablet-down{% else %} title-wrapper--self-padded-mobile{% endif %} title-wrapper--no-top-margin">
-        <h2
-          id="SectionHeading-{{ section.id }}"
-          class="collection-list-title inline-richtext {{ section.settings.heading_size }}{% if settings.animations_reveal_on_scroll %} scroll-trigger animate--slide-in{% endif %}"
-        >
-          {{ section.settings.title }}
-        </h2>
+        <div class="shead">
+          <div class="shead-l">
+            {%- if section.settings.kicker != blank -%}
+              <p class="kicker{% if settings.animations_reveal_on_scroll %} scroll-trigger animate--slide-in{% endif %}">{{ section.settings.kicker }}</p>
+            {%- endif -%}
+            {%- if section.settings.title != blank -%}
+              <h2
+                id="SectionHeading-{{ section.id }}"
+                class="collection-list-title inline-richtext {{ section.settings.heading_size }}{% if settings.animations_reveal_on_scroll %} scroll-trigger animate--slide-in{% endif %}"
+              >
+                {{ section.settings.title }}
+              </h2>
+            {%- endif -%}
+          </div>
+
+          {%- if section.settings.header_link_label != blank -%}
+            <a
+              class="tlink{% if settings.animations_reveal_on_scroll %} scroll-trigger animate--slide-in{% endif %}"
+              href="{{ section.settings.header_link_url | default: routes.collections_url }}"
+            >
+              {{- section.settings.header_link_label -}}
+              <span class="arr" aria-hidden="true">&rarr;</span>
+            </a>
+          {%- endif -%}
+        </div>
 
         {%- if section.settings.show_view_all and show_mobile_slider -%}
           <a
@@ -46,11 +81,11 @@
           </a>
         {%- endif -%}
       </div>
-    {%- endunless -%}
+    {%- endif -%}
 
     <slider-component class="slider-mobile-gutter{% if settings.animations_reveal_on_scroll %} scroll-trigger animate--slide-in{% endif %}">
       <ul
-        class="collection-list contains-card contains-card--collection{% if settings.card_style == 'standard' %} contains-card--standard{% endif %} grid grid--{{ section.settings.columns_desktop }}-col-desktop grid--{{ section.settings.columns_mobile }}-col-tablet-down{% if section.settings.swipe_on_mobile %} slider slider--tablet grid--peek{% endif %} collection-list--{{ section.blocks.size }}-items"
+        class="collection-list contains-card contains-card--collection{% if settings.card_style == 'standard' %} contains-card--standard{% endif %} grid grid--{{ section.settings.columns_desktop }}-col-desktop grid--{{ section.settings.columns_mobile }}-col-tablet-down{% if section.settings.swipe_on_mobile %} slider slider--tablet grid--peek{% endif %}{% if use_mosaic %} collection-list--mosaic{% endif %} collection-list--{{ section.blocks.size }}-items"
         id="Slider-{{ section.id }}"
         role="list"
       >
@@ -144,10 +179,41 @@
   },
   "settings": [
     {
+      "type": "text",
+      "id": "kicker",
+      "label": "Antetítulo",
+      "info": "Etiqueta corta en mayúsculas sobre el título (p. ej. «Por habitación»).",
+      "default": "Por habitación"
+    },
+    {
       "type": "inline_richtext",
       "id": "title",
       "default": "t:sections.collection-list.settings.title.default",
       "label": "t:sections.collection-list.settings.title.label"
+    },
+    {
+      "type": "text",
+      "id": "header_link_label",
+      "label": "Enlace del encabezado — texto",
+      "info": "Aparece a la derecha del título. Déjalo vacío para ocultarlo.",
+      "default": "Ver todo"
+    },
+    {
+      "type": "url",
+      "id": "header_link_url",
+      "label": "Enlace del encabezado — destino",
+      "info": "Si se deja vacío, enlaza a todas las colecciones."
+    },
+    {
+      "type": "select",
+      "id": "layout",
+      "label": "Diseño",
+      "info": "El mosaico editorial (primera colección grande) requiere exactamente 3 colecciones; de lo contrario usa la cuadrícula uniforme.",
+      "options": [
+        { "value": "mosaic", "label": "Mosaico editorial" },
+        { "value": "uniform", "label": "Cuadrícula uniforme" }
+      ],
+      "default": "mosaic"
     },
     {
       "type": "select",

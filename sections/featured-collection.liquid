@@ -73,23 +73,40 @@
     data-id="{{ section.id }}"
   >
     <div class="collection__title title-wrapper title-wrapper--no-top-margin page-width{% if show_mobile_slider %} title-wrapper--self-padded-tablet-down{% endif %}{% if show_desktop_slider %} collection__title--desktop-slider{% endif %}">
-      {%- if section.settings.title != blank -%}
-        <h2 class="title inline-richtext {{ section.settings.heading_size }}{% if settings.animations_reveal_on_scroll %} scroll-trigger animate--slide-in{% endif %}">
-          {{ section.settings.title }}
-        </h2>
-      {%- endif -%}
-      {%- if section.settings.description != blank
-        or section.settings.show_description
-        and section.settings.collection.description != empty
-      -%}
-        <div class="collection__description {{ section.settings.description_style }} rte{% if settings.animations_reveal_on_scroll %} scroll-trigger animate--slide-in{% endif %}">
-          {%- if section.settings.show_description -%}
-            {{ section.settings.collection.description }}
-          {%- else -%}
-            {{ section.settings.description -}}
-          {%- endif %}
+      {%- comment -%} Approved section header: kicker + title + sub on the left, "ver toda la tienda" text link on the right (visual lock: styles.css .shead). {%- endcomment -%}
+      <div class="shead">
+        <div class="shead-l">
+          {%- if section.settings.kicker != blank -%}
+            <p class="kicker{% if settings.animations_reveal_on_scroll %} scroll-trigger animate--slide-in{% endif %}">{{ section.settings.kicker }}</p>
+          {%- endif -%}
+          {%- if section.settings.title != blank -%}
+            <h2 class="title inline-richtext {{ section.settings.heading_size }}{% if settings.animations_reveal_on_scroll %} scroll-trigger animate--slide-in{% endif %}">
+              {{ section.settings.title }}
+            </h2>
+          {%- endif -%}
+          {%- if section.settings.description != blank
+            or section.settings.show_description
+            and section.settings.collection.description != empty
+          -%}
+            <div class="collection__description shead-sub {{ section.settings.description_style }} rte{% if settings.animations_reveal_on_scroll %} scroll-trigger animate--slide-in{% endif %}">
+              {%- if section.settings.show_description -%}
+                {{ section.settings.collection.description }}
+              {%- else -%}
+                {{ section.settings.description -}}
+              {%- endif %}
+            </div>
+          {%- endif -%}
         </div>
-      {%- endif -%}
+        {%- if section.settings.header_link_label != blank -%}
+          <a
+            class="tlink{% if settings.animations_reveal_on_scroll %} scroll-trigger animate--slide-in{% endif %}"
+            href="{{ section.settings.header_link_url | default: section.settings.collection.url | default: routes.all_products_collection_url }}"
+          >
+            {{- section.settings.header_link_label -}}
+            <span class="arr" aria-hidden="true">&rarr;</span>
+          </a>
+        {%- endif -%}
+      </div>
     </div>
 
     <slider-component class="slider-mobile-gutter{% if section.settings.full_width %} slider-component-full-width{% endif %}{% if show_mobile_slider == false %} page-width{% endif %}{% if show_desktop_slider == false and section.settings.full_width == false %} page-width-desktop{% endif %}{% if show_desktop_slider %} slider-component-desktop{% endif %}{% if settings.animations_reveal_on_scroll %} scroll-trigger animate--slide-in{% endif %}">
@@ -240,12 +257,32 @@
     {
       "type": "header",
       "content": "t:sections.featured-collection.settings.header_text.content"
-    },   
+    },
+    {
+      "type": "text",
+      "id": "kicker",
+      "label": "Antetítulo",
+      "info": "Etiqueta corta en mayúsculas sobre el título (p. ej. «Piezas para empezar»).",
+      "default": "Piezas para empezar"
+    },
     {
       "type": "inline_richtext",
       "id": "title",
       "default": "t:sections.featured-collection.settings.title.default",
       "label": "t:sections.featured-collection.settings.title.label"
+    },
+    {
+      "type": "text",
+      "id": "header_link_label",
+      "label": "Enlace del encabezado — texto",
+      "info": "Aparece a la derecha del título. Déjalo vacío para ocultarlo.",
+      "default": "Ver toda la tienda"
+    },
+    {
+      "type": "url",
+      "id": "header_link_url",
+      "label": "Enlace del encabezado — destino",
+      "info": "Si se deja vacío, usa la colección de esta sección (o todos los productos)."
     },
     {
       "type": "select",

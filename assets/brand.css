@@ -787,6 +787,120 @@ details[open] > .header__menu-item {
   color: var(--cream);
 }
 
+/* ============================================================
+   PHASE 3A — Homepage section headers + room mosaic (approved)
+   Shared utilities consumed by the refactored featured-collection +
+   collection-list section headers (and reused by Phase 3B's Picks/Insights/
+   Future). Visual lock: ../Home Page/styles.css .shead / .tlink / .rooms-grid.
+   Per the D4 convention these Dawn-section overrides live here, not in Dawn
+   component CSS. Sizes use px clamps (rem-base-independent on the 62.5% base).
+   ============================================================ */
+
+/* -- Section header: kicker + title + sub on the left, text link on the right -- */
+.shead {
+  display: flex;
+  align-items: flex-end;
+  justify-content: space-between;
+  gap: 40px;
+  text-align: left;
+  margin-bottom: clamp(36px, 5vw, 64px);
+}
+.shead-l { max-width: 60ch; }
+.shead .kicker { margin-bottom: 20px; }
+@media screen and (max-width: 760px) {
+  .shead { flex-direction: column; align-items: flex-start; gap: 22px; }
+}
+
+/* Approved display title inside section headers (steers Dawn's centered title) */
+.shead .title,
+.shead .collection-list-title {
+  font-family: var(--font-display);
+  font-weight: 300;
+  line-height: 0.98;
+  letter-spacing: -0.035em;
+  text-align: left;
+  text-wrap: balance;
+  margin: 0;
+  max-width: none;
+}
+.shead .title { font-size: clamp(38px, 5.4vw, 72px); }
+.shead .collection-list-title { font-size: clamp(30px, 3.7vw, 52px); max-width: 14ch; }
+
+/* Supporting line under the title (approved .shead-sub / .lead) */
+.shead .shead-sub {
+  margin: 18px 0 0;
+  max-width: 52ch;
+  font-family: var(--font-display);
+  font-size: clamp(16px, 1.2vw, 18px);
+  line-height: 1.6;
+  color: var(--ink-soft);
+  text-wrap: pretty;
+}
+
+/* Text link with animated underline (approved .tlink) */
+.tlink {
+  position: relative;
+  display: inline-flex;
+  align-items: center;
+  gap: 9px;
+  flex: none;
+  font-family: var(--font-label);
+  font-weight: 600;
+  text-transform: uppercase;
+  letter-spacing: 0.13em;
+  font-size: 12.5px;
+  color: var(--ink);
+  padding-bottom: 3px;
+  text-decoration: none;
+}
+.tlink::after {
+  content: "";
+  position: absolute;
+  left: 0;
+  bottom: 0;
+  height: 1.5px;
+  width: 100%;
+  background: currentColor;
+  transform: scaleX(0);
+  transform-origin: left;
+  transition: transform 0.4s var(--ease);
+}
+.tlink:hover::after { transform: scaleX(1); }
+.tlink .arr { display: inline-flex; transition: transform 0.35s var(--ease); }
+.tlink:hover .arr { transform: translateX(4px); }
+
+/* -- Room mosaic: map Dawn's collection-list grid onto the approved .rooms-grid.
+   Desktop only; gated in Liquid to exactly 3 rooms (else uniform fallback). The
+   collection cards already carry the Phase-2 room wash + overlaid cream meta. -- */
+@media screen and (min-width: 990px) {
+  .collection-list.collection-list--mosaic {
+    grid-template-columns: 1.32fr 1fr;
+    grid-template-rows: 1fr 1fr;
+    gap: clamp(14px, 1.5vw, 22px);
+    height: clamp(540px, 56vw, 700px);
+  }
+  .collection-list--mosaic .collection-list__item:first-child { grid-row: 1 / span 2; }
+
+  /* Stretch each card to fill its grid cell instead of using the ratio box */
+  .collection-list--mosaic .collection-list__item { display: flex; }
+  .collection-list--mosaic .collection-card-wrapper,
+  .collection-list--mosaic .collection-card-wrapper .card,
+  .collection-list--mosaic .collection-card-wrapper .card__inner { width: 100%; height: 100%; }
+  .collection-list--mosaic .collection-card-wrapper .card__inner.ratio { padding-bottom: 0; }
+  .collection-list--mosaic .collection-card-wrapper .card__inner.ratio::before { content: none; }
+  .collection-list--mosaic .collection-card-wrapper .card__media {
+    position: absolute;
+    inset: 0;
+    height: 100%;
+    margin: 0;
+  }
+
+  /* Dominant first room gets the larger approved title */
+  .collection-list--mosaic .collection-list__item:first-child .card__heading a {
+    font-size: clamp(3.6rem, 3.6vw, 5.8rem);
+  }
+}
+
 /* ---------- Variant picker (approved) ----------
    Phase 2: align variant pills + swatches to the approved system — pill radius,
    periwinkle selected state, hairline rest border. Behavior (Dawn variant JS) is

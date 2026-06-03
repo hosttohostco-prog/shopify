@@ -1,18 +1,16 @@
 {%- comment -%}
-  HostToHost — Newsletter "Cartas de anfitriona" (bespoke)
-  Phase 2 · closing section. Two-column editorial split per the design handoff
-  (design-handoff/project/index.html, the "NEWSLETTER" section). Left: DM Mono
-  eyebrow + Fraunces title (italic word in coral via inline_richtext <em>).
-  Right: email signup form + a quiet reassurance note.
+  HostToHost — Newsletter "Cartas de anfitriona" (Phase 3A · approved Signup)
+  Refactor of the two-column editorial newsletter into the approved Signup card
+  (visual lock: ../Home Page/sections.jsx Signup + styles.css .signup): a white
+  rounded panel on the section canvas, periwinkle radial deco, kicker + title +
+  lead on the left, and a form column on the right — a single pill field
+  (input + "Recibir"), an uppercase reassurance note, an "o" divider, and an
+  optional WhatsApp outline button driven by settings.whatsapp_link.
 
-  The signup reuses Dawn's {% form 'customer' %} machinery (the same form Dawn's
-  stock newsletter posts to, tagged "newsletter") so it really subscribes the
-  customer and surfaces Dawn's success/error states — no fighting the platform.
-  Caveat script dropped per the Variant-D decisions; the note is quiet DM Sans.
-
-  Conventions match hero.liquid / manifesto.liquid / favorite-product.liquid:
-  self-contained {% stylesheet %} on brand.css tokens, per-section padding via
-  {% style %}+id. Prototype rems (16px base) ×1.6 for Dawn's 10px rem base.
+  The signup STILL reuses Dawn's {% form 'customer' %} machinery (tagged
+  "newsletter") so it really subscribes the customer and surfaces Dawn's
+  success/error states — no fighting the platform. Tokens are the approved set;
+  sizes use px (rem-base-independent on Dawn's 62.5% base).
 {%- endcomment -%}
 
 {%- style -%}
@@ -30,196 +28,312 @@
 
 <div class="brand-news brand-news--{{ section.settings.background }} section-{{ section.id }}-padding">
   <div class="brand-news__wrap">
-    <div class="brand-news__copy">
-      {%- if section.settings.eyebrow != blank -%}
-        <span class="brand-news__eyebrow">{{ section.settings.eyebrow }}</span>
-      {%- endif -%}
-      {%- if section.settings.heading != blank -%}
-        <h2 class="brand-news__heading">{{ section.settings.heading }}</h2>
-      {%- endif -%}
-    </div>
+    <div class="brand-news__card">
+      <span class="brand-news__deco" aria-hidden="true"></span>
 
-    <div class="brand-news__form-col">
-      {%- assign news_form_id = 'newsletter-cartas-' | append: section.id -%}
-      {%- form 'customer', id: news_form_id, class: 'brand-news__form' -%}
-        <input type="hidden" name="contact[tags]" value="newsletter">
-
-        {%- if form.posted_successfully? -%}
-          <p class="brand-news__success" role="status" tabindex="-1">
-            {{ section.settings.success_text }}
-          </p>
-        {%- else -%}
-          <div class="brand-news__field">
-            <label class="visually-hidden" for="NewsletterCartas-{{ section.id }}">
-              {{ section.settings.placeholder }}
-            </label>
-            <input
-              id="NewsletterCartas-{{ section.id }}"
-              type="email"
-              name="contact[email]"
-              class="brand-news__input"
-              value="{{ form.email }}"
-              placeholder="{{ section.settings.placeholder }}"
-              aria-required="true"
-              autocorrect="off"
-              autocapitalize="off"
-              autocomplete="email"
-              {% if form.errors %}
-                autofocus
-                aria-invalid="true"
-                aria-describedby="NewsletterCartas-error-{{ section.id }}"
-              {% endif %}
-              required
-            >
-            <button type="submit" name="commit" class="brand-news__btn">
-              {{ section.settings.button_label }}
-            </button>
-          </div>
-
-          {%- if form.errors -%}
-            <small class="brand-news__error" id="NewsletterCartas-error-{{ section.id }}">
-              {{ form.errors.translated_fields.email | capitalize }}
-              {{ form.errors.messages.email }}
-            </small>
-          {%- elsif section.settings.note != blank -%}
-            <p class="brand-news__note">{{ section.settings.note }}</p>
-          {%- endif -%}
+      <div class="brand-news__copy">
+        {%- if section.settings.eyebrow != blank -%}
+          <p class="brand-news__kicker">{{ section.settings.eyebrow }}</p>
         {%- endif -%}
-      {%- endform -%}
+        {%- if section.settings.heading != blank -%}
+          <h2 class="brand-news__heading">{{ section.settings.heading }}</h2>
+        {%- endif -%}
+        {%- if section.settings.body != blank -%}
+          <div class="brand-news__lead">{{ section.settings.body }}</div>
+        {%- endif -%}
+      </div>
+
+      <div class="brand-news__form-col">
+        {%- assign news_form_id = 'newsletter-cartas-' | append: section.id -%}
+        {%- form 'customer', id: news_form_id, class: 'brand-news__form' -%}
+          <input type="hidden" name="contact[tags]" value="newsletter">
+
+          {%- if form.posted_successfully? -%}
+            <p class="brand-news__success" role="status" tabindex="-1">
+              {{ section.settings.success_text }}
+            </p>
+          {%- else -%}
+            <div class="brand-news__field">
+              <label class="visually-hidden" for="NewsletterCartas-{{ section.id }}">
+                {{ section.settings.placeholder }}
+              </label>
+              <input
+                id="NewsletterCartas-{{ section.id }}"
+                type="email"
+                name="contact[email]"
+                class="brand-news__input"
+                value="{{ form.email }}"
+                placeholder="{{ section.settings.placeholder }}"
+                aria-required="true"
+                autocorrect="off"
+                autocapitalize="off"
+                autocomplete="email"
+                {% if form.errors %}
+                  autofocus
+                  aria-invalid="true"
+                  aria-describedby="NewsletterCartas-error-{{ section.id }}"
+                {% endif %}
+                required
+              >
+              <button type="submit" name="commit" class="brand-news__btn">
+                {{ section.settings.button_label }}<span class="brand-news__arrow" aria-hidden="true">&rarr;</span>
+              </button>
+            </div>
+
+            {%- if form.errors -%}
+              <small class="brand-news__error" id="NewsletterCartas-error-{{ section.id }}">
+                {{ form.errors.translated_fields.email | capitalize }}
+                {{ form.errors.messages.email }}
+              </small>
+            {%- elsif section.settings.note != blank -%}
+              <p class="brand-news__note">{{ section.settings.note }}</p>
+            {%- endif -%}
+          {%- endif -%}
+        {%- endform -%}
+
+        {%- if settings.whatsapp_link != blank and section.settings.show_whatsapp -%}
+          <span class="brand-news__or">o</span>
+          <a
+            href="{{ settings.whatsapp_link }}"
+            target="_blank"
+            rel="noopener"
+            class="brand-news__wa"
+          >
+            <svg class="brand-news__wa-icon" viewBox="0 0 24 24" width="17" height="17" fill="currentColor" aria-hidden="true" focusable="false">
+              <path d="M12.04 2C6.58 2 2.13 6.45 2.13 11.91c0 1.75.46 3.45 1.32 4.95L2 22l5.25-1.38a9.9 9.9 0 0 0 4.79 1.22h.01c5.46 0 9.91-4.45 9.91-9.91 0-2.65-1.03-5.14-2.9-7.01A9.82 9.82 0 0 0 12.04 2Zm0 18.13h-.01a8.2 8.2 0 0 1-4.18-1.15l-.3-.18-3.11.82.83-3.04-.2-.31a8.21 8.21 0 0 1 12.74-10.2 8.15 8.15 0 0 1 2.41 5.81c0 4.54-3.69 8.45-8.18 8.45Zm4.49-6.16c-.25-.12-1.46-.72-1.68-.8-.23-.08-.39-.12-.56.12-.16.25-.64.8-.79.97-.14.16-.29.18-.54.06-.25-.12-1.04-.38-1.98-1.22-.73-.65-1.23-1.46-1.37-1.71-.14-.25-.02-.38.11-.5.11-.11.25-.29.37-.43.12-.14.16-.25.25-.41.08-.16.04-.31-.02-.43-.06-.12-.56-1.34-.76-1.84-.2-.48-.41-.42-.56-.42l-.48-.01c-.16 0-.43.06-.66.31-.23.25-.86.85-.86 2.07 0 1.22.89 2.4 1.01 2.56.12.16 1.75 2.67 4.23 3.74.59.26 1.05.41 1.41.52.59.19 1.13.16 1.56.1.48-.07 1.46-.6 1.67-1.18.21-.58.21-1.07.14-1.18-.06-.1-.22-.16-.47-.28Z"/>
+            </svg>
+            {{ section.settings.whatsapp_label }}
+          </a>
+        {%- endif -%}
+      </div>
     </div>
   </div>
 </div>
 
 {%- stylesheet -%}
   .brand-news--cream { background: var(--cream); }
-  .brand-news--paper { background: var(--paper); }
-  .brand-news--white { background: #fff; }
+  .brand-news--cream-deep { background: var(--cream-deep); }
+  .brand-news--white { background: var(--white); }
   .brand-news--sage { background: var(--sage-soft); }
-  .brand-news--ink { background: var(--ink); color: var(--cream); }
+  .brand-news--ink { background: var(--ink); }
 
   .brand-news__wrap {
-    max-width: var(--hth-maxw);
+    max-width: var(--maxw);
     margin-inline: auto;
-    padding-inline: var(--hth-gutter);
+    padding-inline: var(--gutter);
+  }
+
+  /* White card on the section canvas (approved .signup .wrap) */
+  .brand-news__card {
+    position: relative;
+    overflow: hidden;
+    background: var(--white);
+    border-radius: var(--radius-lg);
+    padding: clamp(36px, 5vw, 72px);
     display: grid;
     grid-template-columns: 1fr;
     gap: clamp(24px, 4vw, 48px);
     align-items: center;
   }
   @media screen and (min-width: 900px) {
-    .brand-news__wrap {
+    .brand-news__card {
       grid-template-columns: 1fr 1fr;
-      gap: clamp(32px, 5vw, 64px);
+      gap: clamp(28px, 4vw, 56px);
     }
   }
 
-  .brand-news__eyebrow {
-    display: block;
-    font-family: var(--mono);
-    font-size: 1.25rem;
-    letter-spacing: 0.14em;
-    text-transform: uppercase;
-    color: var(--sage);
+  .brand-news__deco {
+    position: absolute;
+    right: -60px;
+    top: -60px;
+    width: 280px;
+    height: 280px;
+    border-radius: 50%;
+    background: radial-gradient(closest-side, rgba(150, 161, 210, 0.22), transparent);
+    pointer-events: none;
   }
-  .brand-news--ink .brand-news__eyebrow { color: var(--peach); }
+
+  .brand-news__copy { position: relative; z-index: 1; }
+
+  .brand-news__kicker {
+    margin: 0;
+    display: inline-flex;
+    align-items: center;
+    gap: 12px;
+    font-family: var(--font-label);
+    font-size: 12.5px;
+    font-weight: 600;
+    letter-spacing: 0.24em;
+    text-transform: uppercase;
+    color: var(--coral-deep);
+  }
+  .brand-news__kicker::before {
+    content: "";
+    width: 26px;
+    height: 1.5px;
+    background: currentColor;
+    display: inline-block;
+    opacity: 0.6;
+  }
 
   .brand-news__heading {
-    margin: 1.4rem 0 0;
-    max-width: 16ch;
-    font-family: var(--serif);
-    font-weight: 500;
-    line-height: 1.12;
-    letter-spacing: -0.015em;
-    font-size: clamp(2.72rem, 3.2vw, 4rem);
+    margin: 18px 0 14px;
+    max-width: 18ch;
+    font-family: var(--font-display);
+    font-weight: 400;
+    line-height: 1.02;
+    letter-spacing: -0.028em;
+    font-size: clamp(30px, 3.8vw, 50px);
     text-wrap: balance;
-    color: inherit;
+    color: var(--ink);
   }
   .brand-news__heading em,
   .brand-news__heading i {
-    font-style: italic;
-    color: var(--coral);
+    font-style: normal;
+    font-weight: 500;
+    color: var(--coral-deep);
   }
 
+  .brand-news__lead {
+    margin: 0;
+    max-width: 46ch;
+    font-family: var(--font-display);
+    font-size: clamp(16px, 1.2vw, 18px);
+    line-height: 1.6;
+    color: var(--ink-soft);
+    text-wrap: pretty;
+  }
+  .brand-news__lead > :first-child { margin-top: 0; }
+  .brand-news__lead > :last-child { margin-bottom: 0; }
+
   .brand-news__form-col {
+    position: relative;
+    z-index: 1;
     display: flex;
     flex-direction: column;
     gap: 14px;
   }
 
+  /* Single pill holding the input + submit (approved .field) */
   .brand-news__field {
     display: flex;
     gap: 10px;
-    flex-wrap: wrap;
+    background: var(--cream);
+    border-radius: var(--radius-pill);
+    padding: 7px 7px 7px 22px;
+    border: 1.5px solid transparent;
+    transition: border-color 0.3s var(--ease);
   }
+  .brand-news__field:focus-within { border-color: var(--periwinkle); }
 
   .brand-news__input {
     flex: 1;
-    min-width: 200px;
-    font-family: var(--font-body-family);
-    font-size: 1.6rem;
-    padding: 0.95em 1.3em;
-    border: 1.5px solid var(--hairline);
-    border-radius: var(--hth-radius-pill);
-    background: #fff;
+    min-width: 0;
+    border: 0;
+    background: transparent;
+    outline: none;
+    font-family: var(--font-display);
+    font-size: 15px;
     color: var(--ink);
   }
-  .brand-news__input::placeholder { color: var(--ink-40); }
-  .brand-news__input:focus {
-    outline: none;
-    border-color: var(--coral);
-  }
+  .brand-news__input::placeholder { color: var(--ink-soft); }
 
-  /* Ink primary pill, matches the Step B default button */
+  /* Ink primary pill (approved .btn--primary) */
   .brand-news__btn {
     flex: 0 0 auto;
-    font-family: var(--font-body-family);
+    display: inline-flex;
+    align-items: center;
+    gap: 8px;
+    font-family: var(--font-label);
     font-weight: 600;
-    font-size: 1.5rem;
-    letter-spacing: 0.01em;
-    padding: 0.95em 1.9em;
-    border: 1.5px solid var(--ink);
-    border-radius: var(--hth-radius-pill);
+    font-size: 12.5px;
+    letter-spacing: 0.13em;
+    text-transform: uppercase;
+    padding: 14px 24px;
+    border: 0;
+    border-radius: var(--radius-pill);
     background: var(--ink);
     color: var(--cream);
     cursor: pointer;
-    transition: background 0.18s ease, color 0.18s ease, border-color 0.18s ease;
+    transition: background 0.2s var(--ease), transform 0.2s var(--ease);
   }
-  .brand-news__btn:hover {
-    background: transparent;
-    color: var(--ink);
-  }
-  .brand-news--ink .brand-news__btn {
-    border-color: var(--cream);
-    background: var(--cream);
-    color: var(--ink);
-  }
-  .brand-news--ink .brand-news__btn:hover {
-    background: transparent;
-    color: var(--cream);
-  }
+  .brand-news__btn:hover { background: var(--coral-deep); transform: translateY(-1px); }
+  .brand-news__arrow { display: inline-flex; transition: transform 0.3s var(--ease); }
+  .brand-news__btn:hover .brand-news__arrow { transform: translateX(3px); }
 
   .brand-news__note {
     margin: 0;
-    font-size: 1.4rem;
-    font-style: italic;
-    color: var(--ink-55);
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    font-family: var(--font-label);
+    text-transform: uppercase;
+    letter-spacing: 0.1em;
+    font-size: 10.5px;
+    font-weight: 600;
+    color: var(--ink-soft);
   }
-  .brand-news--ink .brand-news__note { color: var(--peach); }
 
   .brand-news__error {
     display: block;
-    font-size: 1.4rem;
+    font-size: 14px;
     color: #c0392b;
   }
 
   .brand-news__success {
     margin: 0;
-    font-family: var(--serif);
-    font-style: italic;
-    font-size: 2.1rem;
+    font-family: var(--font-hand);
+    font-weight: 600;
+    font-size: 21px;
     line-height: 1.2;
-    color: var(--coral);
+    color: var(--coral-deep);
   }
+
+  /* "o" divider (approved .signup-or) */
+  .brand-news__or {
+    display: flex;
+    align-items: center;
+    gap: 14px;
+    color: var(--ink-soft);
+    font-size: 13px;
+  }
+  .brand-news__or::before,
+  .brand-news__or::after {
+    content: "";
+    height: 1px;
+    flex: 1;
+    background: rgba(64, 62, 63, 0.14);
+  }
+
+  /* WhatsApp outline button (approved .btn--outline) */
+  .brand-news__wa {
+    align-self: flex-start;
+    display: inline-flex;
+    align-items: center;
+    gap: 9px;
+    padding: 13px 22px;
+    border: 1.5px solid var(--hairline);
+    border-radius: var(--radius-pill);
+    font-family: var(--font-label);
+    font-weight: 600;
+    font-size: 12.5px;
+    letter-spacing: 0.08em;
+    text-transform: uppercase;
+    color: var(--ink);
+    text-decoration: none;
+    transition: border-color 0.2s var(--ease), color 0.2s var(--ease);
+  }
+  .brand-news__wa:hover { border-color: var(--green-deep); color: var(--green-deep); }
+  .brand-news__wa-icon { flex: none; }
+
+  /* Ink section variant (card stays white; surrounding canvas is dark) */
+  .brand-news--ink .brand-news__card { background: var(--ink); }
+  .brand-news--ink .brand-news__heading { color: var(--cream); }
+  .brand-news--ink .brand-news__heading em,
+  .brand-news--ink .brand-news__heading i { color: var(--coral); }
+  .brand-news--ink .brand-news__lead { color: rgba(252, 243, 233, 0.82); }
+  .brand-news--ink .brand-news__wa { color: var(--cream); border-color: rgba(252, 243, 233, 0.3); }
+  .brand-news--ink .brand-news__wa:hover { color: var(--cream); border-color: var(--cream); }
 {%- endstylesheet -%}
 
 {% schema %}
@@ -231,28 +345,35 @@
     {
       "type": "select",
       "id": "background",
-      "label": "Fondo",
+      "label": "Fondo de la sección",
+      "info": "Color del lienzo detrás de la tarjeta blanca.",
       "options": [
-        { "value": "sage", "label": "Verde salvia" },
         { "value": "cream", "label": "Crema cálida" },
-        { "value": "paper", "label": "Crema (página)" },
+        { "value": "cream-deep", "label": "Crema profunda" },
+        { "value": "sage", "label": "Verde salvia" },
         { "value": "white", "label": "Blanco" },
         { "value": "ink", "label": "Tinta (oscuro)" }
       ],
-      "default": "sage"
+      "default": "cream"
     },
     {
       "type": "text",
       "id": "eyebrow",
       "label": "Antetítulo",
-      "default": "Cartas de anfitriona"
+      "default": "Antes de amoblar"
     },
     {
       "type": "inline_richtext",
       "id": "heading",
       "label": "Título",
       "info": "Usa cursiva para resaltar una palabra en coral.",
-      "default": "Una idea útil para anfitriones, <em>cada semana</em>."
+      "default": "La lista que me hubiera <em>ahorrado meses</em>."
+    },
+    {
+      "type": "richtext",
+      "id": "body",
+      "label": "Párrafo",
+      "default": "<p>Recibe mi checklist de anfitriona y entérate primero de cada colección nueva. Nada de spam — solo lo que de verdad uso.</p>"
     },
     {
       "type": "header",
@@ -262,25 +383,42 @@
       "type": "text",
       "id": "placeholder",
       "label": "Texto del campo de correo",
-      "default": "tu@correo.com"
+      "default": "tucorreo@ejemplo.com"
     },
     {
       "type": "text",
       "id": "button_label",
       "label": "Botón",
-      "default": "Suscribirme"
+      "default": "Recibir"
     },
     {
       "type": "text",
       "id": "note",
       "label": "Nota bajo el formulario",
-      "default": "Sin spam, prometido."
+      "default": "Checklist gratis · cancela cuando quieras"
     },
     {
       "type": "text",
       "id": "success_text",
       "label": "Mensaje de éxito",
-      "default": "¡Listo! Te escribiré pronto."
+      "default": "Gracias — revisa tu correo."
+    },
+    {
+      "type": "header",
+      "content": "WhatsApp"
+    },
+    {
+      "type": "checkbox",
+      "id": "show_whatsapp",
+      "label": "Mostrar botón de WhatsApp",
+      "info": "Usa el enlace global de WhatsApp (Configuración → Marca y contacto).",
+      "default": true
+    },
+    {
+      "type": "text",
+      "id": "whatsapp_label",
+      "label": "Botón de WhatsApp — texto",
+      "default": "Hablar por WhatsApp"
     },
     {
       "type": "header",
