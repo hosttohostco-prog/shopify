@@ -1,8 +1,18 @@
+/*
+ * ------------------------------------------------------------
+ * IMPORTANT: The contents of this file are auto-generated.
+ *
+ * This file may be updated by the Shopify admin theme editor
+ * or related systems. Please exercise caution as any changes
+ * made to this file may be overwritten.
+ * ------------------------------------------------------------
+ */
 {
   "sections": {
     "hero": {
       "type": "hero",
       "settings": {
+        "image": "shopify://shop_images/hero-landscape.jpg",
         "scrim": "dark",
         "text_color": "light",
         "eyebrow": "Curado por una Superhost · Medellín",
@@ -49,7 +59,7 @@
       ],
       "settings": {
         "kicker": "Por habitación",
-        "title": "Tres espacios, <em>una sola intención</em>.",
+        "title": "<strong>3 espacios, </strong><em><strong>una sola </strong></em><em>intención</em>.",
         "header_link_label": "Ver todo",
         "header_link_url": "",
         "layout": "mosaic",
@@ -72,9 +82,76 @@
         "heading": "Lo bueno no se busca.",
         "heading_accent": "Se reconoce.",
         "subtext": "<p>Nueve años recibiendo huéspedes me enseñaron a distinguirlo de un vistazo. Esta tienda es, simplemente, lo que pasó la prueba.</p>",
-        "byline_name": "Mafe",
-        "byline_role": "Superhost · 4 Airbnb · Medellín",
+        "link_label": "",
+        "link_url": "",
+        "image": "shopify://shop_images/E23C8E64-FC70-46F8-B408-F85B2F721946.jpg",
         "image_caption": "Preparando una propiedad antes del check-in",
+        "byline_name": "Mafe",
+        "byline_role": "Superhost",
+        "padding_top": 120,
+        "padding_bottom": 120
+      }
+    },
+    "product_showcase": {
+      "type": "product-showcase",
+      "blocks": {
+        "pick-1": {
+          "type": "pick",
+          "settings": {
+            "product": "vasos-irrompibles",
+            "category": "Cristalería",
+            "title": "Copas de vino",
+            "host_note": "Aguantan cientos de estadías.",
+            "price": "120.000 COP",
+            "tint": "peri"
+          }
+        },
+        "pick-2": {
+          "type": "pick",
+          "settings": {
+            "product": "utensilios-bbq",
+            "category": "Parrilla",
+            "title": "Utensilios BBQ",
+            "host_note": "Para el balcón que vende la reserva.",
+            "price": "145.000 COP",
+            "tint": "gray"
+          }
+        },
+        "pick-3": {
+          "type": "pick",
+          "settings": {
+            "product": "",
+            "category": "Ambiente",
+            "title": "Velas aromáticas",
+            "host_note": "El primer gesto del check-in.",
+            "price": "65.000 COP",
+            "tint": "cream"
+          }
+        },
+        "pick-4": {
+          "type": "pick",
+          "settings": {
+            "product": "toallas-desmaquillantes",
+            "category": "Baño",
+            "title": "Toallas desmaquillantes",
+            "host_note": "Cero manchas, cero quejas.",
+            "price": "48.000 COP",
+            "tint": "coral"
+          }
+        }
+      },
+      "block_order": [
+        "pick-1",
+        "pick-2",
+        "pick-3",
+        "pick-4"
+      ],
+      "settings": {
+        "kicker": "La selección de Mafe",
+        "heading": "Si amoblara un Airbnb mañana, <em>empezaría por aquí.</em>",
+        "subtext": "<p>Mis favoritos del momento — los que de verdad volvería a comprar.</p>",
+        "cta_label": "Ver la selección completa",
+        "cta_link": "",
         "padding_top": 120,
         "padding_bottom": 120
       }
@@ -113,66 +190,13 @@
         "variant": "rules",
         "kicker": "Cómo entra un producto",
         "heading": "Tres reglas. <em>Cero excepciones.</em>",
-        "padding_top": 120,
-        "padding_bottom": 120
-      }
-    },
-    "product_showcase": {
-      "type": "product-showcase",
-      "blocks": {
-        "pick-1": {
-          "type": "pick",
-          "settings": {
-            "category": "Cristalería",
-            "title": "Copas de vino",
-            "host_note": "Aguantan cientos de estadías.",
-            "price": "120.000 COP",
-            "tint": "peri"
-          }
-        },
-        "pick-2": {
-          "type": "pick",
-          "settings": {
-            "category": "Parrilla",
-            "title": "Utensilios BBQ",
-            "host_note": "Para el balcón que vende la reserva.",
-            "price": "145.000 COP",
-            "tint": "gray"
-          }
-        },
-        "pick-3": {
-          "type": "pick",
-          "settings": {
-            "category": "Ambiente",
-            "title": "Velas aromáticas",
-            "host_note": "El primer gesto del check-in.",
-            "price": "65.000 COP",
-            "tint": "cream"
-          }
-        },
-        "pick-4": {
-          "type": "pick",
-          "settings": {
-            "category": "Baño",
-            "title": "Toallas desmaquillantes",
-            "host_note": "Cero manchas, cero quejas.",
-            "price": "48.000 COP",
-            "tint": "coral"
-          }
-        }
-      },
-      "block_order": [
-        "pick-1",
-        "pick-2",
-        "pick-3",
-        "pick-4"
-      ],
-      "settings": {
-        "kicker": "La selección de Mafe",
-        "heading": "Si amoblara un Airbnb mañana, <em>empezaría por aquí.</em>",
-        "subtext": "<p>Mis favoritos del momento — los que de verdad volvería a comprar.</p>",
-        "cta_label": "Ver la selección completa",
-        "cta_link": "",
+        "heading_accent": "Se reconoce.",
+        "subtext": "<p>Nueve años recibiendo huéspedes me enseñaron a distinguirlo de un vistazo. Esta tienda es, simplemente, lo que pasó la prueba.</p>",
+        "link_label": "",
+        "link_url": "",
+        "image_caption": "Preparando una propiedad antes del check-in",
+        "byline_name": "Mafe",
+        "byline_role": "Superhost",
         "padding_top": 120,
         "padding_bottom": 120
       }
@@ -187,7 +211,8 @@
             "tint": "peri",
             "title": "Por qué dejé de comprar vidrio frágil",
             "body": "Cada copa rota es un mensaje a medianoche y una reseña en riesgo. Cambié a piezas que resisten la rotación constante.",
-            "link_label": "Leer y comprar"
+            "link_label": "Leer y comprar",
+            "link_url": ""
           }
         },
         "insight-2": {
@@ -197,7 +222,8 @@
             "tint": "olive",
             "title": "El único detalle que todos comentan",
             "body": "No es el sofá ni el televisor. Es el aroma al entrar y una mesa puesta con intención. Cuesta poco, vale mucho.",
-            "link_label": "Leer y comprar"
+            "link_label": "Leer y comprar",
+            "link_url": ""
           }
         },
         "insight-3": {
@@ -207,7 +233,8 @@
             "tint": "taupe",
             "title": "Barato sale caro: la prueba de los cubiertos",
             "body": "Los cubiertos económicos se oxidan en semanas de lavavajillas. Te muestro cuáles sobreviven y por qué.",
-            "link_label": "Leer y comprar"
+            "link_label": "Leer y comprar",
+            "link_url": ""
           }
         }
       },
@@ -220,11 +247,15 @@
         "variant": "insights",
         "kicker": "Notas de anfitriona",
         "heading": "Ya hice la <em>investigación</em> por ti.",
+        "heading_accent": "Se reconoce.",
         "subtext": "<p>Lo que aprendí tras cientos de estadías — para que compres mejor desde la primera vez.</p>",
         "link_label": "Todas las notas",
         "link_url": "",
-        "padding_top": 120,
-        "padding_bottom": 120
+        "image_caption": "Preparando una propiedad antes del check-in",
+        "byline_name": "Mafe",
+        "byline_role": "Superhost",
+        "padding_top": 72,
+        "padding_bottom": 72
       }
     },
     "home_editorial_future": {
@@ -282,7 +313,13 @@
         "variant": "future",
         "kicker": "Lo que viene",
         "heading": "La curaduría apenas empieza.",
+        "heading_accent": "Se reconoce.",
         "subtext": "<p>Nuevas colecciones, pensadas alrededor de cada momento del huésped.</p>",
+        "link_label": "",
+        "link_url": "",
+        "image_caption": "Preparando una propiedad antes del check-in",
+        "byline_name": "Mafe",
+        "byline_role": "Superhost",
         "padding_top": 120,
         "padding_bottom": 120
       }
@@ -303,16 +340,26 @@
         "padding_top": 88,
         "padding_bottom": 88
       }
+    },
+    "178069494618f16467": {
+      "type": "_blocks",
+      "settings": {}
+    },
+    "178069500409ddf3c1": {
+      "type": "_blocks",
+      "settings": {}
     }
   },
   "order": [
     "hero",
     "collection_list",
     "home_editorial_story",
-    "home_editorial_rules",
     "product_showcase",
+    "home_editorial_rules",
     "home_editorial_insights",
     "home_editorial_future",
-    "newsletter"
+    "newsletter",
+    "178069494618f16467",
+    "178069500409ddf3c1"
   ]
 }

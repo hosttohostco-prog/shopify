@@ -28,6 +28,7 @@
 <div class="brand-hero brand-hero--text-{{ section.settings.text_color }} section-{{ section.id }}-padding">
   <div class="brand-hero__stage{% unless section.settings.image %} brand-hero__stage--placeholder{% endunless %}">
     {%- if section.settings.image -%}
+      {%- assign _hero_alt = section.settings.image.alt | default: section.settings.heading | strip_html -%}
       {{
         section.settings.image
         | image_url: width: 2200
@@ -37,7 +38,7 @@
           sizes: '100vw',
           widths: '750, 1100, 1500, 1900, 2200',
           class: 'brand-hero__img',
-          alt: section.settings.image.alt | default: section.settings.heading | strip_html
+          alt: _hero_alt
       }}
     {%- endif -%}
 
@@ -59,17 +60,25 @@
           <div class="brand-hero__line">{{ section.settings.lead }}</div>
         {%- endif -%}
 
-        {%- if section.settings.button_label != blank or section.settings.button_secondary_label != blank -%}
+        {%- assign _has_primary = false -%}
+        {%- if section.settings.button_label != blank and section.settings.button_link != blank -%}
+          {%- assign _has_primary = true -%}
+        {%- endif -%}
+        {%- assign _has_secondary = false -%}
+        {%- if section.settings.button_secondary_label != blank and section.settings.button_secondary_link != blank -%}
+          {%- assign _has_secondary = true -%}
+        {%- endif -%}
+        {%- if _has_primary or _has_secondary -%}
           <div class="brand-hero__cta">
-            {%- if section.settings.button_label != blank -%}
+            {%- if _has_primary -%}
               <a
-                href="{{ section.settings.button_link | default: '#' }}"
+                href="{{ section.settings.button_link }}"
                 class="brand-hero__btn-light"
               >{{ section.settings.button_label }}<span class="brand-hero__arrow" aria-hidden="true">&rarr;</span></a>
             {%- endif -%}
-            {%- if section.settings.button_secondary_label != blank -%}
+            {%- if _has_secondary -%}
               <a
-                href="{{ section.settings.button_secondary_link | default: '#' }}"
+                href="{{ section.settings.button_secondary_link }}"
                 {% if section.settings.button_secondary_link contains 'wa.me' or section.settings.button_secondary_link contains 'whatsapp' %}target="_blank" rel="noopener"{% endif %}
                 class="brand-hero__ghost"
               >{{ section.settings.button_secondary_label }}<span class="brand-hero__arrow" aria-hidden="true">&rarr;</span></a>
