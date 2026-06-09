@@ -15,8 +15,8 @@
 
 {%- style -%}
   .section-{{ section.id }}-padding {
-    padding-top: {{ section.settings.padding_top | times: 0.7 | round: 0 }}px;
-    padding-bottom: {{ section.settings.padding_bottom | times: 0.7 | round: 0 }}px;
+    padding-top: {{ section.settings.padding_top | times: 0.5 | round: 0 }}px;
+    padding-bottom: {{ section.settings.padding_bottom | times: 0.5 | round: 0 }}px;
   }
   @media screen and (min-width: 750px) {
     .section-{{ section.id }}-padding {
@@ -62,6 +62,8 @@
               <span class="why-av">
                 {%- if section.settings.byline_avatar -%}
                   {{ section.settings.byline_avatar | image_url: width: 92 | image_tag: loading: 'lazy', alt: section.settings.byline_name | escape }}
+                {%- else -%}
+                  <img src="{{ 'logomark-ink.png' | asset_url }}" alt="Host2Host" loading="lazy" class="why-av__logo">
                 {%- endif -%}
               </span>
               <span class="why-byline-t">
@@ -73,9 +75,11 @@
         </div>
 
         <figure class="why-figure{{ reveal }}">
-          <div class="why-frame{% unless section.settings.image %} why-frame--placeholder{% endunless %}">
+          {%- assign img_focal = section.settings.image.presentation.focal_point | default: '50% 50%' -%}
+          <div class="why-frame{% unless section.settings.image %} why-frame--placeholder{% endunless %}" style="--focal: {{ img_focal }}">
             {%- if section.settings.image -%}
-              {{ section.settings.image | image_url: width: 1200 | image_tag: loading: 'lazy', sizes: '(min-width: 990px) 50vw, 100vw', widths: '480, 720, 980, 1200', alt: section.settings.image.alt | default: section.settings.byline_name | escape }}
+              {%- assign img_alt = section.settings.image.alt | default: section.settings.byline_name | escape -%}
+              {{ section.settings.image | image_url: width: 1200 | image_tag: loading: 'lazy', sizes: '(min-width: 990px) 50vw, 100vw', widths: '480, 720, 980, 1200', alt: img_alt }}
             {%- else -%}
               <span class="why-frame__ph">Retrato de Mafe</span>
             {%- endif -%}
@@ -119,28 +123,24 @@
           {%- if section.settings.heading != blank -%}<h2 class="display h-1">{{ section.settings.heading }}</h2>{%- endif -%}
           {%- if section.settings.subtext != blank -%}<div class="lead shead-sub rte">{{ section.settings.subtext }}</div>{%- endif -%}
         </div>
-        {%- if section.settings.link_label != blank -%}
-          <a class="tlink" href="{{ section.settings.link_url | default: '#' }}">{{ section.settings.link_label }}<span class="arr" aria-hidden="true">&rarr;</span></a>
+        {%- if section.settings.link_label != blank and section.settings.link_url != blank -%}
+          <a class="tlink" href="{{ section.settings.link_url }}">{{ section.settings.link_label }}<span class="arr" aria-hidden="true">&rarr;</span></a>
         {%- endif -%}
       </div>
+
       {%- if section.blocks.size > 0 -%}
-        <div class="ins-grid">
+        <div class="ins-va">
           {%- for block in section.blocks -%}
             {%- if block.type == 'insight' -%}
-              <article class="insight{{ reveal }}" {{ block.shopify_attributes }}>
-                <div class="insight-media insight-media--{{ block.settings.tint }}">
-                  {%- if block.settings.tag_label != blank -%}
-                    <div class="insight-tag"><span class="tag tag--cream"><span class="dot"></span>{{ block.settings.tag_label }}</span></div>
-                  {%- endif -%}
-                  <span class="num">{%- assign n = forloop.index -%}{% if n < 10 %}0{% endif %}{{ n }}</span>
-                </div>
-                <div class="insight-body">
-                  {%- if block.settings.title != blank -%}<h3 class="insight-title">{{ block.settings.title }}</h3>{%- endif -%}
-                  {%- if block.settings.body != blank -%}<p class="insight-ex">{{ block.settings.body }}</p>{%- endif -%}
-                  {%- if block.settings.link_label != blank -%}
-                    <a class="insight-link" href="{{ block.settings.link_url | default: '#' }}">{{ block.settings.link_label }}<span class="arr" aria-hidden="true">&rarr;</span></a>
-                  {%- endif -%}
-                </div>
+              <article class="ins-va__item{{ reveal }}">
+                {%- if block.settings.tag_label != blank -%}
+                  <p class="ins-va__kicker">{{ block.settings.tag_label }}</p>
+                {%- endif -%}
+                {%- if block.settings.title != blank -%}<h3 class="ins-va__title">{{ block.settings.title }}</h3>{%- endif -%}
+                {%- if block.settings.body != blank -%}<p class="ins-va__body">{{ block.settings.body }}</p>{%- endif -%}
+                {%- if block.settings.link_label != blank and block.settings.link_url != blank -%}
+                  <a class="ins-va__link" href="{{ block.settings.link_url }}">{{ block.settings.link_label }}<span class="arr" aria-hidden="true">&rarr;</span></a>
+                {%- endif -%}
               </article>
             {%- endif -%}
           {%- endfor -%}
@@ -252,7 +252,7 @@
       "type": "text",
       "id": "byline_role",
       "label": "Firma — rol",
-      "default": "Superhost · 4 Airbnb · Medellín"
+      "default": "Superhost"
     },
     { "type": "image_picker", "id": "byline_avatar", "label": "Firma — avatar" },
     { "type": "header", "content": "Espaciado" },
@@ -328,7 +328,7 @@
         "heading_accent": "Se reconoce.",
         "subtext": "<p>Nueve años recibiendo huéspedes me enseñaron a distinguirlo de un vistazo. Esta tienda es, simplemente, lo que pasó la prueba.</p>",
         "byline_name": "Mafe",
-        "byline_role": "Superhost · 4 Airbnb · Medellín",
+        "byline_role": "Superhost",
         "image_caption": "Preparando una propiedad antes del check-in"
       }
     },

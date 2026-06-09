@@ -1,0 +1,120 @@
+{
+  "sections": {
+    "about-hero": {
+      "type": "about-hero",
+      "blocks": {
+        "cred-1": {
+          "type": "credential",
+          "settings": {
+            "icon": "home",
+            "stat": "9 años",
+            "label": "Hospedando"
+          }
+        },
+        "cred-2": {
+          "type": "credential",
+          "settings": {
+            "icon": "star",
+            "stat": "Superhost",
+            "label": "Airbnb"
+          }
+        },
+        "cred-3": {
+          "type": "credential",
+          "settings": {
+            "icon": "key",
+            "stat": "4+",
+            "label": "Propiedades"
+          }
+        },
+        "cred-4": {
+          "type": "credential",
+          "settings": {
+            "icon": "heart",
+            "stat": "Selección",
+            "label": "Personal"
+          }
+        }
+      },
+      "block_order": ["cred-1", "cred-2", "cred-3", "cred-4"],
+      "settings": {
+        "eyebrow": "Superhost · Medellín · 9 años hospedando",
+        "heading": "Sobre Mafe",
+        "intro": "Empecé hospedando en Medellín hace nueve años. Lo que tienes aquí son los productos que sobrevivieron cientos de rotaciones en mis propias propiedades — nada más.",
+        "cta_label": "Conoce la colección",
+        "cta_url": "/collections/all",
+        "image_alt": "Mafe, anfitriona y fundadora de Host to Host"
+      }
+    },
+    "about-why": {
+      "type": "about-why",
+      "settings": {
+        "eyebrow": "Por qué existe Host to Host",
+        "heading": "Amoblar bien no debería ser tan difícil.",
+        "body": "Después de años comprando mal — pagando caro por cosas que no duran, esperando semanas por importaciones que nunca llegan, reponiendo lo mismo cada temporada — decidí hacer el trabajo una sola vez y compartirlo. Host to Host existe para que no tengas que cometer los mismos errores. Todo lo que encuentras aquí ya lo probé. Todo está disponible en Colombia. Todo vale lo que cuesta.",
+        "padding_top": 80,
+        "padding_bottom": 80
+      }
+    },
+    "selection-process": {
+      "type": "product-trust",
+      "blocks": {
+        "sel-1": {
+          "type": "criterion",
+          "settings": {
+            "heading": "Probado en propiedades reales",
+            "body": "Cada producto vive cientos de rotaciones en mis Airbnb antes de entrar al catálogo. Si no aguanta el uso real, no lo vendo."
+          }
+        },
+        "sel-2": {
+          "type": "criterion",
+          "settings": {
+            "heading": "Disponible en Colombia",
+            "body": "Nada de esperar semanas ni depender de importaciones. Lo que ves está en stock, localmente, listo para llegar."
+          }
+        },
+        "sel-3": {
+          "type": "criterion",
+          "settings": {
+            "heading": "Durabilidad hotelera",
+            "body": "Lo evalúo como un hotel evaluaría su inventario: lavavajillas, uso diario, reposición fácil. No compro fragilidad."
+          }
+        },
+        "sel-4": {
+          "type": "criterion",
+          "settings": {
+            "heading": "Relación precio-vida útil",
+            "body": "Barato que se rompe en tres meses sale más caro. Elijo lo que dura — y cuando el precio importa, lo digo."
+          }
+        }
+      },
+      "block_order": ["sel-1", "sel-2", "sel-3", "sel-4"],
+      "settings": {
+        "padding_top": 80,
+        "padding_bottom": 80
+      }
+    },
+    "newsletter": {
+      "type": "newsletter-cartas",
+      "settings": {
+        "background": "cream-deep",
+        "eyebrow": "Ideas, productos y consejos",
+        "heading": "Para hacer de tu casa un <em>mejor hogar</em>.",
+        "body": "<p>Únete a mi newsletter y recibe inspiración y recomendaciones exclusivas. Sin spam. Solo lo bueno.</p>",
+        "placeholder": "Tu correo electrónico",
+        "button_label": "Suscribirme",
+        "note": "Sin spam · cancela cuando quieras",
+        "success_text": "Gracias — revisa tu correo.",
+        "show_whatsapp": false,
+        "padding_top": 88,
+        "padding_bottom": 88
+      }
+    }
+  },
+  "order": [
+    "about-hero",
+    "about-why",
+    "selection-process",
+    "newsletter"
+  ]
+}

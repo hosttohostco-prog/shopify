@@ -99,9 +99,9 @@
       </div>
     {%- endif -%}
 
-    {%- if section.settings.cta_label != blank -%}
+    {%- if section.settings.cta_label != blank and section.settings.cta_link != blank -%}
       <div class="picks-cta{{ reveal }}">
-        <a class="btn btn--coral" href="{{ section.settings.cta_link | default: '#' }}">{{ section.settings.cta_label }}<span class="arr" aria-hidden="true">&rarr;</span></a>
+        <a class="btn btn--coral" href="{{ section.settings.cta_link }}">{{ section.settings.cta_label }}<span class="arr" aria-hidden="true">&rarr;</span></a>
       </div>
     {%- endif -%}
   </div>

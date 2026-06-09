@@ -667,6 +667,9 @@ details[open] > .header__menu-item {
   color: var(--white);
 }
 
+/* Reduce Dawn's 3rem gap above copyright bar */
+.footer .footer__content-bottom { padding-top: 1.2rem; }
+
 /* Bottom bar: muted Archivo-caps meta (approved .foot-meta) */
 .footer .footer__copyright,
 .footer .footer__copyright .copyright__content {
@@ -756,17 +759,17 @@ details[open] > .header__menu-item {
   z-index: 1;
   pointer-events: none;
   border-radius: var(--radius-lg);
-  background: linear-gradient(to top, rgba(38, 33, 56, 0.82) 0%, rgba(38, 33, 56, 0.34) 30%, rgba(38, 33, 56, 0) 56%);
+  background: linear-gradient(to top, rgba(20, 17, 30, 0.97) 0%, rgba(20, 17, 30, 0.88) 25%, rgba(20, 17, 30, 0.60) 50%, rgba(20, 17, 30, 0.15) 75%, rgba(20, 17, 30, 0) 90%);
 }
 /* Kicker + title + copy overlaid bottom-left, cream (approved .room-meta).
    Content sits with breathing room above the bottom edge; the bottom-weighted
    wash above keeps it legible. Display reset from Dawn's grid to a simple flow. */
-.collection-card-wrapper .card__content {
+.collection-card-wrapper .card > .card__content {
   position: absolute;
   inset: auto 0 0 0;
   z-index: 2;
   display: block;
-  padding: clamp(22px, 2vw, 34px);
+  padding: 0 22px 24px;
 }
 .collection-card-wrapper .card__information {
   padding: 0;
@@ -809,6 +812,16 @@ details[open] > .header__menu-item {
 .collection-card-wrapper .card--standard.card--text > .card__content .card__kicker { display: none; }
 .collection-card-wrapper .icon-wrap {
   color: var(--cream);
+}
+
+/* Full-card overlay link — sits below text and arrow layers, makes the entire
+   card surface clickable. Excluded from keyboard and screen-reader focus. */
+.collection-card-wrapper .card__overlay-link {
+  display: block; /* overrides a:empty { display:none } in base styles */
+  position: absolute;
+  inset: 0;
+  z-index: 4;
+  border-radius: var(--radius-lg);
 }
 
 /* Circular outlined arrow, top-right — the only chrome (approved .room-go).
@@ -1086,6 +1099,7 @@ details[open] > .header__menu-item {
   box-shadow: 0 12px 24px -14px rgba(86, 96, 65, .6);
 }
 .why-av img { width: 100%; height: 100%; object-fit: cover; }
+.why-av img.why-av__logo { width: auto; height: auto; max-width: 60%; max-height: 60%; object-fit: contain; }
 .why-byline-t b { display: block; font-family: var(--font-hand); font-weight: 700; font-size: 21px; color: var(--green-deep); line-height: 1; }
 .why-byline-t i {
   display: block; font-family: var(--font-label); font-style: normal; text-transform: uppercase;
@@ -1098,7 +1112,7 @@ details[open] > .header__menu-item {
   box-shadow: 0 60px 90px -56px rgba(86, 96, 65, .65);
   display: grid; place-items: center;
 }
-.why-frame img { width: 100%; height: 100%; object-fit: cover; display: block; }
+.why-frame img { width: 100%; height: 100%; object-fit: cover; object-position: var(--focal, 50% 50%); display: block; }
 .why-frame__ph {
   font-family: var(--font-label); text-transform: uppercase; letter-spacing: 0.18em;
   font-size: 11px; font-weight: 600; color: rgba(86, 96, 65, .5); text-align: center; padding: 0 16px;
@@ -1114,8 +1128,9 @@ details[open] > .header__menu-item {
 .why-cap-dot { width: 7px; height: 7px; border-radius: 50%; background: var(--coral); flex: none; }
 @media screen and (max-width: 860px) {
   .he-story { grid-template-columns: 1fr; gap: 42px; }
-  .why-figure { order: -1; }
-  .why-frame { aspect-ratio: 4 / 3; }
+  /* why-frame keeps the desktop 5/6 portrait ratio on mobile — matches the
+     portrait photo and prevents the extreme landscape crop that cut off Mafe */
+  /* Mobile: copy first, image second — narrative leads, image supports */
 }
 
 /* ============================ RULES (Cómo entra un producto) ============================ */
@@ -1129,7 +1144,7 @@ details[open] > .header__menu-item {
 .principle {
   display: grid; grid-template-columns: clamp(60px, 7vw, 104px) 1fr minmax(0, 0.9fr) 34px;
   gap: clamp(20px, 3.6vw, 56px); align-items: center;
-  padding: clamp(28px, 3.6vw, 48px) 0;
+  padding: clamp(20px, 2.8vw, 32px) 0;
   border-bottom: 1.6px solid rgba(86, 96, 65, .22);
 }
 .principle > * { transition: transform .45s var(--ease), color .4s var(--ease), opacity .4s var(--ease); }
@@ -1156,35 +1171,45 @@ details[open] > .header__menu-item {
 
 /* ============================ INSIGHTS (Notas de anfitriona) ============================ */
 .he--insights .shead .display em { font-style: normal; font-weight: 500; color: var(--periwinkle-deep); }
-.ins-grid { display: grid; grid-template-columns: repeat(3, 1fr); gap: clamp(18px, 2vw, 28px); }
-.insight {
-  background: var(--white); border-radius: var(--radius-lg); overflow: hidden;
-  display: flex; flex-direction: column;
-  transition: transform .5s var(--ease), box-shadow .5s var(--ease);
+
+/* ─── three columns, serif italic titles ─── */
+.ins-va {
+  display: grid; grid-template-columns: repeat(3, 1fr);
+  border-top: 1.5px solid rgba(38,33,56,.13);
 }
-.insight:hover { transform: translateY(-6px); box-shadow: 0 44px 60px -42px rgba(64, 62, 63, .4); }
-.insight-media { aspect-ratio: 16 / 10; position: relative; overflow: hidden; display: grid; place-items: center; background: var(--warm-gray); }
-.insight-media--peri { background: linear-gradient(150deg, #aab4e0, #7e8cc6); }
-.insight-media--taupe { background: linear-gradient(150deg, #e0cabd, #c2a795); }
-.insight-media--olive { background: linear-gradient(150deg, #bfc78e, #97a067); }
-.insight-media .num { font-family: var(--font-display); font-weight: 600; font-size: 64px; color: rgba(255, 255, 255, .62); letter-spacing: -0.04em; }
-.insight-tag { position: absolute; top: 14px; left: 14px; }
-.insight-body { padding: 24px 26px 28px; display: flex; flex-direction: column; gap: 11px; flex: 1; }
-.insight-title { font-size: 21px; font-weight: 500; letter-spacing: -0.02em; line-height: 1.14; color: var(--ink); margin: 0; }
-.insight-ex { font-size: 14.5px; line-height: 1.5; color: var(--ink-soft); flex: 1; margin: 0; }
-.insight-link {
-  margin-top: 6px; font-family: var(--font-label); text-transform: uppercase; letter-spacing: 0.13em;
-  font-size: 11px; font-weight: 600; color: var(--periwinkle-deep); display: inline-flex; align-items: center; gap: 8px;
+.ins-va__item {
+  padding: 24px 28px 28px; border-right: 1px solid rgba(38,33,56,.1);
+  display: flex; flex-direction: column; gap: 12px;
 }
-.insight-link .arr { transition: transform .35s var(--ease); }
-.insight:hover .insight-link .arr { transform: translateX(4px); }
-@media screen and (max-width: 880px) { .ins-grid { grid-template-columns: 1fr; } }
+.ins-va__item:last-child { border-right: none; }
+.ins-va__kicker {
+  font-family: var(--font-label); font-size: 10.5px; font-weight: 700;
+  letter-spacing: 0.15em; text-transform: uppercase; color: var(--coral); margin: 0;
+}
+.ins-va__title {
+  font-family: var(--font-display); font-style: italic; font-weight: 400;
+  font-size: clamp(2rem, 2.4vw, 2.8rem); line-height: 1.1; letter-spacing: -0.01em;
+  color: var(--ink); margin: 0;
+}
+.ins-va__body { font-size: 14.5px; line-height: 1.55; color: var(--ink-soft); margin: 0; flex: 1; }
+.ins-va__link {
+  font-family: var(--font-label); font-size: 11px; font-weight: 600;
+  letter-spacing: 0.13em; text-transform: uppercase; color: var(--periwinkle-deep);
+  display: inline-flex; align-items: center; gap: 8px; margin-top: 4px;
+  transition: gap .25s var(--ease);
+}
+.ins-va__item:hover .ins-va__link { gap: 13px; }
+
+@media screen and (max-width: 880px) {
+  .ins-va { grid-template-columns: 1fr; }
+  .ins-va__item { border-right: none; border-bottom: 1px solid rgba(38,33,56,.1); }
+}
 
 /* ============================ FUTURE (Lo que viene) ============================ */
 .he--future .shead .kicker { color: var(--cream); opacity: 0.9; }
 .he--future .shead .display { color: var(--cream); }
 .he--future .shead .shead-sub { color: rgba(252, 243, 233, .82); }
-.fut-grid { display: grid; grid-template-columns: repeat(5, 1fr); gap: 14px; margin-top: clamp(36px, 4vw, 52px); }
+.fut-grid { display: grid; grid-template-columns: repeat(5, 1fr); gap: 14px; }
 .fut {
   border: 1px solid rgba(252, 243, 233, .32); border-radius: var(--radius); padding: 24px 22px 26px;
   min-height: 230px; display: flex; flex-direction: column; justify-content: space-between;
@@ -1532,20 +1557,21 @@ details[open] > .header__menu-item {
 */
 #product-grid .quick-add {
   position: absolute;
-  right: 14px;
+  left: 50%;
+  right: auto;
   bottom: calc(70px + 18px);
+  transform: translateX(calc(-50% + 0px)) translateY(5px);
   margin: 0;
   width: auto;
   z-index: 4;
   opacity: 0;
-  transform: translateY(5px);
   transition: opacity 0.18s ease, transform 0.18s ease;
   pointer-events: none;
 }
 #product-grid .card-wrapper:hover .quick-add,
 #product-grid .card-wrapper:focus-within .quick-add {
   opacity: 1;
-  transform: none;
+  transform: translateX(-50%);
   pointer-events: auto;
 }
 
@@ -2137,6 +2163,17 @@ product-info .hth-breadcrumb {
   .pdp-trust-list--3 { grid-template-columns: repeat(2, 1fr); }
 }
 
+.list-menu__item--instagram {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.6em;
+}
+.list-menu__item--instagram .svg-wrapper {
+  display: flex;
+  align-items: center;
+  flex-shrink: 0;
+}
+
 @media screen and (max-width: 749px) {
   .pdp-trust-list--2,
   .pdp-trust-list--3,
@@ -2159,4 +2196,381 @@ product-info .hth-breadcrumb {
   .pdp-cr-check { width: 40px; height: 40px; }
   .pdp-cr-b { grid-column: 1 / -1; margin-top: 10px; max-width: none; }
   .pdp-criterion:hover .pdp-cr-h { transform: none; }
+}
+
+/* ============================================================
+   Homepage overlay header
+   Goal: header floats over the hero image; transparent + white
+   until the user scrolls, then snaps to the warm-cream bar.
+   All selectors are scoped to body.template-index so every
+   other page is unaffected.
+   Dawn's sticky JS adds .scrolled-past-header to .section-header;
+   we piggyback on that to flip between the two states.
+   ============================================================ */
+
+/* 1. Hide announcement bar on the homepage only */
+body.template-index .announcement-bar-section {
+  display: none;
+}
+
+/* 2. Lift the header out of normal flow so the hero fills from
+      the very top of the viewport. Fixed (not absolute) is required
+      so Dawn's sticky hide/reveal mechanism still works: Dawn toggles
+      top: 0 / top: calc(-1 * var(--header-height)) on the element,
+      which only has an effect when the element is already removed from
+      flow and pinned to the viewport. Absolute would pin it to the
+      header-group origin, sliding off screen permanently on scroll. */
+body.template-index .section-header {
+  position: fixed !important;
+  top: 0;
+  left: 0;
+  right: 0;
+  width: 100%;
+  z-index: 100;
+  margin-bottom: 0 !important;
+}
+
+/* 3. Transparent background in the overlay state.
+      The ::before pseudo handles the dark gradient for legibility. */
+body.template-index .header-wrapper {
+  background: transparent !important;
+  backdrop-filter: none !important;
+  -webkit-backdrop-filter: none !important;
+  transition: background 250ms ease, backdrop-filter 250ms ease,
+              -webkit-backdrop-filter 250ms ease, box-shadow 250ms ease;
+}
+
+body.template-index .header-wrapper::before {
+  content: '';
+  position: absolute;
+  inset: 0;
+  background: linear-gradient(to bottom, rgba(0, 0, 0, 0.45), rgba(0, 0, 0, 0));
+  pointer-events: none;
+  opacity: 1;
+  transition: opacity 250ms ease;
+  z-index: -1;
+}
+
+/* 4. White logo, links, and icons in overlay state */
+body.template-index .header__heading-logo {
+  filter: brightness(0) invert(1);
+  transition: filter 250ms ease;
+}
+
+body.template-index .header__heading-link span.h2 {
+  color: #fff;
+  transition: color 250ms ease;
+}
+
+body.template-index .header__menu-item,
+body.template-index .header__menu-item span {
+  color: #fff !important;
+  transition: color 250ms ease;
+}
+
+body.template-index .header__icon {
+  color: #fff !important;
+  transition: color 250ms ease;
+}
+
+/* Subtle hover: slight opacity dip rather than a colour accent */
+body.template-index .header__menu-item:hover span,
+body.template-index .header__icon:hover {
+  opacity: 0.75;
+  color: #fff !important;
+}
+
+/* Hamburger / drawer icon lines (mobile) */
+body.template-index header-drawer .icon {
+  color: #fff;
+  transition: color 250ms ease;
+}
+
+/* 5. Sticky / scrolled state: restore warm cream + dark text.
+      Dawn adds .scrolled-past-header to .section-header;
+      .shopify-section-header-sticky is added when the bar is
+      pinned at the top after the user scrolls up. Target both
+      so the solid bar shows whether the header is re-revealed
+      mid-scroll or the user is at the top after scrolling. */
+body.template-index .scrolled-past-header .header-wrapper,
+body.template-index .shopify-section-header-sticky .header-wrapper {
+  background: rgba(252, 243, 233, 0.96) !important;
+  backdrop-filter: blur(16px) saturate(1.2) !important;
+  -webkit-backdrop-filter: blur(16px) saturate(1.2) !important;
+  box-shadow: 0 1px 0 var(--hairline), 0 12px 28px -24px rgba(64, 62, 63, 0.45);
+}
+
+body.template-index .scrolled-past-header .header-wrapper::before,
+body.template-index .shopify-section-header-sticky .header-wrapper::before {
+  opacity: 0;
+}
+
+body.template-index .scrolled-past-header .header__heading-logo,
+body.template-index .shopify-section-header-sticky .header__heading-logo {
+  filter: none;
+}
+
+body.template-index .scrolled-past-header .header__heading-link span.h2,
+body.template-index .shopify-section-header-sticky .header__heading-link span.h2 {
+  color: inherit;
+}
+
+body.template-index .scrolled-past-header .header__menu-item,
+body.template-index .scrolled-past-header .header__menu-item span,
+body.template-index .shopify-section-header-sticky .header__menu-item,
+body.template-index .shopify-section-header-sticky .header__menu-item span {
+  color: inherit !important;
+}
+
+body.template-index .scrolled-past-header .header__icon,
+body.template-index .shopify-section-header-sticky .header__icon {
+  color: inherit !important;
+}
+
+body.template-index .scrolled-past-header header-drawer .icon,
+body.template-index .shopify-section-header-sticky header-drawer .icon {
+  color: inherit;
+}
+
+body.template-index .scrolled-past-header .header__menu-item:hover span,
+body.template-index .shopify-section-header-sticky .header__menu-item:hover span,
+body.template-index .scrolled-past-header .header__icon:hover,
+body.template-index .shopify-section-header-sticky .header__icon:hover {
+  opacity: 1;
+  color: var(--periwinkle-deep) !important;
+}
+
+/* ============================================================
+   MOBILE OPTIMISATION PASS — 2026-06-08
+   All desktop rules above are UNCHANGED. These mobile-only
+   overrides preserve the Host-to-Host design language while
+   improving readability, spacing, and hierarchy on small screens.
+   Desktop (≥750px) is completely untouched by every rule below.
+   ============================================================ */
+
+/* ---- HERO — slightly smaller type and CTA on mobile ---- */
+@media screen and (max-width: 749px) {
+  .brand-hero__title {
+    font-size: clamp(28px, 8.5vw, 40px);
+  }
+  .brand-hero__line {
+    font-size: 15px;
+    margin-bottom: 22px;
+  }
+  .brand-hero__btn-light {
+    padding: 13px 22px;
+    font-size: 11.5px;
+  }
+}
+
+/* ---- CATEGORY SECTION — section header ---- */
+@media screen and (max-width: 749px) {
+  .shead .collection-list-title {
+    font-size: clamp(24px, 6.5vw, 34px);
+  }
+  .section-collection-list .shead {
+    margin-bottom: clamp(14px, 3vw, 22px);
+  }
+}
+
+/* ---- CATEGORY SECTION — Option C mobile grid ----
+   Cocina spans full width above; Baño + Ambiente share the bottom row.
+   Switch container from Dawn flex to CSS Grid. Neutralise the ratio-
+   padding trick and apply explicit aspect-ratios. Typography and circles
+   tightened only on the narrow half-width cards. Desktop (≥990px) mosaic
+   is completely unaffected (different media query). */
+@media screen and (max-width: 749px) {
+  /* (1) CSS Grid container — override Dawn flex */
+  .collection-list.collection-list--mosaic {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    grid-template-rows: auto auto;
+    gap: 10px;
+    height: auto;
+    margin-bottom: 0;
+  }
+
+  /* (2) Neutralise Dawn's flex item sizing */
+  .collection-list.collection-list--mosaic .grid__item {
+    width: auto;
+    max-width: none;
+    margin: 0;
+    padding: 0;
+    display: flex;
+  }
+
+  /* (3) Cocina: spans both columns */
+  .collection-list--mosaic .collection-list__item:first-child {
+    grid-column: 1 / -1;
+    grid-row: auto;
+  }
+
+  /* (4) Kill Dawn's ratio padding-bottom trick; use aspect-ratio instead */
+  .collection-list--mosaic .collection-card-wrapper .card__inner.ratio {
+    padding-bottom: 0;
+    height: auto;
+  }
+  .collection-list--mosaic .collection-card-wrapper .card__inner.ratio::before {
+    content: none;
+  }
+
+  /* (5) card__media absolutely fills card__inner */
+  .collection-list--mosaic .collection-card-wrapper .card__media {
+    position: absolute;
+    inset: 0;
+    height: 100%;
+    margin: 0;
+  }
+
+  /* (6) Card and wrapper fill grid cell width */
+  .collection-list--mosaic .collection-card-wrapper,
+  .collection-list--mosaic .collection-card-wrapper .card {
+    width: 100%;
+  }
+
+  /* (7) Large radius + clip on mobile */
+  .collection-list--mosaic .collection-card-wrapper .card {
+    overflow: hidden;
+    border-radius: var(--radius-lg);
+  }
+
+  /* (8) Aspect ratios */
+  .collection-list--mosaic .collection-list__item:first-child .card__inner {
+    aspect-ratio: 3 / 2; /* Cocina: landscape dominant */
+  }
+  .collection-list--mosaic .collection-list__item:not(:first-child) .card__inner {
+    aspect-ratio: 5 / 6; /* Baño + Ambiente: portrait, tall */
+  }
+
+  /* (9) All cards — slightly smaller title */
+  .collection-list--mosaic .collection-card-wrapper .card__heading a {
+    font-size: clamp(2.2rem, 5.5vw, 3.2rem);
+  }
+
+  /* (10) Narrow cards only — tighter text, padding, and circle */
+  .collection-list--mosaic .collection-list__item:not(:first-child) .card > .card__content {
+    padding: 0 14px 16px;
+  }
+  .collection-list--mosaic .collection-list__item:not(:first-child) .card__heading a {
+    font-size: 2.2rem; /* 22px on Dawn's 62.5% base */
+  }
+  .collection-list--mosaic .collection-list__item:not(:first-child) .card__caption {
+    font-size: 1.3rem; /* 13px */
+    max-width: 18ch;
+  }
+  .collection-list--mosaic .collection-list__item:not(:first-child) .card__kicker {
+    margin-bottom: 6px;
+  }
+  .collection-list--mosaic .collection-list__item:not(:first-child) .card__go {
+    width: 34px;
+    height: 34px;
+    top: 12px;
+    right: 12px;
+  }
+}
+
+/* ---- STORY (Por qué existe) — tighter type on mobile ---- */
+@media screen and (max-width: 860px) {
+  .why-stmt {
+    font-size: clamp(32px, 8vw, 52px);
+    margin-top: 16px;
+  }
+  .why-sub {
+    font-size: clamp(15px, 3.8vw, 17px);
+    margin-top: 20px;
+  }
+  .why-byline {
+    margin-top: 24px;
+  }
+}
+
+/* ---- PICKS (La selección de Mafe) — horizontal scroll carousel on mobile ----
+   The rail bleeds past hth-wrap gutters with negative margin + restored padding
+   so the partial-next-card effect works correctly without adding overflow:hidden
+   to the wrapper. Desktop (≥750px) grid is unchanged. */
+@media screen and (max-width: 749px) {
+  .picks-rail {
+    display: flex;
+    overflow-x: auto;
+    scroll-snap-type: x mandatory;
+    -webkit-overflow-scrolling: touch;
+    gap: 14px;
+    padding-bottom: 16px;
+    margin-inline: calc(-1 * var(--gutter));
+    padding-inline: var(--gutter);
+    scrollbar-width: none;
+    /* reset grid-only property */
+    grid-template-columns: none;
+  }
+  .picks-rail::-webkit-scrollbar { display: none; }
+  .pick {
+    flex: 0 0 44vw;
+    scroll-snap-align: start;
+    max-width: 180px;
+  }
+}
+
+/* ---- FUTURE (Lo que viene) — horizontal scroll carousel on mobile ----
+   Same bleed-and-restore pattern as the Picks carousel above.
+   Overrides the existing stacked-column breakpoints (460px / 680px). */
+@media screen and (max-width: 749px) {
+  .fut-grid {
+    display: flex;
+    overflow-x: auto;
+    scroll-snap-type: x mandatory;
+    -webkit-overflow-scrolling: touch;
+    gap: 12px;
+    padding-bottom: 16px;
+    margin-inline: calc(-1 * var(--gutter));
+    padding-inline: var(--gutter);
+    scrollbar-width: none;
+    /* reset the grid-template-columns breakpoint rules above */
+    grid-template-columns: none;
+  }
+  .fut-grid::-webkit-scrollbar { display: none; }
+  .fut {
+    flex: 0 0 72vw;
+    max-width: 280px;
+    scroll-snap-align: start;
+    min-height: 200px;
+  }
+}
+
+/* ---- SECTION TOP PADDING — align all homepage sections with category section (~30px) ----
+   Each section generates dynamic .section-{id}-padding with per-section multipliers
+   (0.5–0.75). Override via outer wrapper classes so desktop is unaffected. */
+@media screen and (max-width: 749px) {
+  .picks,
+  .he,
+  .brand-news {
+    padding-top: 32px !important;
+  }
+}
+
+/* ---- NEWSLETTER (Antes de amoblar) — form layout on narrow screens ----
+   Stack input and submit button vertically so neither gets squeezed.
+   WhatsApp button stretches full width for a balanced look. */
+@media screen and (max-width: 480px) {
+  .brand-news__card {
+    padding: 28px 22px;
+  }
+  .brand-news__field {
+    flex-direction: column;
+    gap: 10px;
+    border-radius: var(--radius);
+    padding: 14px 16px;
+    align-items: stretch;
+  }
+  .brand-news__input {
+    font-size: 16px; /* prevent iOS zoom on focus */
+  }
+  .brand-news__btn {
+    align-self: stretch;
+    justify-content: center;
+    border-radius: var(--radius-pill);
+  }
+  .brand-news__wa {
+    align-self: stretch;
+    justify-content: center;
+  }
 }

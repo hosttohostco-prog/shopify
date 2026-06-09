@@ -26,8 +26,24 @@
 {%- endstyle -%}
 
 <div class="brand-hero brand-hero--text-{{ section.settings.text_color }} section-{{ section.id }}-padding">
-  <div class="brand-hero__stage{% unless section.settings.image %} brand-hero__stage--placeholder{% endunless %}">
-    {%- if section.settings.image -%}
+  <div class="brand-hero__stage{% unless section.settings.image or section.settings.video_url != blank %} brand-hero__stage--placeholder{% endunless %}">
+    {%- if section.settings.video_url != blank -%}
+      {%- assign _poster_url = '' -%}
+      {%- if section.settings.image -%}
+        {%- assign _poster_url = section.settings.image | image_url: width: 1500 -%}
+      {%- endif -%}
+      <video
+        class="brand-hero__img brand-hero__video"
+        src="{{ section.settings.video_url }}"
+        {% if _poster_url != '' %}poster="{{ _poster_url }}"{% endif %}
+        autoplay
+        muted
+        loop
+        playsinline
+        preload="auto"
+        aria-hidden="true"
+      ></video>
+    {%- elsif section.settings.image -%}
       {%- assign _hero_alt = section.settings.image.alt | default: section.settings.heading | strip_html -%}
       {{
         section.settings.image
@@ -120,6 +136,9 @@
     object-fit: cover;
     display: block;
     z-index: 0;
+  }
+  .brand-hero__video {
+    object-position: center;
   }
 
   /* ---- Scrim: bottom-weighted + left-weighted, keeps overlaid copy legible ---- */
@@ -318,10 +337,16 @@
   "class": "section",
   "settings": [
     {
+      "type": "text",
+      "id": "video_url",
+      "label": "Video de fondo (URL)",
+      "info": "Sube el .mp4 en Admin → Contenido → Archivos, copia la URL y pégala aquí. Si hay video, reemplaza la imagen. La imagen se usa como poster (fotograma inicial)."
+    },
+    {
       "type": "image_picker",
       "id": "image",
-      "label": "Imagen de fondo",
-      "info": "Foto de estilo de vida a todo el ancho. Sin imagen se muestra un degradado periwinkle como marcador."
+      "label": "Imagen de fondo / poster",
+      "info": "Con video: se usa como fotograma inicial mientras carga. Sin video: foto de estilo de vida a todo el ancho."
     },
     {
       "type": "select",

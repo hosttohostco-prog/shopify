@@ -47,6 +47,9 @@
     "
     style="--ratio-percent: {{ 1 | divided_by: ratio | times: 100 }}%;"
   >
+    {%- unless card_collection == blank -%}
+      <a href="{{ card_collection.url }}" class="card__overlay-link" tabindex="-1" aria-hidden="true"></a>
+    {%- endunless -%}
     <div
       class="card__inner {% if card_style == 'standard' %}color-{{ card_color_scheme }} gradient{% endif %}{% if card_collection.featured_image or card_style == 'standard' %} ratio{% endif %}"
       style="--ratio-percent: {{ 1 | divided_by: ratio | times: 100 }}%;"

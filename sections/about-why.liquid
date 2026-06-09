@@ -1,0 +1,140 @@
+{{ 'brand.css' | asset_url | stylesheet_tag }}
+
+{%- style -%}
+.section-{{ section.id }}-padding {
+  padding-top: {{ section.settings.padding_top }}px;
+  padding-bottom: {{ section.settings.padding_bottom }}px;
+}
+@media screen and (max-width: 749px) {
+  .section-{{ section.id }}-padding {
+    padding-top: {{ section.settings.padding_top | times: 0.75 | round }}px;
+    padding-bottom: {{ section.settings.padding_bottom | times: 0.75 | round }}px;
+  }
+}
+.abw {
+  background: var(--cream-deep);
+}
+.abw__inner {
+  display: grid;
+  grid-template-columns: 1fr 2fr;
+  gap: 64px;
+  align-items: start;
+}
+.abw__label-col {
+  padding-top: 6px;
+}
+.abw__eyebrow {
+  font-family: var(--font-label);
+  font-size: 11px;
+  font-weight: 600;
+  letter-spacing: 0.13em;
+  text-transform: uppercase;
+  color: var(--coral-deep);
+  margin: 0 0 16px;
+  display: flex;
+  align-items: center;
+  gap: 10px;
+}
+.abw__eyebrow::before {
+  content: '';
+  display: inline-block;
+  width: 24px;
+  height: 1.5px;
+  background: currentColor;
+  opacity: 0.7;
+  flex: none;
+}
+.abw__heading {
+  font-family: var(--font-display);
+  font-weight: 300;
+  font-size: clamp(26px, 2.8vw, 38px);
+  letter-spacing: -0.03em;
+  line-height: 1.08;
+  color: var(--ink);
+  margin: 0;
+  text-wrap: balance;
+}
+.abw__body {
+  font-size: clamp(16px, 1.2vw, 19px);
+  line-height: 1.7;
+  color: var(--ink-soft);
+  margin: 0;
+  text-wrap: pretty;
+}
+@media screen and (max-width: 899px) {
+  .abw__inner {
+    grid-template-columns: 1fr;
+    gap: 24px;
+  }
+}
+{%- endstyle -%}
+
+<section class="abw section-{{ section.id }}-padding">
+  <div class="page-width">
+    <div class="abw__inner">
+
+      <div class="abw__label-col">
+        {%- if section.settings.eyebrow != blank -%}
+          <p class="abw__eyebrow">{{ section.settings.eyebrow }}</p>
+        {%- endif -%}
+        {%- if section.settings.heading != blank -%}
+          <h2 class="abw__heading">{{ section.settings.heading | escape }}</h2>
+        {%- endif -%}
+      </div>
+
+      <div class="abw__body-col">
+        {%- if section.settings.body != blank -%}
+          <p class="abw__body">{{ section.settings.body }}</p>
+        {%- endif -%}
+      </div>
+
+    </div>
+  </div>
+</section>
+
+{% schema %}
+{
+  "name": "About — Por qué existimos",
+  "tag": "section",
+  "class": "section",
+  "settings": [
+    {
+      "type": "text",
+      "id": "eyebrow",
+      "label": "Antetítulo",
+      "default": "Por qué existe Host to Host"
+    },
+    {
+      "type": "text",
+      "id": "heading",
+      "label": "Título",
+      "default": "Amoblar bien no debería ser tan difícil."
+    },
+    {
+      "type": "textarea",
+      "id": "body",
+      "label": "Cuerpo (máx. 150 palabras)",
+      "default": "Después de años comprando mal — pagando caro por cosas que no duran, esperando semanas por importaciones que nunca llegan, reponiendo lo mismo cada temporada — decidí hacer el trabajo una sola vez y compartirlo. Host to Host existe para que no tengas que cometer los mismos errores. Todo lo que encuentras aquí ya lo probé. Todo está disponible en Colombia. Todo vale lo que cuesta."
+    },
+    {
+      "type": "header",
+      "content": "Espaciado"
+    },
+    {
+      "type": "range",
+      "id": "padding_top",
+      "label": "Espacio superior",
+      "min": 0, "max": 120, "step": 4, "default": 80
+    },
+    {
+      "type": "range",
+      "id": "padding_bottom",
+      "label": "Espacio inferior",
+      "min": 0, "max": 120, "step": 4, "default": 80
+    }
+  ],
+  "presets": [
+    { "name": "About — Por qué existimos" }
+  ]
+}
+{% endschema %}

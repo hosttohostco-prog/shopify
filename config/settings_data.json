@@ -4,7 +4,9 @@
     "Default": {
       "logo": "shopify://shop_images/logo-coral.png",
       "logo_width": 120,
-      "brand_headline": "HostToHost",
+      "brand_headline": "",
+      "brand_image": "shopify://shop_images/logo-coral.png",
+      "brand_image_width": 150,
       "brand_description": "<p>Productos, formación y recursos de una Superhost con 9 años hospedando en Colombia.</p>",
       "color_schemes": {
         "scheme-1": {
@@ -159,7 +161,7 @@
       "social_twitter_link": "",
       "social_facebook_link": "",
       "social_pinterest_link": "",
-      "social_instagram_link": "",
+      "social_instagram_link": "https://www.instagram.com/demafetohost/",
       "social_tiktok_link": "",
       "social_tumblr_link": "",
       "social_snapchat_link": "",

@@ -1,0 +1,191 @@
+{{ 'brand.css' | asset_url | stylesheet_tag }}
+
+{%- style -%}
+.section-{{ section.id }}-padding {
+  padding-top: {{ section.settings.padding_top }}px;
+  padding-bottom: {{ section.settings.padding_bottom }}px;
+}
+@media screen and (max-width: 749px) {
+  .section-{{ section.id }}-padding {
+    padding-top: {{ section.settings.padding_top | times: 0.75 | round }}px;
+    padding-bottom: {{ section.settings.padding_bottom | times: 0.75 | round }}px;
+  }
+}
+.abc {
+  background: var(--cream);
+  border-top: 1px solid var(--ink-40);
+}
+.abc__grid {
+  display: grid;
+  grid-template-columns: repeat(4, 1fr);
+}
+.abc__card {
+  padding: 40px 36px 40px 0;
+  border-right: 1px solid var(--ink-40);
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+}
+.abc__card:first-child { padding-left: 0; }
+.abc__card:last-child { border-right: none; padding-right: 0; }
+.abc__icon {
+  color: var(--coral-deep);
+  flex: none;
+}
+.abc__stat {
+  font-family: var(--font-display);
+  font-weight: 300;
+  font-size: clamp(24px, 2.4vw, 32px);
+  letter-spacing: -0.03em;
+  line-height: 1.0;
+  color: var(--ink);
+  margin: 0;
+  text-transform: uppercase;
+}
+.abc__label {
+  font-family: var(--font-label);
+  font-size: 11.5px;
+  font-weight: 600;
+  letter-spacing: 0.11em;
+  text-transform: uppercase;
+  color: var(--ink);
+  margin: 0;
+}
+.abc__desc {
+  font-size: 15px;
+  line-height: 1.55;
+  color: var(--ink-soft);
+  margin: 0;
+}
+@media screen and (max-width: 989px) {
+  .abc__grid { grid-template-columns: repeat(2, 1fr); }
+  .abc__card {
+    padding: 32px 28px 32px 0;
+    border-bottom: 1px solid var(--ink-40);
+  }
+  .abc__card:nth-child(2) { border-right: none; padding-right: 0; }
+  .abc__card:nth-child(3),
+  .abc__card:nth-child(4) { border-bottom: none; }
+}
+@media screen and (max-width: 599px) {
+  .abc__grid { grid-template-columns: 1fr; }
+  .abc__card { border-right: none; padding-right: 0; }
+  .abc__card:last-child { border-bottom: none; }
+  .abc__card:not(:last-child) { border-bottom: 1px solid var(--ink-40); }
+}
+{%- endstyle -%}
+
+<section class="abc section-{{ section.id }}-padding">
+  <div class="page-width">
+    {%- if section.blocks.size > 0 -%}
+      <div class="abc__grid">
+        {%- for block in section.blocks -%}
+          {%- if block.type == 'credential' -%}
+            <div class="abc__card" {{ block.shopify_attributes }}>
+              <span class="abc__icon" aria-hidden="true">
+                {%- case block.settings.icon -%}
+                  {%- when 'star' -%}
+                    <svg width="28" height="28" viewBox="0 0 28 28" fill="none"><path d="M14 3l2.96 6.05 6.62.97-4.79 4.69 1.13 6.61L14 18.25l-5.92 3.07 1.13-6.61L4.42 10.02l6.62-.97L14 3z" stroke="currentColor" stroke-width="1.6" stroke-linejoin="round"/></svg>
+                  {%- when 'key' -%}
+                    <svg width="28" height="28" viewBox="0 0 28 28" fill="none"><circle cx="10" cy="11" r="6" stroke="currentColor" stroke-width="1.6"/><path d="M14.5 15l9 9M20 19l2.5 2.5M23.5 22.5l-2 2" stroke="currentColor" stroke-width="1.6" stroke-linecap="round"/></svg>
+                  {%- when 'heart' -%}
+                    <svg width="28" height="28" viewBox="0 0 28 28" fill="none"><path d="M14 23S4 16.5 4 9.5A5.5 5.5 0 0114 7a5.5 5.5 0 0110 2.5C24 16.5 14 23 14 23z" stroke="currentColor" stroke-width="1.6" stroke-linejoin="round"/></svg>
+                  {%- when 'check' -%}
+                    <svg width="28" height="28" viewBox="0 0 28 28" fill="none"><polyline points="5,14 11,20 23,8" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"/></svg>
+                  {%- else -%}
+                    <svg width="28" height="28" viewBox="0 0 28 28" fill="none"><path d="M4 12.5L14 4l10 8.5V24a1 1 0 01-1 1H5a1 1 0 01-1-1V12.5z" stroke="currentColor" stroke-width="1.6" stroke-linejoin="round"/><path d="M10 25v-9h8v9" stroke="currentColor" stroke-width="1.6" stroke-linejoin="round"/></svg>
+                {%- endcase -%}
+              </span>
+              {%- if block.settings.stat != blank -%}
+                <p class="abc__stat">{{ block.settings.stat }}</p>
+              {%- endif -%}
+              {%- if block.settings.label != blank -%}
+                <p class="abc__label">{{ block.settings.label }}</p>
+              {%- endif -%}
+              {%- if block.settings.description != blank -%}
+                <p class="abc__desc">{{ block.settings.description }}</p>
+              {%- endif -%}
+            </div>
+          {%- endif -%}
+        {%- endfor -%}
+      </div>
+    {%- endif -%}
+  </div>
+</section>
+
+{% schema %}
+{
+  "name": "About — Credibilidad",
+  "tag": "section",
+  "class": "section",
+  "max_blocks": 4,
+  "blocks": [
+    {
+      "type": "credential",
+      "name": "Credencial",
+      "settings": [
+        {
+          "type": "select",
+          "id": "icon",
+          "label": "Icono",
+          "options": [
+            { "value": "home",  "label": "Casa" },
+            { "value": "star",  "label": "Estrella" },
+            { "value": "key",   "label": "Llave" },
+            { "value": "heart", "label": "Corazón" },
+            { "value": "check", "label": "Check" }
+          ],
+          "default": "home"
+        },
+        {
+          "type": "text",
+          "id": "stat",
+          "label": "Dato principal (grande)",
+          "default": "9 años"
+        },
+        {
+          "type": "text",
+          "id": "label",
+          "label": "Etiqueta",
+          "default": "Anfitriona en Airbnb"
+        },
+        {
+          "type": "textarea",
+          "id": "description",
+          "label": "Descripción breve",
+          "default": "Miles de estancias y experiencias compartidas."
+        }
+      ]
+    }
+  ],
+  "settings": [
+    {
+      "type": "header",
+      "content": "Espaciado"
+    },
+    {
+      "type": "range",
+      "id": "padding_top",
+      "label": "Espacio superior",
+      "min": 0, "max": 120, "step": 4, "default": 64
+    },
+    {
+      "type": "range",
+      "id": "padding_bottom",
+      "label": "Espacio inferior",
+      "min": 0, "max": 120, "step": 4, "default": 64
+    }
+  ],
+  "presets": [
+    {
+      "name": "About — Credibilidad",
+      "blocks": [
+        { "type": "credential", "settings": { "icon": "home",  "stat": "9 años",          "label": "Anfitriona en Airbnb",      "description": "Miles de estancias y experiencias compartidas." } },
+        { "type": "credential", "settings": { "icon": "star",  "stat": "Superhost",        "label": "Reconocimiento de Airbnb",  "description": "Por ofrecer estancias excepcionales de forma consistente." } },
+        { "type": "credential", "settings": { "icon": "key",   "stat": "4+ propiedades",   "label": "Administración propia",     "description": "En Medellín y Guatapé. Operadas — no delegadas." } },
+        { "type": "credential", "settings": { "icon": "heart", "stat": "Selección personal","label": "Cada producto probado",     "description": "Usado, probado y aprobado antes de entrar al catálogo." } }
+      ]
+    }
+  ]
+}
+{% endschema %}
