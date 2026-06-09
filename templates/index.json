@@ -12,6 +12,7 @@
     "hero": {
       "type": "hero",
       "settings": {
+        "video_url": "",
         "image": "shopify://shop_images/hero-landscape.jpg",
         "scrim": "dark",
         "text_color": "light",
@@ -120,7 +121,7 @@
         "pick-3": {
           "type": "pick",
           "settings": {
-            "product": "",
+            "product": "velas",
             "category": "Ambiente",
             "title": "Velas aromáticas",
             "host_note": "El primer gesto del check-in.",
