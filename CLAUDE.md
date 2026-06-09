@@ -10,24 +10,36 @@ Use the `shopify-theme-sync` skill. It will:
 
 1. Pull high-risk JSON files from the live theme
 2. Show the diff
-3. Warn before overwriting any Theme Editor changes
-4. Commit the pulled state before pushing
+3. Wait for James's review and approval
+4. Commit only after approval
+5. Push to the intended target theme
+
+## Assume a pull is required if any of the following were recently changed
+
+- Product assignments
+- Homepage images or hero content
+- Collection images or selections
+- CTA links
+- Theme settings
+- Product page settings
 
 ## High-risk files — always pull before pushing
 
 - `templates/index.json` — product assignments, homepage content, CTA links
 - `config/settings_data.json` — uploaded images, theme-wide settings
+- `templates/product.json` — product page settings
 - `sections/header-group.json`
 - `sections/footer-group.json`
 
 ## Rule
 
-**pull → diff → warn → commit → push**
+**pull → diff → review → commit → push**
 
-Never overwrite `templates/index.json` or `config/settings_data.json` without checking for live changes first.
+Never commit or push without James's explicit approval. Never push to the live theme unless explicitly requested.
 
 ## Store details
 
 - Store: `host-to-host.myshopify.com`
 - Live theme: `Host To Host Launch` (ID `157501358279`)
-- Push command: `shopify theme push --live --allow-live --store host-to-host.myshopify.com`
+- Default push: targets development theme (`shopify theme push --store host-to-host.myshopify.com`)
+- Live push: only when explicitly requested (`--theme 157501358279 --live --allow-live`)
